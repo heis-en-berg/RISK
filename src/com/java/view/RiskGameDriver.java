@@ -1,6 +1,6 @@
 package com.java.view;
 
-import com.java.controller.map.MapCreator;
+import com.java.controller.map.MapLoader;
 import com.java.model.gamedata.GameData;
 
 public class RiskGameDriver {
@@ -9,8 +9,8 @@ public class RiskGameDriver {
 
 	public RiskGameDriver() {
 		gameData = new GameData();
-		MapCreator mapCreator = new MapCreator();
-		gameData.gameMap = mapCreator.loadMap();
+		MapLoader maploader = new MapLoader();
+		gameData.gameMap = maploader.loadMap();
 		gameData.generateDummyData();
 	}
 
