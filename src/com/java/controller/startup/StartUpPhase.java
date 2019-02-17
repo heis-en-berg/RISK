@@ -3,23 +3,19 @@ package com.java.controller.startup;
 import java.util.ArrayList;
 
 import com.java.model.cards.CardsDeck;
-import com.java.model.dao.DAO;
+import com.java.model.gamedata.GameData;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 
 public class StartUpPhase {
 
-	public DAO dao;
+	public GameData dao;
 	
 	public StartUpPhase() {
-		dao = new DAO();
+		dao = new GameData();
 	}
 	
-	public DAO start() {
-		return null;
-	}
-	
-	private GameMap loadMap() {
+	public GameData start() {
 		return null;
 	}
 	

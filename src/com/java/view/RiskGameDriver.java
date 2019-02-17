@@ -1,10 +1,17 @@
 package com.java.view;
 
-import com.java.model.dao.DAO;
+import com.java.controller.map.MapCreator;
+import com.java.model.gamedata.GameData;
 
 public class RiskGameDriver {
 
-	public DAO dao;
+	public GameData gameData;
+
+	public RiskGameDriver() {
+		gameData = new GameData();
+		//MapCreator mapCreator = new MapCreator();
+		//dao.gameMap = mapCreator.loadMap();
+	}
 
 	public void startGame() {
 		// TODO Auto-generated method stub

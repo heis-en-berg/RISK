@@ -7,21 +7,21 @@ import com.java.model.cards.Card;
 
 public class Player {
 
-	public String playerNameId;
-	public ArrayList<Card> cards;
-	public HashMap<String, ArrayList<String>> conqueredCountries;
+	private Integer playerID;
+	private String playerName;
+	private ArrayList<Card> cards;
 	
-	public Player(String playerName) {
-		this.playerNameId = playerName;
+	public Player(Integer playerID, String playerName) {
+		this.playerID = playerID;
+		this.playerName = playerName;
 		cards = new ArrayList<>();
-		conqueredCountries = new HashMap<>();
 	}
 	
-	public void addConqueredCountry(String continentNameId, String countryNameId) {
-		if(!this.conqueredCountries.containsKey(continentNameId)) {
-			this.conqueredCountries.put(continentNameId, new ArrayList<>());
-		}
-		this.conqueredCountries.get(continentNameId).add(countryNameId);
+	public ArrayList<Card> getCards(){
+		return this.cards;
 	}
 	
+	public String getPlayerName() {
+		return this.playerName;
+	}
 }

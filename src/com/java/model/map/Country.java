@@ -2,19 +2,43 @@ package com.java.model.map;
 
 public class Country {
 
-	public String countryNameId;
-	public String continentNameId;
-	public String conquerorNameId;
-	public Integer armyCount;
+	private String countryName;
+	private String countryContinentName;
+	private Integer countryConquerorID;
+	private Integer armyCount;
 	
-	public Country(String countryName, String continentNameId) {
-		this.countryNameId = countryName;
-		this.continentNameId = continentNameId;
+	public Country(String countryName, String continentName) {
+		this.countryName = countryName;
+		this.countryContinentName = continentName;
 		this.armyCount = 0;
 	}
 	
-	public void changeCountryName(String countryName) {
-		this.countryNameId = countryName;
+	public String getCountryName() {
+		return this.countryName;
+	}
+	
+	public void updateCountryName(String countryName) {
+		this.countryName = countryName;
+	}
+	
+	public String getCountryContinentName() {
+		return this.countryContinentName;
+	}
+	
+	public void updateCountryContinentName(String countryContinentName) {
+		this.countryContinentName = countryContinentName;
+	}
+	
+	public void setConquerorID(Integer countryConquerorID) {
+		this.countryConquerorID = countryConquerorID;
+	}
+	
+	public Integer getCountryConquerorID() {
+		return this.countryConquerorID;
+	}
+	
+	public Integer getCountryArmyCount() {
+		return this.armyCount;
 	}
 	
 	public Integer addArmy(Integer armyCount) {
@@ -23,7 +47,9 @@ public class Country {
 	}
 	
 	public Integer deductArmy(Integer armyCount) {
-		this.armyCount -= armyCount;
+		if(this.armyCount >= armyCount) {
+			this.armyCount -= armyCount;
+		}
 		return this.armyCount;
 	}
 }

@@ -1,33 +1,38 @@
 package com.java.model.map;
 
-import java.util.ArrayList;
-
 public class Continent {
 
-	public String continentNameId;
-	public Integer controlValue;
-	public ArrayList<String> countries;
+	private String continentName;
+	private Integer continentControlValue;
+	private Integer continentConquerorID;
 	
 	public Continent(String continentName, Integer controlValue) {
-		this.continentNameId = continentName;
-		this.controlValue = controlValue;
-		countries = new ArrayList<>();
+		this.continentName = continentName;
+		this.continentControlValue = controlValue;
 	}
 	
-	public void addCountry(String countryName) {
-		countries.add(countryName);
+	public String getContinentName() {
+		return continentName;
 	}
-	
-	public void removeCountry(String countryName) {
-		countries.remove(countryName);
+
+	public void updateContinentName(String continentName) {
+		this.continentName = continentName;
 	}
-	
-	public void changeContinentName(String continentName) {
-		this.continentNameId = continentName;
+
+	public Integer getContinentControlValue() {
+		return continentControlValue;
 	}
-	
-	public void changeControlValue(Integer controlValue) {
-		this.controlValue = controlValue;
+
+	public void setContinentControlValue(Integer continentControlValue) {
+		this.continentControlValue = continentControlValue;
+	}
+
+	public Integer getContinentConquerorID() {
+		return continentConquerorID;
+	}
+
+	public void updateContinentConquerorID(Integer continentConquerorID) {
+		this.continentConquerorID = continentConquerorID;
 	}
 	
 }
