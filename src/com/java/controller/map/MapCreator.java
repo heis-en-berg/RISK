@@ -142,13 +142,14 @@ public class MapCreator {
 
 		if ((currentLine = mapFileBufferedReader.readLine()) != null) {
 
-			while ((currentLine = mapFileBufferedReader.readLine()) != null) {
+			while (currentLine != null) {
 				territoryTextData.add(currentLine);
 				splitString = currentLine.split(",");
 				String currentTerritory = splitString[0];
 				String currentTerritoryContinent = splitString[1];
 				Country country = new Country(currentTerritory, currentTerritoryContinent);
 				map.addCountry(country);
+				currentLine = mapFileBufferedReader.readLine();
 			}
 
 			for (int i = 0; i < territoryTextData.size(); i++) {

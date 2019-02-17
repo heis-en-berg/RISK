@@ -26,13 +26,11 @@ public class GameData {
 	private AtomicInteger playerIdAtomicInteger = new AtomicInteger(0);
 	
 	public GameData(){
-		gameMap = new GameMap();
 		noOfPlayers = 2;
 		players  = new ArrayList<>();
-		generateDummyData();
 	}
 	
-	private void generateDummyData(){
+	public void generateDummyData(){
 		generatePlayers();
 		generateGameMap();
 	}
@@ -45,52 +43,8 @@ public class GameData {
 	}
 	
 	private void generateGameMap() {
-		generateCountries();
-		setAdjacentCountries();
-		generateContinents();
 		assignCountriesToPlayers();
 		placeArmies();
-	}
-	
-	private void generateCountries() {
-		Country country1 = new Country("C1", "Continent1");
-		Country country2 = new Country("C2", "Continent1");
-		Country country3 = new Country("C3", "Continent1");
-		Country country4 = new Country("C4", "Continent2");
-		Country country5 = new Country("C5", "Continent2");
-		Country country6 = new Country("C6", "Continent2");
-		this.gameMap.addCountry(country1);
-		this.gameMap.addCountry(country2);
-		this.gameMap.addCountry(country3);
-		this.gameMap.addCountry(country4);
-		this.gameMap.addCountry(country5);
-		this.gameMap.addCountry(country6);
-	}
-	
-	private void setAdjacentCountries() {
-		this.gameMap.setAdjacentCountry("C1", "C2");
-		this.gameMap.setAdjacentCountry("C2", "C1");
-		this.gameMap.setAdjacentCountry("C2", "C3");
-		this.gameMap.setAdjacentCountry("C2", "C6");
-		this.gameMap.setAdjacentCountry("C3", "C2");
-		this.gameMap.setAdjacentCountry("C3", "C5");
-		this.gameMap.setAdjacentCountry("C4", "C5");
-		this.gameMap.setAdjacentCountry("C4", "C6");
-		this.gameMap.setAdjacentCountry("C5", "C4");
-		this.gameMap.setAdjacentCountry("C5", "C6");
-		this.gameMap.setAdjacentCountry("C5", "C3");
-		this.gameMap.setAdjacentCountry("C6", "C5");
-		this.gameMap.setAdjacentCountry("C6", "C4");
-		this.gameMap.setAdjacentCountry("C6", "C2");
-	}
-	
-	private void generateContinents() {
-			Continent continent1 = new Continent("Continent1", 3);
-			
-			Continent continent2 = new Continent("Continent2", 4);
-			
-			this.gameMap.addContinent(continent1);
-			this.gameMap.addContinent(continent2);
 	}
 	
 	private void assignCountriesToPlayers() {

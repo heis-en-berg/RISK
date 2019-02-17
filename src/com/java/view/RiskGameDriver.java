@@ -9,8 +9,9 @@ public class RiskGameDriver {
 
 	public RiskGameDriver() {
 		gameData = new GameData();
-		//MapCreator mapCreator = new MapCreator();
-		//dao.gameMap = mapCreator.loadMap();
+		MapCreator mapCreator = new MapCreator();
+		gameData.gameMap = mapCreator.loadMap();
+		gameData.generateDummyData();
 	}
 
 	public void startGame() {
