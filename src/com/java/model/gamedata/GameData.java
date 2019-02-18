@@ -44,7 +44,7 @@ public class GameData {
 
 	private void generateGameMap() {
 		assignCountriesToPlayers();
-		assignContinentsToPlayers();
+		//assignContinentsToPlayers();
 		placeArmies();
 	}
 
@@ -57,10 +57,10 @@ public class GameData {
 		this.gameMap.setCountryConquerer("C6", 2);
 	}
 
-	private void assignContinentsToPlayers(){
-		this.gameMap.setContinentConquerer("Continent1",1);
-		this.gameMap.setContinentConquerer("Continent2",1);
-	}
+//	private void assignContinentsToPlayers(){
+//		this.gameMap.setContinentConquerer("Continent1",1);
+//		this.gameMap.setContinentConquerer("Continent2",1);
+//	}
 
 	private void placeArmies() {
 		this.gameMap.getCountry("C1").addArmy(3);

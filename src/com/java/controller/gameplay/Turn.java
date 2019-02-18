@@ -12,49 +12,58 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 	public GameData gameData;
 	public Player player;
-	private Dice dice = new Dice(); //To be used in attack phase.
+	private Dice dice;
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
 
-	public Turn(GameData new_gameData, Player new_player) {
+	public Turn(Player player, GameData gameData) {
 
-		this.gameData = new_gameData;
-		this.player = new_player;
+		this.gameData = gameData;
+		this.player = player;
+		dice = new Dice(); //To be used in attack phase.
 	}
+
+	public void startTurn(){
+		startReinforcement();
+		//startAttack();      For build 2.
+		startFortification();
+	}
+
 	/*
-	 * Fortification Phase
-	 * @see com.java.controller.gameplay.FortificationPhase
+	 * Reinforcement Phase
+	 * @see com.java.controller.gameplay.ReinforcementPhase
 	 */
+	@Override
+	public void startReinforcement() {
+
+		Integer totalReinforecementArmyCount = calculateReinforcementArmy();
+		placeArmy(totalReinforecementArmyCount);
+	}
 
 	@Override
 	public Integer calculateReinforcementArmy() {
 
-		Integer totalReinforecementArmyCount;
-		Integer totalCountriesOwnedByPlayer = 0;
+		Integer totalReinforecementArmyCount = 0;
+		Integer totalCountriesOwnedByPlayer;
 		Integer currentPlayerID = player.getPlayerID();
-		Integer totalControlValue=0;
 
+		/*Count the total number of continents owned by the player and retrieve the continent's control value. */
+
+		HashSet<String> conqueredContinentsPerPlayer= this.gameData.gameMap.getConqueredContinentsPerPlayer(currentPlayerID);
+		for(String continent: conqueredContinentsPerPlayer){
+			Integer controlValue = this.gameData.gameMap.getContinent(continent).getContinentControlValue();
+			totalReinforecementArmyCount += controlValue;
+		}
 
 		/*Count the total number of countries owned by the player */
-		HashSet<String> conqueredCountriesPerPlayer= this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
-		totalCountriesOwnedByPlayer = conqueredCountriesPerPlayer.size();
-
+		totalCountriesOwnedByPlayer= this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID).size();
+		totalReinforecementArmyCount += totalCountriesOwnedByPlayer/REINFORCEMENT_DIVISION_FACTOR;
 		/*
 		 * totalReinforecementArmyCount will be the maximum of totalCountriesOwnedByPlayer/REINFORCEMENT_DIVISION_FACTOR
 		 * and MINIMUM_REINFORCEMENT_ARMY_NUMBER.
 		 */
-		totalReinforecementArmyCount = (totalCountriesOwnedByPlayer / REINFORCEMENT_DIVISION_FACTOR) > MINIMUM_REINFORCEMENT_ARMY_NUMBER ?
-				totalCountriesOwnedByPlayer / REINFORCEMENT_DIVISION_FACTOR : MINIMUM_REINFORCEMENT_ARMY_NUMBER;
-
-		/*Count the total number of continents owned by the player and retrieve the continent's control value. */
-
-		HashSet<String> conqueredContinentsPerPlayer= this.gameData.gameMap.getConqueredContinentsPerPlayer(1);
-		for(String continent: conqueredContinentsPerPlayer){
-			Integer controlValue = this.gameData.gameMap.getContinent(continent).getContinentControlValue();
-			totalControlValue = totalControlValue + controlValue;
-		}
-		totalReinforecementArmyCount = totalReinforecementArmyCount + totalControlValue;
-
+		totalReinforecementArmyCount = Math.max(totalReinforecementArmyCount, MINIMUM_REINFORCEMENT_ARMY_NUMBER);
+		System.out.println(totalReinforecementArmyCount);
 		return totalReinforecementArmyCount;
 	}
 
@@ -64,27 +73,35 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 	}
 
-	@Override
-	public void startReinforcement() {
-
-
-
-	}
-
+	/*
+	 * Fortification Phase
+	 * @see com.java.controller.gameplay.FortificationPhase
+	 */
 	@Override
 	public void startFortification() {
+		getPotentialFortificationScenarios();
+		Integer noOfArmies = getNoOfArmiesToMove();
+		String fromCountryName = choseCountryToFortifyfrom();
+		String toCountryName = choseCountryToFortifyto();
+		fortify(fromCountryName,toCountryName,noOfArmies);
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public HashMap<Integer, ArrayList<Integer>> getPotentialFortificationScenarios() {
+	public HashMap<String, ArrayList<Integer>> getPotentialFortificationScenarios() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Integer choseCountryToFortifyfrom() {
+	public String choseCountryToFortifyfrom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String choseCountryToFortifyto() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,14 +113,11 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	}
 
 	@Override
-	public Boolean fortify(Integer fromCountryId, Integer toCountryId, Integer noOfArmies) {
+	public Boolean fortify(String fromCountryName, String toCountryName, Integer noOfArmies) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 }
 
-	/*
-	 * Reinforcement Phase
-	 * @see com.java.controller.gameplay.ReinforcementPhase
-	 */
+
 

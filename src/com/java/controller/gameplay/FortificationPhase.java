@@ -6,9 +6,10 @@ import java.util.HashMap;
 public interface FortificationPhase {
 
 	void startFortification();
-	HashMap<Integer, ArrayList<Integer>> getPotentialFortificationScenarios();
-	Integer choseCountryToFortifyfrom();
+	HashMap<String, ArrayList<Integer>> getPotentialFortificationScenarios();
+	String choseCountryToFortifyfrom();
+	String choseCountryToFortifyto();
 	Integer getNoOfArmiesToMove();
-	Boolean fortify(Integer fromCountryId, Integer toCountryId, Integer noOfArmies);
+	Boolean fortify(String fromCountryId, String toCountryId, Integer noOfArmies);
 	
 }

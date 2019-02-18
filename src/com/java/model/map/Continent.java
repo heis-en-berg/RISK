@@ -35,8 +35,5 @@ public class Continent {
 		this.continentConquerorID = countryConquerorID;
 	}
 
-	public void updateContinentConquerorID(Integer continentConquerorID) {
-		this.continentConquerorID = continentConquerorID;
-	}
 
 }

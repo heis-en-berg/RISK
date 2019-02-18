@@ -24,5 +24,7 @@ public class Player {
 	public String getPlayerName() {
 		return this.playerName;
 	}
-	public Integer getPlayerID() {return this.playerID;}
+	public Integer getPlayerID() {
+		return this.playerID;
+	}
 }

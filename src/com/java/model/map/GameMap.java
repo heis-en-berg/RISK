@@ -119,10 +119,16 @@ public class GameMap {
 	}
 
 	public  HashSet<String> getConqueredCountriesPerPlayer(Integer playerId){
+		if(!this.conqueredCountriesPerPlayer.containsKey(playerId)) {
+			return new HashSet<>();
+		}
 		return this.conqueredCountriesPerPlayer.get(playerId);
 	}
 
 	public  HashSet<String> getConqueredContinentsPerPlayer(Integer playerId){
+		if(!this.conqueredContinentsPerPlayer.containsKey(playerId)) {
+			return new HashSet<>();
+		}
 		return this.conqueredContinentsPerPlayer.get(playerId);
 	}
 
