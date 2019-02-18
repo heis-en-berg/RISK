@@ -15,38 +15,39 @@ public class GameData {
 	public Integer noOfPlayers;
 	public ArrayList<Player> players;
 	public CardsDeck cardsDeck; /* For build 2 */
-	
+
 	public static final Integer MIN_PLAYERS = 2;
 	public static final Integer MAX_PLAYERS = 6;
-	
-	/* 
-	 * Dummy Data Generator : To be used for development purpose only. 
+
+	/*
+	 * Dummy Data Generator : To be used for development purpose only.
 	 */
-	
-	private AtomicInteger playerIdAtomicInteger = new AtomicInteger(0);
-	
+
+	private AtomicInteger playerIdAtomicInteger = new AtomicInteger(1);
+
 	public GameData(){
 		noOfPlayers = 2;
 		players  = new ArrayList<>();
 	}
-	
+
 	public void generateDummyData(){
 		generatePlayers();
 		generateGameMap();
 	}
-	
+
 	private void generatePlayers(){
 		for(int p = 1; p <= this.noOfPlayers; p++) {
 			Player player = new Player(playerIdAtomicInteger.getAndIncrement(), "P" + playerIdAtomicInteger.get());
 			this.players.add(player);
 		}
 	}
-	
+
 	private void generateGameMap() {
 		assignCountriesToPlayers();
+		assignContinentsToPlayers();
 		placeArmies();
 	}
-	
+
 	private void assignCountriesToPlayers() {
 		this.gameMap.setCountryConquerer("C1", 1);
 		this.gameMap.setCountryConquerer("C2", 2);
@@ -55,7 +56,12 @@ public class GameData {
 		this.gameMap.setCountryConquerer("C5", 1);
 		this.gameMap.setCountryConquerer("C6", 2);
 	}
-	
+
+	private void assignContinentsToPlayers(){
+		this.gameMap.setContinentConquerer("Continent1",1);
+		this.gameMap.setContinentConquerer("Continent2",1);
+	}
+
 	private void placeArmies() {
 		this.gameMap.getCountry("C1").addArmy(3);
 		this.gameMap.getCountry("C2").addArmy(1);
@@ -64,5 +70,5 @@ public class GameData {
 		this.gameMap.getCountry("C5").addArmy(5);
 		this.gameMap.getCountry("C6").addArmy(6);
 	}
-	
+
 }

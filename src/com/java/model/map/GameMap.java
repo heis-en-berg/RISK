@@ -10,6 +10,7 @@ public class GameMap {
 	private HashMap<String, HashSet<String>> adjacentCountries;
 	private HashMap<String, HashSet<String>> continentCountries;
 	private HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer;
+	private HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer;
 	private String mapAuthor;
 	public String warn;
 
@@ -19,6 +20,7 @@ public class GameMap {
 		continentObjects = new HashMap<>();
 		continentCountries = new HashMap<>();
 		conqueredCountriesPerPlayer = new HashMap<>();
+		conqueredContinentsPerPlayer = new HashMap<>();
 	}
 
 	public void addCountry(Country country) {
@@ -35,7 +37,7 @@ public class GameMap {
 	 */
 	public void removeCountry(String countryName) {
 		Country country = this.countryObjects.get(countryName);
-		
+
 		/* Removes country name from adjacentCountries */
 		this.adjacentCountries.remove(countryName);
 		for(String fromCountryKey : adjacentCountries.keySet()) {
@@ -43,10 +45,10 @@ public class GameMap {
 				this.adjacentCountries.get(fromCountryKey).remove(countryName);
 			}
 		}
-		
+
 		/* Removes country name from continentCountries */
 		this.continentCountries.get(country.getCountryContinentName()).remove(countryName);
-		
+
 		/* Removes country object from countryObjects */
 		this.continentObjects.remove(countryName);
 	}
@@ -92,35 +94,52 @@ public class GameMap {
 			this.adjacentCountries.get(countryName).remove(adjacentCountryName);
 		}
 	}
-	
+
 	public HashSet<String> getContinentCountries(String continentName){
 		return this.continentCountries.get(continentName);
 	}
-	
+
 	public void setCountryConquerer(String countryName, Integer playerId) {
 		if(!this.conqueredCountriesPerPlayer.containsKey(playerId)) {
 			this.conqueredCountriesPerPlayer.put(playerId, new HashSet<>());
 		}
 		this.conqueredCountriesPerPlayer.get(playerId).add(countryName);
-		
+
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(playerId);
 	}
-	
+
+	public void setContinentConquerer(String continentName, Integer playerId) {
+		if(!this.conqueredContinentsPerPlayer.containsKey(playerId)) {
+			this.conqueredContinentsPerPlayer.put(playerId, new HashSet<>());
+		}
+		this.conqueredContinentsPerPlayer.get(playerId).add(continentName);
+		Continent continent = this.getContinent(continentName);
+		continent.setContinentConquerorID(playerId);
+	}
+
+	public  HashSet<String> getConqueredCountriesPerPlayer(Integer playerId){
+		return this.conqueredCountriesPerPlayer.get(playerId);
+	}
+
+	public  HashSet<String> getConqueredContinentsPerPlayer(Integer playerId){
+		return this.conqueredContinentsPerPlayer.get(playerId);
+	}
+
 	public void updateCountryConquerer(String countryName, Integer oldConquererPlayerId, Integer newConquererPlayerId) {
 		if(this.conqueredCountriesPerPlayer.get(oldConquererPlayerId).contains(countryName)) {
 			this.conqueredCountriesPerPlayer.get(oldConquererPlayerId).remove(countryName);
 		}
 		this.conqueredCountriesPerPlayer.get(newConquererPlayerId).add(countryName);
-		
+
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(newConquererPlayerId);
 	}
-	
+
 	public void setMapAuthor(String mapAuthor) {
 		this.mapAuthor = mapAuthor;
 	}
-	
+
 	public String getMapAuthor() {
 		return this.mapAuthor;
 	}

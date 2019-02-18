@@ -5,12 +5,12 @@ public class Continent {
 	private String continentName;
 	private Integer continentControlValue;
 	private Integer continentConquerorID;
-	
+
 	public Continent(String continentName, Integer controlValue) {
 		this.continentName = continentName;
 		this.continentControlValue = controlValue;
 	}
-	
+
 	public String getContinentName() {
 		return continentName;
 	}
@@ -31,8 +31,12 @@ public class Continent {
 		return continentConquerorID;
 	}
 
+	public void setContinentConquerorID(Integer countryConquerorID) {
+		this.continentConquerorID = countryConquerorID;
+	}
+
 	public void updateContinentConquerorID(Integer continentConquerorID) {
 		this.continentConquerorID = continentConquerorID;
 	}
-	
+
 }
