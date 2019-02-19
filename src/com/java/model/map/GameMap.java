@@ -3,7 +3,7 @@ package com.java.model.map;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class GameMap {
+public class GameMap implements Cloneable{
 
 	private HashMap<String, Country> countryObjects;
 	private HashMap<String, Continent> continentObjects;
@@ -15,6 +15,7 @@ public class GameMap {
 	public String warn;
 
 	public GameMap() {
+		mapAuthor = "";
 		countryObjects = new HashMap<>();
 		adjacentCountries = new HashMap<>();
 		continentObjects = new HashMap<>();
@@ -22,6 +23,24 @@ public class GameMap {
 		conqueredCountriesPerPlayer = new HashMap<>();
 		conqueredContinentsPerPlayer = new HashMap<>();
 	}
+	
+	@Override
+    public GameMap clone() {
+		GameMap gameMap = null;
+		try {
+			gameMap = (GameMap) super.clone();
+			gameMap.countryObjects = new HashMap<>(countryObjects);
+			gameMap.continentObjects = new HashMap<>(continentObjects);
+			gameMap.adjacentCountries = new HashMap<>(adjacentCountries);
+			gameMap.continentCountries = new HashMap<>(continentCountries);
+			gameMap.conqueredCountriesPerPlayer = new HashMap<>(conqueredCountriesPerPlayer);
+			gameMap.conqueredContinentsPerPlayer = new HashMap<>(conqueredContinentsPerPlayer);
+		} catch (CloneNotSupportedException e) {
+			System.out.println("Gamemap Cloning error");
+		}
+ 
+        return gameMap;        // return deep copy
+    }
 
 	public void addCountry(String countryName, String countryContinentName) {
 		Country country = new Country(countryName, countryContinentName);
@@ -53,6 +72,10 @@ public class GameMap {
 		/* Removes country object from countryObjects */
 		this.countryObjects.remove(countryName);
 	}
+	
+	public HashMap<String, Country> getAllCountries(){
+		return this.countryObjects;
+	}
 
 	public Country getCountry(String countryName) {
 		if (!this.countryObjects.containsKey(countryName)) {
@@ -60,7 +83,7 @@ public class GameMap {
 		}
 		return this.countryObjects.get(countryName);
 	}
-
+	
 	public void addContinent(String continentName, Integer controlValue) {
 		Continent continent = new Continent(continentName, controlValue);
 		this.continentObjects.put(continent.getContinentName(), continent);
@@ -73,6 +96,10 @@ public class GameMap {
 			removeCountry(continentCountry.toString());
 		}
 		continentCountries.remove(continentName);
+	}
+	
+	public HashMap<String, Continent> getAllContinents(){
+		return this.continentObjects;
 	}
 
 	public Continent getContinent(String continentName) {

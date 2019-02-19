@@ -13,7 +13,7 @@ import com.java.model.map.GameMap;
 /**
  * 
  * @author Karan Dhingra
- *
+ * TODO: validate .map file before loading the map
  */
 public class MapLoader {
 
@@ -35,7 +35,6 @@ public class MapLoader {
 
 		if (defaultMapChoice == 1) {
 			loadMapFromFile(DEFAULT_MAP_FILE_PATH);
-			getChoiceToContinueOrEditMap();
 		} else if (defaultMapChoice == 2) {
 			String userMapFilePath = null;
 
@@ -48,17 +47,24 @@ public class MapLoader {
 				getAndValidateUserMapFilePath();
 			}
 			System.out.println("Map Loaded successfully");
-			getChoiceToContinueOrEditMap();
 		} else {
 			MapCreator mapCreator = new MapCreator(map);
-			mapCreator.createMap();
+			map = mapCreator.createMap();
 		}
+		Integer editOrContinueChoice = 0;
 		
-		scanner.close();
+		do {
+			editOrContinueChoice = getChoiceToContinueOrEditMap();
+			if (editOrContinueChoice == 1) {
+				MapEditor mapEditor = new MapEditor(map);
+				map = mapEditor.editMap();
+			}
+		} while(editOrContinueChoice != 2);
+		
 		return map;
 	}
 
-	private void getChoiceToContinueOrEditMap() {
+	private Integer getChoiceToContinueOrEditMap() {
 		Integer choice = null;
 		do {
 			System.out.println();
@@ -73,10 +79,7 @@ public class MapLoader {
 			}
 		} while (!(choice == 1 || choice == 2));
 
-		if (choice == 1) {
-			MapEditor mapEditor = new MapEditor(map);
-			mapEditor.editMap();
-		}
+		return choice;
 	}
 
 	private Integer getChoiceToUseDeafaultMap() {

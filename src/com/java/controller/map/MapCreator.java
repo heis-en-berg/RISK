@@ -1,27 +1,19 @@
 package com.java.controller.map;
 
-import java.util.Scanner;
-
 import com.java.model.map.GameMap;
 
 public class MapCreator extends MapEditor {
 
-	GameMap map;
-	Scanner scanner;
-	
-	
 	public MapCreator(GameMap map) {
 		super(map);
-		this.map = map;
-		scanner = new Scanner(System.in);
 	}
 
-	public void createMap() {
-		// TODO Auto-generated method stub
+	public GameMap createMap() {
+		
 		Integer userChoice = 0;
 		do {
 			userChoice = getCreateMapUserChoice();
-		} while(userChoice < 1 || userChoice > 9);
+		} while(userChoice < 1 || userChoice > 11);
 		
 		switch (userChoice) {
 			case 1: addMapAuthor();
@@ -40,22 +32,26 @@ public class MapCreator extends MapEditor {
 					break;
 			case 8: showMapContent();
 					break;
-			case 9: if(validateMap()) {
-						scanner.close();
-						return;
-					}
+			case 9: mapValidator.validateMap(editedMap);
 					break;
+			case 10: editedMap = originalMap.clone();
+			 		 System.out.println("Changes discarded");
+			 		 break;
+			case 11: if(mapValidator.validateMap(editedMap)) {
+						return editedMap;
+					 }
+					 break;
 		}
 		
-		editMap();
+		return createMap();
 	}
 
 	private Integer getCreateMapUserChoice() {
 		Integer userChoice = 0;
 		System.out.println("\nCreate a new Map: \n1. Add Author\n2. Add a Continent\n3. Remove a Continent\n"
 				+ "4. Add a Country\n5. Remove a Country\n6. Add Adjacency\n7. Remove Adjacency\n"
-				+ "8. Show Map Content\n9. Save and Exit");
-		System.out.println("Enter choice: ");
+				+ "8. Show Map Content\n9. Validate Map\n10. Discard changes\n11. Save and Exit");
+		System.out.print("Enter choice: ");
 		try {
 			userChoice = Integer.parseInt(scanner.nextLine());
 		} catch(NumberFormatException e) {
@@ -68,7 +64,11 @@ public class MapCreator extends MapEditor {
 	private void addMapAuthor() {
 		System.out.print("Please Enter the name of the author: ");
 		String mapAuthorName = scanner.nextLine().trim();
-		map.setMapAuthor(mapAuthorName);
+		if(mapAuthorName.isEmpty() || mapAuthorName.length() == 0) {
+			System.out.println("Invalid Name");
+			return;
+		}
+		editedMap.setMapAuthor(mapAuthorName);
 		System.out.println("Author: " + mapAuthorName);
 	}
 	

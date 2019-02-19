@@ -6,19 +6,23 @@ import com.java.model.map.GameMap;
 
 public class MapEditor {
 
-	GameMap map;
+	GameMap originalMap;
+	GameMap editedMap;
 	Scanner scanner;
+	MapValidator mapValidator;
 
 	public MapEditor(GameMap map) {
-		this.map = map;
+		this.originalMap = map;
+		this.editedMap = originalMap.clone();
 		scanner = new Scanner(System.in);
+		mapValidator = new MapValidator();
 	}
 
-	public void editMap() {
+	public GameMap editMap() {
 		Integer userChoice = 0;
 		do {
 			userChoice = getEditMapUserChoice();
-		} while(userChoice < 1 || userChoice > 9);
+		} while(userChoice < 1 || userChoice > 11);
 		
 		switch (userChoice) {
 			case 1: changeMapAuthor();
@@ -37,22 +41,26 @@ public class MapEditor {
 					break;
 			case 8: showMapContent();
 					break;
-			case 9: if(validateMap()) {
-						scanner.close();
-						return;
-					}
+			case 9: mapValidator.validateMap(editedMap);
 					break;
+			case 10: editedMap = originalMap.clone();
+					 System.out.println("Changes discarded");
+					 break;
+			case 11: if(mapValidator.validateMap(editedMap)) {
+						return editedMap;
+					 }
+					 break;
 		}
 		
-		editMap();
+		return editMap();
 	}
 	
 	private Integer getEditMapUserChoice() {
 		Integer userChoice = 0;
 		System.out.println("\nEdit map: \n1. Change Author\n2. Add a Continent\n3. Remove a Continent\n"
 				+ "4. Add a Country\n5. Remove a Country\n6. Add Adjacency\n7. Remove Adjacency\n"
-				+ "8. Show Map Content\n9. Save and Exit");
-		System.out.println("Enter choice: ");
+				+ "8. Show Map Content\n9. Validate Map\n10. Discard changes\n11. Save and Exit");
+		System.out.print("Enter choice: ");
 		try {
 			userChoice = Integer.parseInt(scanner.nextLine());
 		} catch(NumberFormatException e) {
@@ -64,26 +72,26 @@ public class MapEditor {
 
 	protected void showMapContent() {
 		//TODO : Print with details and remove method from model
-		map.printMap();
+		editedMap.printMap();
 	}
 
 	protected void removeAdjacenecyBetweenCountries() {
 		String countryName1 = null;
 		String countryName2 = null;
 		System.out.println("Please enter the names of the countries to be disconnected: ");
-		System.out.println("Country : ");
+		System.out.print("Country : ");
 		countryName1 = scanner.nextLine().trim();
-		if(map.getCountry(countryName1) == null) {
+		if(editedMap.getCountry(countryName1) == null) {
 			System.out.println(countryName1 + " doesn't exist in the map.");
 			return;
 		}
-		System.out.println("Country : ");
+		System.out.print("Country : ");
 		countryName2 = scanner.nextLine().trim();
-		if(map.getCountry(countryName2) == null) {
+		if(editedMap.getCountry(countryName2) == null) {
 			System.out.println(countryName2 + " doesn't exist in the map.");
 			return;
 		}
-		if(!map.removeAdjacenyBetweenCountries(countryName1, countryName2)) {
+		if(!editedMap.removeAdjacenyBetweenCountries(countryName1, countryName2)) {
 			System.out.println("No edge extsts between the countries");
 			return;
 		}
@@ -94,19 +102,19 @@ public class MapEditor {
 		String countryName1 = null;
 		String countryName2 = null;
 		System.out.println("Please enter the names of the countries to be connected: ");
-		System.out.println("Country : ");
+		System.out.print("Country : ");
 		countryName1 = scanner.nextLine().trim();
-		if(map.getCountry(countryName1) == null) {
+		if(editedMap.getCountry(countryName1) == null) {
 			System.out.println(countryName1 + " doesn't exist in the map.");
 			return;
 		}
-		System.out.println("Country : ");
+		System.out.print("Country : ");
 		countryName2 = scanner.nextLine().trim();
-		if(map.getCountry(countryName2) == null) {
+		if(editedMap.getCountry(countryName2) == null) {
 			System.out.println(countryName2 + " doesn't exist in the map.");
 			return;
 		}
-		map.setAdjacentCountry(countryName1, countryName2);
+		editedMap.setAdjacentCountry(countryName1, countryName2);
 		System.out.println("Edge added successfully");
 	}
 
@@ -114,29 +122,29 @@ public class MapEditor {
 		String countryName = null;
 		System.out.print("Please Enter the name of the Country to be removed: ");
 		countryName = scanner.nextLine().trim();
-		if(map.getCountry(countryName) == null) {
+		if(editedMap.getCountry(countryName) == null) {
 			System.out.println(countryName + " doesn't exist in the map.");
 			return;
 		}
-		map.removeCountry(countryName);
+		editedMap.removeCountry(countryName);
 		System.out.println("Country removed successfully");
 	}
 
 	protected void addCountryToMap() {
 		System.out.print("Please Enter the name of the new Country: ");
 		String newCountryName = scanner.nextLine().trim();
-		if(map.getCountry(newCountryName) != null) {
+		if(editedMap.getCountry(newCountryName) != null) {
 			System.out.println("Country already exists");
 			return;
 		}
 		String continentName = null;
 		System.out.print("Please Enter the name of the Continent, that " + newCountryName + " belongs to: ");
 		continentName = scanner.nextLine().trim();
-		if(map.getContinent(continentName) == null) {
+		if(editedMap.getContinent(continentName) == null) {
 			System.out.println(continentName + " doesn't exist in the map.");
 			return;
 		}
-		map.addCountry(newCountryName, continentName);
+		editedMap.addCountry(newCountryName, continentName);
 		System.out.println("Country added successfully");
 	}
 
@@ -145,18 +153,18 @@ public class MapEditor {
 		String continentName = null;
 		System.out.print("Please Enter the name of the Continent to be removed: ");
 		continentName = scanner.nextLine().trim();
-		if(map.getContinent(continentName) == null) {
+		if(editedMap.getContinent(continentName) == null) {
 			System.out.println(continentName + " doesn't exist in the map.");
 			return;
 		}
-		map.removeContinent(continentName);
+		editedMap.removeContinent(continentName);
 		System.out.println("Continent removed successfully");
 	}
 
 	protected void addContinenToMap() {
 		System.out.print("Please Enter the name of the new Continent: ");
 		String newContinentName = scanner.nextLine().trim();
-		if(map.getContinent(newContinentName) != null) {
+		if(editedMap.getContinent(newContinentName) != null) {
 			System.out.println("Continent already exists");
 			return;
 		}
@@ -173,21 +181,20 @@ public class MapEditor {
 				continentControlValue = -1;
 			}
 		} while(continentControlValue < 0);
-		map.addContinent(newContinentName, continentControlValue);
+		editedMap.addContinent(newContinentName, continentControlValue);
 		System.out.println("Continent added successfully");
 	}
 
 	protected void changeMapAuthor() {
-		System.out.println("Current Map Author: " + map.getMapAuthor());
+		System.out.println("Current Map Author: " + editedMap.getMapAuthor());
 		System.out.print("Please Enter the name of the author: ");
 		String mapAuthorName = scanner.nextLine().trim();
-		map.setMapAuthor(mapAuthorName);
-		System.out.println("Map Author updated to : " + map.getMapAuthor());
-	}
-	
-	protected boolean validateMap() {
-		// TODO Auto-generated method stub
-		return true;
+		if(mapAuthorName.isEmpty() || mapAuthorName.length() == 0) {
+			System.out.println("Invalid Name");
+			return;
+		}
+		editedMap.setMapAuthor(mapAuthorName);
+		System.out.println("Map Author updated to : " + editedMap.getMapAuthor());
 	}
 
 }
