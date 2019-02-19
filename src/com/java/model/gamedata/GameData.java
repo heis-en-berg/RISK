@@ -12,8 +12,9 @@ import com.java.model.player.Player;
 public class GameData {
 
 	public GameMap gameMap;
-	public Integer noOfPlayers;
-	public ArrayList<Player> players;
+	private Integer noOfPlayers;
+	private ArrayList<Player> players;
+
 	public CardsDeck cardsDeck; /* For build 2 */
 
 	public static final Integer MIN_PLAYERS = 2;
@@ -70,5 +71,22 @@ public class GameData {
 		this.gameMap.getCountry("C5").addArmy(5);
 		this.gameMap.getCountry("C6").addArmy(6);
 	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
+	}
+
+	public Integer getNoOfPlayers() {
+		return noOfPlayers;
+	}
+
+	public void setNoOfPlayers(Integer noOfPlayers) {
+		this.noOfPlayers = noOfPlayers;
+	}
+
 
 }

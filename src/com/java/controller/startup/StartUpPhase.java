@@ -9,41 +9,46 @@ import com.java.model.player.Player;
 
 public class StartUpPhase {
 
-	public GameData dao;
+	public GameData gameData;
 	
-	public StartUpPhase() {
-		dao = new GameData();
+	public StartUpPhase(GameData gameDate) {
+		this.gameData = new GameData();
 	}
 	
 	public GameData start() {
 		return null;
 	}
 	
-	private Integer getNoOfPlayerFromUser() {
+	public Integer getNoOfPlayerFromUser() {
 		return null;
 	}
 	
-	private ArrayList<String> getPlayersNamesFromUser() {
+	public ArrayList<String> getPlayersNamesFromUser() {
 		return null;
 	}
 	
-	private ArrayList<Player> generatePlayers(ArrayList<String> playerNames){
-		return null;
+	public ArrayList<Player> generatePlayers(ArrayList<String> playerNames){
+		ArrayList<Player> newPlayers = new ArrayList<Player>();
+
+		for(int i=0; i < playerNames.size(); i++){
+			newPlayers.add(new Player(((Integer)i+1),playerNames.get(i)));
+		}
+		return newPlayers;
 	}
 	
-	private void assignCountriesToPlayers() {
+	public void assignCountriesToPlayers() {
 		
 	}
 	
-	private CardsDeck generateCardsDeck() {
+	public CardsDeck generateCardsDeck() {
 		return null;
 	}
 	
-	private void placeArmies() {
+	public void placeArmies() {
 		
 	}
 	
-	private Integer getNumberOfArmiesToAllocate(Integer noOfPlayers) {
+	public Integer getNumberOfArmiesToAllocate(Integer noOfPlayers) {
 		return null;
 	}
 }
