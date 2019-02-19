@@ -8,4 +8,9 @@ public class MapCreator extends MapEditor {
 		super(map);
 	}
 
+	public void createMap() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -23,7 +23,8 @@ public class GameMap {
 		conqueredContinentsPerPlayer = new HashMap<>();
 	}
 
-	public void addCountry(Country country) {
+	public void addCountry(String countryName, String countryContinentName) {
+		Country country = new Country(countryName, countryContinentName);
 		this.countryObjects.put(country.getCountryName(), country);
 		if(!this.continentCountries.containsKey(country.getCountryContinentName())) {
 			this.continentCountries.put(country.getCountryContinentName(), new HashSet<>());
@@ -50,7 +51,7 @@ public class GameMap {
 		this.continentCountries.get(country.getCountryContinentName()).remove(countryName);
 
 		/* Removes country object from countryObjects */
-		this.continentObjects.remove(countryName);
+		this.countryObjects.remove(countryName);
 	}
 
 	public Country getCountry(String countryName) {
@@ -60,42 +61,63 @@ public class GameMap {
 		return this.countryObjects.get(countryName);
 	}
 
-	public void addContinent(Continent continent) {
+	public void addContinent(String continentName, Integer controlValue) {
+		Continent continent = new Continent(continentName, controlValue);
 		this.continentObjects.put(continent.getContinentName(), continent);
 	}
 
 	public void removeContinent(String continentName) {
 		this.continentObjects.remove(continentName);
+		Object[] continentCountriesSet = continentCountries.get(continentName).toArray();
+		for(Object continentCountry : continentCountriesSet) {
+			removeCountry(continentCountry.toString());
+		}
+		continentCountries.remove(continentName);
 	}
 
 	public Continent getContinent(String continentName) {
+		if(!this.continentObjects.containsKey(continentName)) {
+			return null;
+		}
 		return this.continentObjects.get(continentName);
 	}
 
 	public void setAdjacentCountry(String countryName, String adjacentCountryName) {
-		if (!this.adjacentCountries.containsKey(countryName)) {
-			this.adjacentCountries.put(countryName, new HashSet<>());
+		setAdjacency(countryName, adjacentCountryName);
+		setAdjacency(adjacentCountryName, countryName);
+	}
+	
+	private void setAdjacency(String fromCountry, String toCountry) {
+		if (!this.adjacentCountries.containsKey(fromCountry)) {
+			this.adjacentCountries.put(fromCountry, new HashSet<>());
 		}
-		this.adjacentCountries.get(countryName).add(adjacentCountryName);
+		this.adjacentCountries.get(fromCountry).add(toCountry);
 	}
 
 	public HashSet<String> getAdjacentCountries(String countryName) {
+		if(!this.adjacentCountries.containsKey(countryName)) {
+			return new HashSet<>();
+		}
 		return this.adjacentCountries.get(countryName);
 	}
 
-	public void removeAdjacenyBetweenCountries(String countryName, String adjacentCountryName) {
-		removeAdjacency(countryName, adjacentCountryName);
-		removeAdjacency(adjacentCountryName, countryName);
+	public Boolean removeAdjacenyBetweenCountries(String countryName, String adjacentCountryName) {
+		return (removeAdjacency(countryName, adjacentCountryName) && removeAdjacency(adjacentCountryName, countryName));
 	}
 
-	private void removeAdjacency(String countryName, String adjacentCountryName) {
+	private Boolean removeAdjacency(String countryName, String adjacentCountryName) {
 		if (this.adjacentCountries.containsKey(countryName)
 				&& this.adjacentCountries.get(countryName).contains(adjacentCountryName)) {
 			this.adjacentCountries.get(countryName).remove(adjacentCountryName);
+			return true;
 		}
+		return false;
 	}
 
 	public HashSet<String> getContinentCountries(String continentName){
+		if(!this.continentCountries.containsKey(continentName)) {
+			return new HashSet();
+		}
 		return this.continentCountries.get(continentName);
 	}
 
@@ -148,6 +170,21 @@ public class GameMap {
 
 	public String getMapAuthor() {
 		return this.mapAuthor;
+	}
+	
+	/*
+	 * Just for development purpose
+	 */
+	public void printMap() {
+		System.out.println("[[Countries]]");
+		for(String countryName: countryObjects.keySet()) {
+			System.out.println(countryName + " :: " + getAdjacentCountries(countryName).toString());
+		}
+		
+		System.out.println("[[Continent]]");
+		for(String continentName: continentObjects.keySet()) {
+			System.out.println(continentName + " :: " + getContinentCountries(continentName).toString());
+		}
 	}
 
 }

@@ -26,6 +26,12 @@ public class MapLoader {
 	public MapLoader() {
 		scanner = new Scanner(System.in);
 	}
+	
+	@Override
+	public void finalize() {
+		System.out.println("finalize");
+		scanner.close();
+	}
 
 	public GameMap loadMap() {
 
@@ -37,6 +43,7 @@ public class MapLoader {
 
 		if (defaultMapChoice == 1) {
 			loadMapFromFile(DEFAULT_MAP_FILE_PATH);
+			getChoiceToContinueOrEditMap();
 		} else if (defaultMapChoice == 2) {
 			String userMapFilePath = null;
 
@@ -44,17 +51,17 @@ public class MapLoader {
 				userMapFilePath = getAndValidateUserMapFilePath();
 			} while (userMapFilePath == null);
 
-			if (!loadMapFromFile(userMapFilePath)) {
+			while (!loadMapFromFile(userMapFilePath)) {
 				System.out.println("Error in file content");
 				getAndValidateUserMapFilePath();
 			}
-
 			System.out.println("Map Loaded successfully");
+			getChoiceToContinueOrEditMap();
 		} else {
-			MapCreator mapCreator = new MapCreator(map);
-			// TODO: call map creator
+			MapEditor mapEditor = new MapEditor(map);
+			mapEditor.editMap();
 		}
-		getChoiceToContinueOrEditMap();
+		
 		return map;
 	}
 
@@ -182,8 +189,7 @@ public class MapLoader {
 				while ((currentLine = mapFileBufferedReader.readLine()) != null
 						&& !currentLine.equals("[Territories]")) {
 					splitString = currentLine.split("=");
-					Continent continent = new Continent(splitString[0], Integer.parseInt(splitString[1]));
-					map.addContinent(continent);
+					map.addContinent(splitString[0], Integer.parseInt(splitString[1]));
 				}
 			}
 		}
@@ -206,8 +212,7 @@ public class MapLoader {
 				splitString = currentLine.split(",");
 				String currentTerritory = splitString[0];
 				String currentTerritoryContinent = splitString[1];
-				Country country = new Country(currentTerritory, currentTerritoryContinent);
-				map.addCountry(country);
+				map.addCountry(currentTerritory, currentTerritoryContinent);
 				currentLine = mapFileBufferedReader.readLine();
 			}
 
