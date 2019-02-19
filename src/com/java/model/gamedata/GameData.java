@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.java.model.cards.CardsDeck;
-import com.java.model.map.Continent;
-import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 

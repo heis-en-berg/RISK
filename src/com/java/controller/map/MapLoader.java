@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.java.model.map.Continent;
-import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 
 /**
@@ -25,12 +23,6 @@ public class MapLoader {
 
 	public MapLoader() {
 		scanner = new Scanner(System.in);
-	}
-	
-	@Override
-	public void finalize() {
-		System.out.println("finalize");
-		scanner.close();
 	}
 
 	public GameMap loadMap() {
@@ -58,10 +50,11 @@ public class MapLoader {
 			System.out.println("Map Loaded successfully");
 			getChoiceToContinueOrEditMap();
 		} else {
-			MapEditor mapEditor = new MapEditor(map);
-			mapEditor.editMap();
+			MapCreator mapCreator = new MapCreator(map);
+			mapCreator.createMap();
 		}
 		
+		scanner.close();
 		return map;
 	}
 

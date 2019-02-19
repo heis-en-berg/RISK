@@ -116,7 +116,7 @@ public class GameMap {
 
 	public HashSet<String> getContinentCountries(String continentName){
 		if(!this.continentCountries.containsKey(continentName)) {
-			return new HashSet();
+			return new HashSet<String>();
 		}
 		return this.continentCountries.get(continentName);
 	}
@@ -176,6 +176,8 @@ public class GameMap {
 	 * Just for development purpose
 	 */
 	public void printMap() {
+		System.out.println("Author: " +  getMapAuthor());
+
 		System.out.println("[[Countries]]");
 		for(String countryName: countryObjects.keySet()) {
 			System.out.println(countryName + " :: " + getAdjacentCountries(countryName).toString());

@@ -2,7 +2,6 @@ package com.java.controller.map;
 
 import java.util.Scanner;
 
-import com.java.model.map.Continent;
 import com.java.model.map.GameMap;
 
 public class MapEditor {
@@ -39,6 +38,7 @@ public class MapEditor {
 			case 8: showMapContent();
 					break;
 			case 9: if(validateMap()) {
+						scanner.close();
 						return;
 					}
 					break;
@@ -56,18 +56,18 @@ public class MapEditor {
 		try {
 			userChoice = Integer.parseInt(scanner.nextLine());
 		} catch(NumberFormatException e) {
-			System.out.println("Enter a valid input!!");
+			System.out.println("Invalid input!!");
 			userChoice = 0;
 		}
 		return userChoice;
 	}
 
-	private void showMapContent() {
+	protected void showMapContent() {
 		//TODO : Print with details and remove method from model
 		map.printMap();
 	}
 
-	private void removeAdjacenecyBetweenCountries() {
+	protected void removeAdjacenecyBetweenCountries() {
 		String countryName1 = null;
 		String countryName2 = null;
 		System.out.println("Please enter the names of the countries to be disconnected: ");
@@ -90,7 +90,7 @@ public class MapEditor {
 		System.out.println("Edge removed successfully");
 	}
 
-	private void addAdjacenecyBetweenCountries() {
+	protected void addAdjacenecyBetweenCountries() {
 		String countryName1 = null;
 		String countryName2 = null;
 		System.out.println("Please enter the names of the countries to be connected: ");
@@ -110,7 +110,7 @@ public class MapEditor {
 		System.out.println("Edge added successfully");
 	}
 
-	private void removeCountryFromMap() {
+	protected void removeCountryFromMap() {
 		String countryName = null;
 		System.out.print("Please Enter the name of the Country to be removed: ");
 		countryName = scanner.nextLine().trim();
@@ -122,7 +122,7 @@ public class MapEditor {
 		System.out.println("Country removed successfully");
 	}
 
-	private void addCountryToMap() {
+	protected void addCountryToMap() {
 		System.out.print("Please Enter the name of the new Country: ");
 		String newCountryName = scanner.nextLine().trim();
 		if(map.getCountry(newCountryName) != null) {
@@ -140,7 +140,7 @@ public class MapEditor {
 		System.out.println("Country added successfully");
 	}
 
-	private void removeContinentFromMap() {
+	protected void removeContinentFromMap() {
 		
 		String continentName = null;
 		System.out.print("Please Enter the name of the Continent to be removed: ");
@@ -153,7 +153,7 @@ public class MapEditor {
 		System.out.println("Continent removed successfully");
 	}
 
-	private void addContinenToMap() {
+	protected void addContinenToMap() {
 		System.out.print("Please Enter the name of the new Continent: ");
 		String newContinentName = scanner.nextLine().trim();
 		if(map.getContinent(newContinentName) != null) {
@@ -177,7 +177,7 @@ public class MapEditor {
 		System.out.println("Continent added successfully");
 	}
 
-	private void changeMapAuthor() {
+	protected void changeMapAuthor() {
 		System.out.println("Current Map Author: " + map.getMapAuthor());
 		System.out.print("Please Enter the name of the author: ");
 		String mapAuthorName = scanner.nextLine().trim();
@@ -185,7 +185,7 @@ public class MapEditor {
 		System.out.println("Map Author updated to : " + map.getMapAuthor());
 	}
 	
-	private boolean validateMap() {
+	protected boolean validateMap() {
 		// TODO Auto-generated method stub
 		return true;
 	}
