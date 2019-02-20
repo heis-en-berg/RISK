@@ -160,7 +160,7 @@ public class GameMap {
 		return conqueredCountriesPerPlayer;
 	}
 
-	// SET THE WHOLE OBJECT NOT ADDING ELEMENTS
+	// SET THE WHOLE OBJECT NOT ADDING ELEMENTS using gettes and setters to acess private data 
 
 	public void setConqueredCountriesPerPlayer(HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer) {
 		this.conqueredCountriesPerPlayer = conqueredCountriesPerPlayer;
@@ -169,4 +169,38 @@ public class GameMap {
 	public void setConqueredContinentsPerPlayer(HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer) {
 		this.conqueredContinentsPerPlayer = conqueredContinentsPerPlayer;
 	}
+
+	public void setCountryObjects(HashMap<String, Country> countryObjects) {
+		this.countryObjects = countryObjects;
+	}
+
+	public HashMap<String, Continent> getContinentObjects() {
+		return continentObjects;
+	}
+
+	public void setContinentObjects(HashMap<String, Continent> continentObjects) {
+		this.continentObjects = continentObjects;
+	}
+
+	public HashMap<String, HashSet<String>> getAdjacentCountries() {
+		return adjacentCountries;
+	}
+
+	public void setAdjacentCountries(HashMap<String, HashSet<String>> adjacentCountries) {
+		this.adjacentCountries = adjacentCountries;
+	}
+
+	public HashMap<String, HashSet<String>> getContinentCountries() {
+		return continentCountries;
+	}
+
+	public void setContinentCountries(HashMap<String, HashSet<String>> continentCountries) {
+		this.continentCountries = continentCountries;
+	}
+
+	public HashMap<Integer, HashSet<String>> getConqueredContinentsPerPlayer() {
+		return conqueredContinentsPerPlayer;
+	}
+
+
 }

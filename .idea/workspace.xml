@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2b5e2b90-6aa9-4b37-8819-e27d8f1aafa7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/com/java/controller/startup/StartUpPhase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/controller/startup/StartUpPhase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/java/model/map/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/model/map/GameMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/java/view/RiskGameDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/view/RiskGameDriver.java" afterDir="false" />
     </list>
@@ -14,85 +14,59 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/main/RiskGameApplication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="9" selection-start-line="9" selection-end-line="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/java/view/RiskGameDriver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="61" column="25" lean-forward="true" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
+            <state relative-caret-position="49">
+              <caret line="49" column="42" lean-forward="true" selection-start-line="49" selection-start-column="42" selection-end-line="49" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1270#1278#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/java/controller/startup/StartUpPhase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-36">
+              <caret line="24" column="4" lean-forward="true" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="4" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/java/controller/startup/StartUpPhase.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="409">
-              <caret line="59" column="84" selection-start-line="59" selection-start-column="84" selection-end-line="59" selection-end-column="84" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#296#297#0" expanded="true" />
-                <element signature="e#323#324#0" expanded="true" />
-                <element signature="e#352#353#0" expanded="true" />
-                <element signature="e#370#371#0" expanded="true" />
-                <element signature="e#447#448#0" expanded="true" />
-                <element signature="e#459#460#0" expanded="true" />
-                <element signature="e#490#491#0" expanded="true" />
-                <element signature="e#508#509#0" expanded="true" />
-                <element signature="e#662#670#0" expanded="true" />
-                <element signature="e#1190#1216#0" expanded="true" />
-                <element signature="e#697#698#0" expanded="true" />
-                <element signature="e#715#716#0" expanded="true" />
-                <element signature="e#823#824#0" expanded="true" />
-                <element signature="e#841#842#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/java/model/map/GameMap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="164" column="111" selection-start-line="164" selection-start-column="111" selection-end-line="164" selection-end-column="111" />
+            <state relative-caret-position="-289">
+              <caret line="162" column="95" selection-start-line="162" selection-start-column="95" selection-end-line="162" selection-end-column="95" />
               <folding>
-                <element signature="e#5384#5385#0" expanded="true" />
-                <element signature="e#5412#5413#0" expanded="true" />
                 <element signature="e#5489#5490#0" expanded="true" />
                 <element signature="e#5530#5531#0" expanded="true" />
+                <element signature="e#6014#6015#0" expanded="true" />
+                <element signature="e#6057#6058#0" expanded="true" />
+                <element signature="e#6117#6118#0" expanded="true" />
+                <element signature="e#6147#6148#0" expanded="true" />
+                <element signature="e#6342#6343#0" expanded="true" />
+                <element signature="e#6373#6374#0" expanded="true" />
+                <element signature="e#6579#6580#0" expanded="true" />
+                <element signature="e#6611#6612#0" expanded="true" />
+                <element signature="e#6832#6833#0" expanded="true" />
+                <element signature="e#6874#6875#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/java/model/gamedata/GameData.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
-              <folding>
-                <element signature="e#2018#2019#0" expanded="true" />
-                <element signature="e#2039#2040#0" expanded="true" />
-                <element signature="e#2093#2094#0" expanded="true" />
-                <element signature="e#2122#2123#0" expanded="true" />
-                <element signature="e#2158#2159#0" expanded="true" />
-                <element signature="e#2183#2184#0" expanded="true" />
-                <element signature="e#2235#2236#0" expanded="true" />
-                <element signature="e#2272#2273#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/main/RiskGameApplication.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -112,13 +86,13 @@
       <list>
         <option value="$PROJECT_DIR$/src/com/java/model/gamedata/GameData.java" />
         <option value="$PROJECT_DIR$/src/module-info.java" />
+        <option value="$PROJECT_DIR$/src/com/java/controller/startup/StartUpPhase.java" />
         <option value="$PROJECT_DIR$/src/com/java/view/RiskGameDriver.java" />
         <option value="$PROJECT_DIR$/src/com/java/model/map/GameMap.java" />
-        <option value="$PROJECT_DIR$/src/com/java/controller/startup/StartUpPhase.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-18" />
     <option name="y" value="-34" />
     <option name="width" value="2092" />
@@ -129,7 +103,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -183,13 +156,14 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550624300943" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550706204666" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../Sem1/Software Project Managment/Project-HRMS/Testing workSpace" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="C:/Program Files/nodejs/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -238,12 +212,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1550614638331</updated>
-      <workItem from="1550614642160" duration="8851000" />
+      <workItem from="1550614642160" duration="9141000" />
+      <workItem from="1550703549096" duration="2282000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8851000" />
+    <option name="totallyTimeSpent" value="11423000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
@@ -254,7 +229,7 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info active="true" content_ui="combo" id="Project" order="5" visible="true" weight="0.17408907" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.17651822" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Messages" order="0" weight="0.32960895" />
       <window_info anchor="bottom" id="Version Control" order="1" />
@@ -265,7 +240,7 @@
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
       <window_info anchor="bottom" id="Run" order="8" weight="0.32960895" />
-      <window_info anchor="bottom" id="Debug" order="9" weight="0.30726257" />
+      <window_info anchor="bottom" id="Debug" order="9" weight="0.47858474" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="12" />
@@ -283,18 +258,6 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/java/controller/startup/StartUpPhase.java</url>
-          <line>59</line>
-          <properties />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/module-info.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -303,6 +266,13 @@
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/model/gamedata/GameData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="30" column="25" lean-forward="true" selection-start-line="30" selection-end-line="31" />
         </state>
       </provider>
     </entry>
@@ -315,65 +285,41 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/view/RiskGameDriver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="61" column="25" lean-forward="true" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
+        <state relative-caret-position="49">
+          <caret line="49" column="42" lean-forward="true" selection-start-line="49" selection-start-column="42" selection-end-line="49" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1270#1278#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/model/gamedata/GameData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
-          <folding>
-            <element signature="e#2018#2019#0" expanded="true" />
-            <element signature="e#2039#2040#0" expanded="true" />
-            <element signature="e#2093#2094#0" expanded="true" />
-            <element signature="e#2122#2123#0" expanded="true" />
-            <element signature="e#2158#2159#0" expanded="true" />
-            <element signature="e#2183#2184#0" expanded="true" />
-            <element signature="e#2235#2236#0" expanded="true" />
-            <element signature="e#2272#2273#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/model/map/GameMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="164" column="111" selection-start-line="164" selection-start-column="111" selection-end-line="164" selection-end-column="111" />
-          <folding>
-            <element signature="e#5384#5385#0" expanded="true" />
-            <element signature="e#5412#5413#0" expanded="true" />
-            <element signature="e#5489#5490#0" expanded="true" />
-            <element signature="e#5530#5531#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/controller/startup/StartUpPhase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="59" column="84" selection-start-line="59" selection-start-column="84" selection-end-line="59" selection-end-column="84" />
+        <state relative-caret-position="-36">
+          <caret line="24" column="4" lean-forward="true" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="4" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#296#297#0" expanded="true" />
-            <element signature="e#323#324#0" expanded="true" />
-            <element signature="e#352#353#0" expanded="true" />
-            <element signature="e#370#371#0" expanded="true" />
-            <element signature="e#447#448#0" expanded="true" />
-            <element signature="e#459#460#0" expanded="true" />
-            <element signature="e#490#491#0" expanded="true" />
-            <element signature="e#508#509#0" expanded="true" />
-            <element signature="e#662#670#0" expanded="true" />
-            <element signature="e#1190#1216#0" expanded="true" />
-            <element signature="e#697#698#0" expanded="true" />
-            <element signature="e#715#716#0" expanded="true" />
-            <element signature="e#823#824#0" expanded="true" />
-            <element signature="e#841#842#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/model/map/GameMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-289">
+          <caret line="162" column="95" selection-start-line="162" selection-start-column="95" selection-end-line="162" selection-end-column="95" />
+          <folding>
+            <element signature="e#5489#5490#0" expanded="true" />
+            <element signature="e#5530#5531#0" expanded="true" />
+            <element signature="e#6014#6015#0" expanded="true" />
+            <element signature="e#6057#6058#0" expanded="true" />
+            <element signature="e#6117#6118#0" expanded="true" />
+            <element signature="e#6147#6148#0" expanded="true" />
+            <element signature="e#6342#6343#0" expanded="true" />
+            <element signature="e#6373#6374#0" expanded="true" />
+            <element signature="e#6579#6580#0" expanded="true" />
+            <element signature="e#6611#6612#0" expanded="true" />
+            <element signature="e#6832#6833#0" expanded="true" />
+            <element signature="e#6874#6875#0" expanded="true" />
           </folding>
         </state>
       </provider>
