@@ -58,9 +58,12 @@ public class RiskGameDriver {
 		// assign to game data the playerss
 		gameData.setPlayers(players);
 
+		// Country Assignment begins
+		startUp.assignCountriesToPlayers();
+
 
 	}
-	
+
 	private void initiateRoundRobinBasedGamePlay() {
 		// TODO Auto-generated method stub
 	}

@@ -1,9 +1,13 @@
 package com.java.controller.startup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Random;
 
 import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
+import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 
@@ -37,7 +41,23 @@ public class StartUpPhase {
 	}
 	
 	public void assignCountriesToPlayers() {
-		
+		HashMap<String, Country> countryObject = gameData.gameMap.getCountryObjects();
+
+		Random randomPlayerID = new Random();
+		int numOfPlayersId;
+		HashMap<Integer, HashSet<String>> conqueredContriesPerPlayer = new HashMap<Integer, HashSet<String>>();
+
+		for (int i = 0; i < gameData.getNoOfPlayers(); i++){
+			conqueredContriesPerPlayer.put(i,new HashSet<String>());
+		}
+
+		for(String countryName : countryObject.keySet()){
+			numOfPlayersId = randomPlayerID.nextInt(gameData.getNoOfPlayers()+1); // from first to last
+			HashSet<String> countriesPlayer = conqueredContriesPerPlayer.get(numOfPlayersId);
+			countriesPlayer.add(countryName);
+		}
+
+		gameData.gameMap.setConqueredCountriesPerPlayer(conqueredContriesPerPlayer);
 	}
 	
 	public CardsDeck generateCardsDeck() {

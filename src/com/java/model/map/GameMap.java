@@ -12,7 +12,9 @@ public class GameMap {
 	private HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer;
 	private HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer;
 	private String mapAuthor;
+
 	public String warn;
+
 
 	public GameMap() {
 		countryObjects = new HashMap<>();
@@ -150,4 +152,21 @@ public class GameMap {
 		return this.mapAuthor;
 	}
 
+	public HashMap<String, Country> getCountryObjects() {
+		return countryObjects;
+	}
+
+	public HashMap<Integer, HashSet<String>> getConqueredCountriesPerPlayer() {
+		return conqueredCountriesPerPlayer;
+	}
+
+	// SET THE WHOLE OBJECT NOT ADDING ELEMENTS
+
+	public void setConqueredCountriesPerPlayer(HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer) {
+		this.conqueredCountriesPerPlayer = conqueredCountriesPerPlayer;
+	}
+
+	public void setConqueredContinentsPerPlayer(HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer) {
+		this.conqueredContinentsPerPlayer = conqueredContinentsPerPlayer;
+	}
 }
