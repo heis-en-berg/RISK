@@ -1,7 +1,6 @@
 package com.java.model.player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.java.model.cards.Card;
 

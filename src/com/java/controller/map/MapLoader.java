@@ -8,14 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.java.model.map.Continent;
-import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 
 /**
  * 
  * @author Karan Dhingra
- *
+ * TODO: validate .map file before loading the map
  */
 public class MapLoader {
 
@@ -44,21 +42,29 @@ public class MapLoader {
 				userMapFilePath = getAndValidateUserMapFilePath();
 			} while (userMapFilePath == null);
 
-			if (!loadMapFromFile(userMapFilePath)) {
+			while (!loadMapFromFile(userMapFilePath)) {
 				System.out.println("Error in file content");
 				getAndValidateUserMapFilePath();
 			}
-
 			System.out.println("Map Loaded successfully");
 		} else {
 			MapCreator mapCreator = new MapCreator(map);
-			// TODO: call map creator
+			map = mapCreator.createMap();
 		}
-		getChoiceToContinueOrEditMap();
+		Integer editOrContinueChoice = 0;
+		
+		do {
+			editOrContinueChoice = getChoiceToContinueOrEditMap();
+			if (editOrContinueChoice == 1) {
+				MapEditor mapEditor = new MapEditor(map);
+				map = mapEditor.editMap();
+			}
+		} while(editOrContinueChoice != 2);
+		
 		return map;
 	}
 
-	private void getChoiceToContinueOrEditMap() {
+	private Integer getChoiceToContinueOrEditMap() {
 		Integer choice = null;
 		do {
 			System.out.println();
@@ -73,10 +79,7 @@ public class MapLoader {
 			}
 		} while (!(choice == 1 || choice == 2));
 
-		if (choice == 1) {
-			MapEditor mapEditor = new MapEditor(map);
-			mapEditor.editMap();
-		}
+		return choice;
 	}
 
 	private Integer getChoiceToUseDeafaultMap() {
@@ -182,8 +185,7 @@ public class MapLoader {
 				while ((currentLine = mapFileBufferedReader.readLine()) != null
 						&& !currentLine.equals("[Territories]")) {
 					splitString = currentLine.split("=");
-					Continent continent = new Continent(splitString[0], Integer.parseInt(splitString[1]));
-					map.addContinent(continent);
+					map.addContinent(splitString[0], Integer.parseInt(splitString[1]));
 				}
 			}
 		}
@@ -206,8 +208,7 @@ public class MapLoader {
 				splitString = currentLine.split(",");
 				String currentTerritory = splitString[0];
 				String currentTerritoryContinent = splitString[1];
-				Country country = new Country(currentTerritory, currentTerritoryContinent);
-				map.addCountry(country);
+				map.addCountry(currentTerritory, currentTerritoryContinent);
 				currentLine = mapFileBufferedReader.readLine();
 			}
 
