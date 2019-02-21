@@ -60,6 +60,27 @@ public class StartUpPhase {
 		gameData.gameMap.setConqueredCountriesPerPlayer(conqueredContriesPerPlayer);
 	}
 	
+	public Integer initialArmyCalculation(Integer numPlayers) {
+		Integer numberOfArmiesPerPlayer = new Integer(0);
+		switch(numPlayers) {
+			case 2:
+				numberOfArmiesPerPlayer = 40;
+				break;
+			case 3:
+				numberOfArmiesPerPlayer = 35;
+				break;
+			case 4:
+				numberOfArmiesPerPlayer = 30;
+				break;
+			case 5:
+				numberOfArmiesPerPlayer = 25;
+				break;
+			case 6:
+				numberOfArmiesPerPlayer = 20;
+				break;
+		}
+		return numberOfArmiesPerPlayer;
+	}
 	public CardsDeck generateCardsDeck() {
 		return null;
 	}

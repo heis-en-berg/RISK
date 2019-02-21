@@ -3,9 +3,12 @@ package com.java.view;
 import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
+import com.java.model.map.Country;
 import com.java.model.player.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class RiskGameDriver {
@@ -25,7 +28,7 @@ public class RiskGameDriver {
 		// Call the helpers here
 		initiateStartUpPhase();
 	}
-	
+
 	private void initiateStartUpPhase() {
 		// need to call the controller start uphase
 		startUp = new StartUpPhase(gameData);
@@ -61,16 +64,53 @@ public class RiskGameDriver {
 		// Country Assignment begins
 		startUp.assignCountriesToPlayers();
 
-
+		// List players and countries for each
+		System.out.println("List of players with owned countries");
+		HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer = gameData.gameMap.getConqueredCountriesPerPlayer();
+		
+		// Calculation of initial army
+		//Integer numberOfArmiesPerPlayer =  startUp.initialArmyCalculation(gameData.getNoOfPlayers());
+		System.out.println("Calculation of initial armies done....");
+		
+		// Initial army placement start
+		
+		for(Player player : startUp.gameData.getPlayers()) {
+			
+			HashSet<String> countriesPerPlayer = conqueredCountriesPerPlayer.get(player.getPlayerID());
+			System.out.println("Player: " + player.getPlayerName() + "owns the following countries: ");
+			
+			String[] countriesPerPlayerArray = (String[]) countriesPerPlayer.toArray();
+			Integer numberOfArmiesAvailablePerPlayer =  startUp.initialArmyCalculation(gameData.getNoOfPlayers());
+			
+			while(numberOfArmiesAvailablePerPlayer > 0) {
+				for(int i = 0; i < countriesPerPlayerArray.length; i++) {
+					System.out.println(i + ": " + countriesPerPlayerArray[i]);
+				}
+				
+				System.out.println("Please pick the number associated with country in order to place armies: ");
+				int chosedCountryByUser = input.nextInt();
+				String countryName = countriesPerPlayerArray[chosedCountryByUser];
+				
+				System.out.println("You have " + numberOfArmiesAvailablePerPlayer + " armies left");
+				System.out.println("How many armies do you want to put in: " + countryName);
+				int numberOfArmiesByUser = input.nextInt();
+				
+				HashMap<String, Country> countryObjects = gameData.gameMap.getCountryObjects();
+			
+				Country selectedCountry = countryObjects.get(countryName);
+				selectedCountry.addArmy(numberOfArmiesByUser);
+				numberOfArmiesAvailablePerPlayer = numberOfArmiesAvailablePerPlayer - numberOfArmiesByUser;
+			}
+		}
 
 	}
 
 	private void initiateRoundRobinBasedGamePlay() {
 		// TODO Auto-generated method stub
 	}
-	
+
 	private void startTurn() {
 		// TODO Auto-generated method stub
 	}
-	
+
 }
