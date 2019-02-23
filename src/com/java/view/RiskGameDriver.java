@@ -51,10 +51,13 @@ public class RiskGameDriver {
 
 		ArrayList<String> playerNames = new ArrayList<String>();
 
-		for(int i=0; i<numOfPlayer; i++ ){
+		for(int i=0; i<numOfPlayer; i++ ) {
 			System.out.println("Player " + (i+1) + " Enter your name: ");
 			playerNames.add(input.next());
 		}
+
+		// call rolldice
+
 
 		// array list of players returned when generated from the controller
 		ArrayList<Player> players = startUp.generatePlayers(playerNames);
@@ -106,6 +109,7 @@ public class RiskGameDriver {
 		}
 
 	}
+
 
 	private void initiateRoundRobinBasedGamePlay() {
 		// TODO Auto-generated method stub

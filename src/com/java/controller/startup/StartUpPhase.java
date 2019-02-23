@@ -1,9 +1,6 @@
 package com.java.controller.startup;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
@@ -41,16 +38,32 @@ public class StartUpPhase {
 	}
 	
 	public void assignCountriesToPlayers() {
+		// used to assign the countires to the players
+		HashMap<Integer, HashSet<String>> conqueredContriesPerPlayer = new HashMap<Integer, HashSet<String>>();
+
+
+		// used to obtian the country objects
 		HashMap<String, Country> countryObject = gameData.gameMap.getCountryObjects();
 
 		Random randomPlayerID = new Random();
 		int numOfPlayersId;
-		HashMap<Integer, HashSet<String>> conqueredContriesPerPlayer = new HashMap<Integer, HashSet<String>>();
+
+		// start randomly assigning the countries evenly to the players
+		String[] countiresToAssign = Arrays.copyOf(countryObject.keySet().toArray(), countryObject.size(),String[].class);
+
+		// converting to arraylist for shuffing the elements (contries)
+		ArrayList<String> countiresToAssignArrayList =  new ArrayList<String>(Arrays.asList(countiresToAssign));
+
+		Collections.shuffle(countiresToAssignArrayList);
+
+		// calculate the even number of contries to assign to each player
+		int numToAssign = countiresToAssignArrayList.size()/gameData.getNoOfPlayers();
 
 		for (int i = 0; i < gameData.getNoOfPlayers(); i++){
-			conqueredContriesPerPlayer.put(i+1,new HashSet<String>());
+			conqueredContriesPerPlayer.put(i+1,new HashSet<String>()); // its just empty strings to fill up
 		}
 
+		// iterating and assigning country to a player
 		for(String countryName : countryObject.keySet()){
 			numOfPlayersId = randomPlayerID.nextInt(gameData.getNoOfPlayers()) + 1; // from first to last
 			HashSet<String> countriesPlayer = conqueredContriesPerPlayer.get(numOfPlayersId);
