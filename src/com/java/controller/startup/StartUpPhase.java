@@ -15,8 +15,8 @@ public class StartUpPhase {
 
 	public GameData gameData;
 	
-	public StartUpPhase(GameData gameDate) {
-		this.gameData = new GameData();
+	public StartUpPhase(GameData gameData) {
+		this.gameData = gameData;
 	}
 	
 	public GameData start() {
@@ -48,11 +48,11 @@ public class StartUpPhase {
 		HashMap<Integer, HashSet<String>> conqueredContriesPerPlayer = new HashMap<Integer, HashSet<String>>();
 
 		for (int i = 0; i < gameData.getNoOfPlayers(); i++){
-			conqueredContriesPerPlayer.put(i,new HashSet<String>());
+			conqueredContriesPerPlayer.put(i+1,new HashSet<String>());
 		}
 
 		for(String countryName : countryObject.keySet()){
-			numOfPlayersId = randomPlayerID.nextInt(gameData.getNoOfPlayers()+1); // from first to last
+			numOfPlayersId = randomPlayerID.nextInt(gameData.getNoOfPlayers()) + 1; // from first to last
 			HashSet<String> countriesPlayer = conqueredContriesPerPlayer.get(numOfPlayersId);
 			countriesPlayer.add(countryName);
 		}

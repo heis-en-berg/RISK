@@ -19,7 +19,7 @@ public class MapLoader {
 
 	GameMap map = new GameMap();
 	Scanner scanner;
-	public static final String DEFAULT_MAP_FILE_PATH = "./map/default.map";
+	public static final String DEFAULT_MAP_FILE_PATH = "./map/default1.map";
 
 	public MapLoader() {
 		scanner = new Scanner(System.in);
