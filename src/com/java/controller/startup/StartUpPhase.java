@@ -11,6 +11,7 @@ import com.java.model.player.Player;
 public class StartUpPhase {
 
 	public GameData gameData;
+	private static int playerId = 1;
 	
 	public StartUpPhase(GameData gameData) {
 		this.gameData = gameData;
@@ -32,7 +33,8 @@ public class StartUpPhase {
 		ArrayList<Player> newPlayers = new ArrayList<Player>();
 
 		for(int i=0; i < playerNames.size(); i++){
-			newPlayers.add(new Player(((Integer)i+1),playerNames.get(i)));
+			newPlayers.add(new Player(playerId,playerNames.get(i)));
+			playerId++;
 		}
 		return newPlayers;
 	}
@@ -57,17 +59,30 @@ public class StartUpPhase {
 		Collections.shuffle(countiresToAssignArrayList);
 
 		// calculate the even number of contries to assign to each player
-		int numToAssign = countiresToAssignArrayList.size()/gameData.getNoOfPlayers();
-
-		for (int i = 0; i < gameData.getNoOfPlayers(); i++){
-			conqueredContriesPerPlayer.put(i+1,new HashSet<String>()); // its just empty strings to fill up
-		}
-
-		// iterating and assigning country to a player
-		for(String countryName : countryObject.keySet()){
-			numOfPlayersId = randomPlayerID.nextInt(gameData.getNoOfPlayers()) + 1; // from first to last
-			HashSet<String> countriesPlayer = conqueredContriesPerPlayer.get(numOfPlayersId);
-			countriesPlayer.add(countryName);
+		int numOfCountriesPerPlayerToAssign = countiresToAssignArrayList.size()/gameData.getNoOfPlayers();
+		
+		int numOfCountriesToAssign = countiresToAssignArrayList.size();
+		int numberOfPlayers = gameData.getNoOfPlayers();
+		int index = 0;
+		// this index keeps track of the current index of array countries
+		int indexKeeper = 0;
+		// iterating the players Ids to give them the countries
+		for (int i = 1; i < gameData.getNoOfPlayers() + 1; i++){
+			HashSet<String> countriesOwnedByAPlayer = new HashSet<String>();
+			int numberOfCountriesAssigned = 0;
+			for(int j = indexKeeper; j < indexKeeper + numOfCountriesPerPlayerToAssign; j++) {
+				countriesOwnedByAPlayer.add(countiresToAssignArrayList.get(j));
+				numberOfCountriesAssigned++;
+			}
+			// we change the number of countries to give to the player to be fair with each.
+			indexKeeper = indexKeeper + numberOfCountriesAssigned;
+			conqueredContriesPerPlayer.put(i,countriesOwnedByAPlayer);
+			index++;
+			numOfCountriesToAssign = numOfCountriesToAssign - numberOfCountriesAssigned;
+			numberOfPlayers--;
+			if(numberOfPlayers != 0) {
+				numOfCountriesPerPlayerToAssign = numOfCountriesToAssign/numberOfPlayers;
+			}
 		}
 
 		gameData.gameMap.setConqueredCountriesPerPlayer(conqueredContriesPerPlayer);
