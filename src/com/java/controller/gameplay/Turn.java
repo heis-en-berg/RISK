@@ -142,6 +142,11 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 					this.boldStatement("("+String.valueOf(reinforcementArmy)+")\n\n");
 					continue;
 				}
+				if(!(numberOfArmiesToBePlacedByUser > 0)){
+					this.clearConsole();
+					this.highlightStatementInRed("Please input a value greater than 0.\n\n");
+					continue;
+				}
 				this.clearConsole();
 				this.highlightStatementInRed("Successful...Country chosen " + countryNameByUser + " ,Number of armies placed: " + numberOfArmiesToBePlacedByUser + "\n\n");
 				this.gameData.gameMap.getCountry(countryNameByUser).addArmy(numberOfArmiesToBePlacedByUser);
