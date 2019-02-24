@@ -38,6 +38,8 @@ public class StartUpPhase {
 		}
 		return newPlayers;
 	}
+
+
 	
 	public void assignCountriesToPlayers() {
 		// used to assign the countires to the players
@@ -64,22 +66,31 @@ public class StartUpPhase {
 		int numOfCountriesToAssign = countiresToAssignArrayList.size();
 		int numberOfPlayers = gameData.getNoOfPlayers();
 		int index = 0;
-		// this index keeps track of the current index of array countries
 		int indexKeeper = 0;
+
+
 		// iterating the players Ids to give them the countries
 		for (int i = 1; i < gameData.getNoOfPlayers() + 1; i++){
 			HashSet<String> countriesOwnedByAPlayer = new HashSet<String>();
 			int numberOfCountriesAssigned = 0;
+
+			// creating the window to assign countires to players , iterate and change index based on the even number to distrubute per PLAYERS
+			// this index keeps track of the current index of array countries
 			for(int j = indexKeeper; j < indexKeeper + numOfCountriesPerPlayerToAssign; j++) {
 				countriesOwnedByAPlayer.add(countiresToAssignArrayList.get(j));
 				numberOfCountriesAssigned++;
 			}
+
 			// we change the number of countries to give to the player to be fair with each.
 			indexKeeper = indexKeeper + numberOfCountriesAssigned;
 			conqueredContriesPerPlayer.put(i,countriesOwnedByAPlayer);
 			index++;
+
+			// just update the number of contires to assign to next player
 			numOfCountriesToAssign = numOfCountriesToAssign - numberOfCountriesAssigned;
 			numberOfPlayers--;
+
+			// so that it doesnt break the code since the last player has been chosen.
 			if(numberOfPlayers != 0) {
 				numOfCountriesPerPlayerToAssign = numOfCountriesToAssign/numberOfPlayers;
 			}
@@ -87,7 +98,9 @@ public class StartUpPhase {
 
 		gameData.gameMap.setConqueredCountriesPerPlayer(conqueredContriesPerPlayer);
 	}
-	
+
+
+
 	public Integer initialArmyCalculation(Integer numPlayers) {
 		Integer numberOfArmiesPerPlayer = new Integer(0);
 		switch(numPlayers) {

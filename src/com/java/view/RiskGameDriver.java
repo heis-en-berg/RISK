@@ -1,5 +1,6 @@
 package com.java.view;
 
+import com.java.controller.dice.Dice;
 import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
@@ -56,8 +57,6 @@ public class RiskGameDriver {
 			playerNames.add(input.next());
 		}
 
-		// call rolldice
-
 
 		// array list of players returned when generated from the controller
 		ArrayList<Player> players = startUp.generatePlayers(playerNames);
@@ -71,12 +70,14 @@ public class RiskGameDriver {
 		// List players and countries for each
 		System.out.println("List of players with owned countries");
 		HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer = gameData.gameMap.getConqueredCountriesPerPlayer();
-		
+
+		// now start the roundrobin order
+
+
 		// Calculation of initial army
-		//Integer numberOfArmiesPerPlayer =  startUp.initialArmyCalculation(gameData.getNoOfPlayers());
 		System.out.println("Calculation of initial armies done....");
 		
-		// Initial army placement start
+		// TODO Initial army placement start put this in another method
 		HashMap<String, Country> countryObjects = gameData.gameMap.getCountryObjects();
 		
 		for(Player player : startUp.gameData.getPlayers()) {
@@ -89,6 +90,7 @@ public class RiskGameDriver {
 			
 			while(numberOfArmiesAvailablePerPlayer > 0) {
 				System.out.println("Player: " + player.getPlayerName() + " owns the following countries: ");
+
 				for(int i = 0; i < countriesPerPlayerArray.length; i++) {
 					String countryName = countriesPerPlayerArray[i];
 					System.out.println(i + ": " + countryName + " has " + countryObjects.get(countryName).getCountryArmyCount() + " armies placed.");
@@ -109,7 +111,6 @@ public class RiskGameDriver {
 		}
 
 	}
-
 
 	private void initiateRoundRobinBasedGamePlay() {
 		// TODO Auto-generated method stub
