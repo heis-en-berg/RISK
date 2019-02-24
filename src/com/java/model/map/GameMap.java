@@ -16,6 +16,7 @@ public class GameMap implements Cloneable{
 
 	public GameMap() {
 		mapAuthor = "";
+		warn = "";
 		countryObjects = new HashMap<>();
 		adjacentCountries = new HashMap<>();
 		continentObjects = new HashMap<>();
