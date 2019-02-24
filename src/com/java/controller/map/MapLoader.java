@@ -13,7 +13,7 @@ import com.java.model.map.GameMap;
 /**
  * 
  * @author Karan Dhingra
- * TODO: validate .map file before loading the map
+ * TODO: save map in a text file
  */
 public class MapLoader {
 
@@ -44,7 +44,7 @@ public class MapLoader {
 
 			while (!loadMapFromFile(userMapFilePath)) {
 				System.out.println("Error in file content");
-				getAndValidateUserMapFilePath();
+				getChoiceToUseDeafaultMap();
 			}
 			System.out.println("Map Loaded successfully");
 		} else {
@@ -113,12 +113,36 @@ public class MapLoader {
 		}
 		return filePath;
 	}
+	
+	private String nextLine(BufferedReader mapFileBufferedReader) throws IOException {
+		String currentLine = null;
+		
+		do {
+			currentLine = mapFileBufferedReader.readLine();
+		} while(currentLine != null && currentLine.length() == 0);
+		
+		if(currentLine != null) {
+			currentLine = currentLine.trim();
+		}
+		
+		return currentLine;
+	}
 
 	private Boolean loadMapFromFile(String mapFilePath) {
 
 		Boolean response = true;
 		BufferedReader mapFileBufferedReader = null;
 
+		MapValidator mapValidator = new MapValidator();
+		try {
+			if(!mapValidator.validateMapTextFile(mapFilePath)) {
+				return false;
+			}
+		} catch (IOException e2) {
+			System.out.println(e2.getMessage());
+			return false;
+		}
+		
 		try {
 			mapFileBufferedReader = new BufferedReader(new FileReader(mapFilePath));
 		} catch (FileNotFoundException e1) {
@@ -146,21 +170,21 @@ public class MapLoader {
 		String[] splitString;
 		String currentLine = "";
 
-		if ((currentLine = mapFileBufferedReader.readLine()) != null) {
+		if ((currentLine = nextLine(mapFileBufferedReader)) != null) {
 			currentLine = currentLine.trim();
 
 			if (!currentLine.equals("[Map]")) {
 				response = false;
 			} else {
 
-				if ((currentLine = mapFileBufferedReader.readLine()) != null) {
+				if ((currentLine = nextLine(mapFileBufferedReader)) != null) {
 					splitString = currentLine.split("=");
 					map.setMapAuthor(splitString[1]);
 				} else {
 					response = false;
 				}
 
-				if ((currentLine = mapFileBufferedReader.readLine()) != null) {
+				if ((currentLine = nextLine(mapFileBufferedReader)) != null) {
 					splitString = currentLine.split("=");
 					map.warn = splitString[1];
 				} else {
@@ -177,12 +201,12 @@ public class MapLoader {
 		String[] splitString;
 		String currentLine = "";
 
-		if ((currentLine = mapFileBufferedReader.readLine()) != null) {
+		if ((currentLine = nextLine(mapFileBufferedReader)) != null) {
 			String tag = currentLine.trim();
 			if (!tag.equals("[Continents]")) {
 				response = false;
 			} else {
-				while ((currentLine = mapFileBufferedReader.readLine()) != null
+				while ((currentLine = nextLine(mapFileBufferedReader)) != null
 						&& !currentLine.equals("[Territories]")) {
 					splitString = currentLine.split("=");
 					map.addContinent(splitString[0], Integer.parseInt(splitString[1]));
@@ -201,7 +225,7 @@ public class MapLoader {
 		String currentLine = "";
 		ArrayList<String> territoryTextData = new ArrayList<>();
 
-		if ((currentLine = mapFileBufferedReader.readLine()) != null) {
+		if ((currentLine = nextLine(mapFileBufferedReader)) != null) {
 
 			while (currentLine != null) {
 				territoryTextData.add(currentLine);
@@ -209,7 +233,7 @@ public class MapLoader {
 				String currentTerritory = splitString[0];
 				String currentTerritoryContinent = splitString[1];
 				map.addCountry(currentTerritory, currentTerritoryContinent);
-				currentLine = mapFileBufferedReader.readLine();
+				currentLine = nextLine(mapFileBufferedReader);
 			}
 
 			for (int i = 0; i < territoryTextData.size(); i++) {
