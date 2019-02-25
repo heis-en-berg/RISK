@@ -2,6 +2,7 @@ package com.java.controller.startup;
 
 import java.util.*;
 
+import com.java.controller.dice.Dice;
 import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
@@ -112,6 +113,19 @@ public class StartUpPhase {
 	}
 	public CardsDeck generateCardsDeck() {
 		return null;
+	}
+
+	public ArrayList<Player> generateRoundRobin(){
+
+		Dice dice = new Dice();
+
+		//iterate over players and set the order of play
+		for(Player player : gameData.getPlayers()){
+			player.setOrderOfPlay(dice.rollDice());
+		}
+
+		Collections.sort(gameData.getPlayers());
+
 	}
 	
 	public void placeArmies() {

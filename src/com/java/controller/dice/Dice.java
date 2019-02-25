@@ -14,6 +14,7 @@ public class Dice {
 		return 	rand1.nextInt(6 - 1 +1) + 1;
 	}
 
+	// for later...
 	public ArrayList<Integer> rollDice(Integer numberOfDice) {
 		return null;
 	}

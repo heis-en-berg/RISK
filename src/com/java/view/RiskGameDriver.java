@@ -67,11 +67,14 @@ public class RiskGameDriver {
 		// Country Assignment begins
 		startUp.assignCountriesToPlayers();
 
+
 		// List players and countries for each
 		System.out.println("List of players with owned countries");
 		HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer = gameData.gameMap.getConqueredCountriesPerPlayer();
 
+
 		// now start the roundrobin order
+		initiateRoundRobin();
 
 
 		// Calculation of initial army
@@ -109,6 +112,10 @@ public class RiskGameDriver {
 				numberOfArmiesAvailablePerPlayer = numberOfArmiesAvailablePerPlayer - numberOfArmiesByUser;
 			}
 		}
+
+	}
+
+	private void initiateRoundRobin(){
 
 	}
 

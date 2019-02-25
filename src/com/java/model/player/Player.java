@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.java.model.cards.Card;
 
-public class Player {
+public class Player implements Comparable<Player> {
 
 	private Integer playerID;
 	private String playerName;
@@ -35,5 +35,12 @@ public class Player {
 	public void setOrderOfPlay(Integer orderOfPlay) {
 		this.orderOfPlay = orderOfPlay;
 	}
-	
+
+	@Override
+	public int compareTo(Player player) {
+	    Integer compareOrderPlay = ((Player) player).getOrderOfPlay();
+
+	    // based on decending sort
+		return compareOrderPlay-this.orderOfPlay;
+	}
 }
