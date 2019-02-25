@@ -9,6 +9,7 @@ public class Player {
 	private Integer playerID;
 	private String playerName;
 	private ArrayList<Card> cards;
+	private Integer orderOfPlay;
 
 	public Player(Integer playerID, String playerName) {
 		this.playerID = playerID;
@@ -26,4 +27,13 @@ public class Player {
 	public Integer getPlayerID() {
 		return this.playerID;
 	}
+
+	public Integer getOrderOfPlay() {
+		return orderOfPlay;
+	}
+
+	public void setOrderOfPlay(Integer orderOfPlay) {
+		this.orderOfPlay = orderOfPlay;
+	}
+	
 }
