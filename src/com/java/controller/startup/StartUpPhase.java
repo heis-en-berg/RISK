@@ -116,16 +116,33 @@ public class StartUpPhase {
 	}
 
 	public ArrayList<Player> generateRoundRobin(){
-
-		Dice dice = new Dice();
-
 		//iterate over players and set the order of play
-		for(Player player : gameData.getPlayers()){
+		solveTie(gameData.getPlayers());
+		return null;
+	}
+	
+	private void solveTie(ArrayList<Player> tiePlayers) {
+		Dice dice = new Dice();
+		for(Player player : tiePlayers){
 			player.setOrderOfPlay(dice.rollDice());
 		}
-
-		Collections.sort(gameData.getPlayers());
-
+		Collections.sort(tiePlayers);
+		for(int i = 0; i < tiePlayers.size(); i++) {
+			ArrayList<Player> temp = new ArrayList<Player>();
+			temp.add(tiePlayers.get(i));
+			for(int j = i+1; j < tiePlayers.size(); j++) {
+				if(tiePlayers.get(i).getOrderOfPlay() == tiePlayers.get(j).getOrderOfPlay()) {
+					temp.add(tiePlayers.get(j));
+				}else {
+					break;
+				}
+			}
+			if(temp.size() > 1) {
+				solveTie(temp);
+			} else {
+				System.out.println(tiePlayers.get(i).getPlayerName());
+			}
+		}
 	}
 	
 	public void placeArmies() {

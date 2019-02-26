@@ -116,7 +116,7 @@ public class RiskGameDriver {
 	}
 
 	private void initiateRoundRobin(){
-
+		startUp.generateRoundRobin();
 	}
 
 	private void initiateRoundRobinBasedGamePlay() {
