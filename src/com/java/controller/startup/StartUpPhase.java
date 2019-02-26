@@ -111,11 +111,13 @@ public class StartUpPhase {
 		}
 		return numberOfArmiesPerPlayer;
 	}
+
 	public CardsDeck generateCardsDeck() {
 		return null;
 	}
 
 	public ArrayList<String> generateRoundRobin(){
+
 		//iterate over players and set the order of play
 		ArrayList<Player> temp = new ArrayList<Player>();
 		ArrayList<Player> tiePlayers = gameData.getPlayers();
@@ -123,14 +125,21 @@ public class StartUpPhase {
 		
 		Dice dice = new Dice();
 		int aux = tiePlayers.size();
+
+		// this will resolve ties based on the die rolled
 		while(!tiePlayers.isEmpty()) {
 			results.add(" ");
+
+			// assign the player object to the roll die interger ammount
 			for(int k = 0; k < aux; k++){
 				tiePlayers.get(k).setOrderOfPlay(dice.rollDice());
 				results.add("Player " + tiePlayers.get(k).getPlayerName() + " rolled the dice: " + tiePlayers.get(k).getOrderOfPlay());
 			}
-			//Collections.sort(tiePlayers);
+
+            // when the player roll dice the tie has to be resolved by calling custom sort from 0 till
 			tiePlayers = sort(tiePlayers, 0, aux);
+
+            // to check if the first two players do not have the same number rolled add to temp array
 			if(tiePlayers.size() > 1 && tiePlayers.get(0).getOrderOfPlay() != tiePlayers.get(1).getOrderOfPlay()) {
 				temp.add(tiePlayers.get(0));
 				tiePlayers.remove(0);
@@ -140,11 +149,15 @@ public class StartUpPhase {
 				temp.add(tiePlayers.get(0));
 				tiePlayers.remove(0);
 			}
+
+
 			Boolean flag = false;
+
 			for(int i = 0; i < tiePlayers.size() - 1; i++) {
 				if(tiePlayers.get(0).getOrderOfPlay() == tiePlayers.get(i+1).getOrderOfPlay()) {
 					aux = i + 1 + 1;
 					flag = true;
+
 				} else {
 					if(!flag) {
 						aux = 0;
@@ -164,13 +177,11 @@ public class StartUpPhase {
 		gameData.setPlayers(temp);
 		return results;
 	}
-	
-	private void solveTies(ArrayList<Player> tiePlayers) {
-		
-		
-	}
-	
+
+
+	//custom sorting that allows to pick the start and stop index passed from user.
 	private ArrayList<Player> sort(ArrayList<Player> array, int from, int to) {
+
 		for(int i = from; i < to; i++) {
 			for(int j = from; j < to; j++) {
 				if(array.get(i).getOrderOfPlay() > array.get(j).getOrderOfPlay() ) {
@@ -182,6 +193,7 @@ public class StartUpPhase {
 		}
 		return array;
 	}
+
 	public void placeArmies() {
 		
 	}
