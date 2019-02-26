@@ -38,6 +38,7 @@ public class RiskGameDriver {
 		int numOfPlayer =0;
 
 		do {
+			System.out.println(" ");
 			System.out.println("Note: You can only have players between 2 to 6");
 			System.out.println("Enter the number of players: ");
 
@@ -51,9 +52,12 @@ public class RiskGameDriver {
 		gameData.setNoOfPlayers(numOfPlayer);
 
 		ArrayList<String> playerNames = new ArrayList<String>();
-
+		
+		System.out.println(" ");
+		
 		for(int i=0; i<numOfPlayer; i++ ) {
-			System.out.println("Player " + (i+1) + " Enter your name: ");
+			System.out.println("Player " + (i+1));
+			System.out.println("Enter your name: ");
 			playerNames.add(input.next());
 		}
 
@@ -66,15 +70,15 @@ public class RiskGameDriver {
 
 		// Country Assignment begins
 		startUp.assignCountriesToPlayers();
-
+		
+		// now start the roundrobin order
+		System.out.println(" ");
+		initiateRoundRobin();
 
 		// List players and countries for each
+		System.out.println(" ");
 		System.out.println("List of players with owned countries");
 		HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer = gameData.gameMap.getConqueredCountriesPerPlayer();
-
-
-		// now start the roundrobin order
-		initiateRoundRobin();
 
 
 		// Calculation of initial army
@@ -84,27 +88,32 @@ public class RiskGameDriver {
 		HashMap<String, Country> countryObjects = gameData.gameMap.getCountryObjects();
 		
 		for(Player player : startUp.gameData.getPlayers()) {
-			
+			Boolean firstTime = true;
 			HashSet<String> countriesPerPlayer = conqueredCountriesPerPlayer.get(player.getPlayerID());
-			
 			
 			String[] countriesPerPlayerArray = Arrays.copyOf(countriesPerPlayer.toArray(), countriesPerPlayer.size() ,String[].class);
 			Integer numberOfArmiesAvailablePerPlayer =  startUp.initialArmyCalculation(gameData.getNoOfPlayers());
-			
+			System.out.println(" ");
+			System.out.println("Number of Countries per player: " + numberOfArmiesAvailablePerPlayer);
 			while(numberOfArmiesAvailablePerPlayer > 0) {
 				System.out.println("Player: " + player.getPlayerName() + " owns the following countries: ");
-
 				for(int i = 0; i < countriesPerPlayerArray.length; i++) {
 					String countryName = countriesPerPlayerArray[i];
-					System.out.println(i + ": " + countryName + " has " + countryObjects.get(countryName).getCountryArmyCount() + " armies placed.");
+					if(firstTime) {
+						countryObjects.get(countryName).addArmy(1);
+						numberOfArmiesAvailablePerPlayer--;
+					}
+					System.out.println("\t " + i + ": " + countryName + " has " + countryObjects.get(countryName).getCountryArmyCount() + " armies placed.");
 				}
+				firstTime = false;
+				System.out.println("You have " + numberOfArmiesAvailablePerPlayer + " armies left.");
 				
 				System.out.println("Please pick the number associated with the country in order to place your armies: ");
 				int chosedCountryByUser = input.nextInt();
 				String countryName = countriesPerPlayerArray[chosedCountryByUser];
 				
-				System.out.println("You have " + numberOfArmiesAvailablePerPlayer + " armies left");
-				System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to put in " + countryName + " ?");
+				
+				System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to put in " + countryName + "?");
 				int numberOfArmiesByUser = input.nextInt();
 				
 				Country selectedCountry = countryObjects.get(countryName);
@@ -116,7 +125,10 @@ public class RiskGameDriver {
 	}
 
 	private void initiateRoundRobin(){
-		startUp.generateRoundRobin();
+		ArrayList<String> results = startUp.generateRoundRobin();
+		for(int i = 0; i < results.size(); i ++) {
+			System.out.println(results.get(i));
+		}
 	}
 
 	private void initiateRoundRobinBasedGamePlay() {

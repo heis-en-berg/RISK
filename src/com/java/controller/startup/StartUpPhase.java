@@ -115,36 +115,73 @@ public class StartUpPhase {
 		return null;
 	}
 
-	public ArrayList<Player> generateRoundRobin(){
+	public ArrayList<String> generateRoundRobin(){
 		//iterate over players and set the order of play
-		solveTie(gameData.getPlayers());
-		return null;
-	}
-	
-	private void solveTie(ArrayList<Player> tiePlayers) {
+		ArrayList<Player> temp = new ArrayList<Player>();
+		ArrayList<Player> tiePlayers = gameData.getPlayers();
+		ArrayList<String> results = new ArrayList<String>();
+		
 		Dice dice = new Dice();
-		for(Player player : tiePlayers){
-			player.setOrderOfPlay(dice.rollDice());
-		}
-		Collections.sort(tiePlayers);
-		for(int i = 0; i < tiePlayers.size(); i++) {
-			ArrayList<Player> temp = new ArrayList<Player>();
-			temp.add(tiePlayers.get(i));
-			for(int j = i+1; j < tiePlayers.size(); j++) {
-				if(tiePlayers.get(i).getOrderOfPlay() == tiePlayers.get(j).getOrderOfPlay()) {
-					temp.add(tiePlayers.get(j));
-				}else {
+		int aux = tiePlayers.size();
+		while(!tiePlayers.isEmpty()) {
+			results.add(" ");
+			for(int k = 0; k < aux; k++){
+				tiePlayers.get(k).setOrderOfPlay(dice.rollDice());
+				results.add("Player " + tiePlayers.get(k).getPlayerName() + " rolled the dice: " + tiePlayers.get(k).getOrderOfPlay());
+			}
+			//Collections.sort(tiePlayers);
+			tiePlayers = sort(tiePlayers, 0, aux);
+			if(tiePlayers.size() > 1 && tiePlayers.get(0).getOrderOfPlay() != tiePlayers.get(1).getOrderOfPlay()) {
+				temp.add(tiePlayers.get(0));
+				tiePlayers.remove(0);
+			}
+			
+			if(tiePlayers.size() == 1) {
+				temp.add(tiePlayers.get(0));
+				tiePlayers.remove(0);
+			}
+			Boolean flag = false;
+			for(int i = 0; i < tiePlayers.size() - 1; i++) {
+				if(tiePlayers.get(0).getOrderOfPlay() == tiePlayers.get(i+1).getOrderOfPlay()) {
+					aux = i + 1 + 1;
+					flag = true;
+				} else {
+					if(!flag) {
+						aux = 0;
+					}
 					break;
 				}
 			}
-			if(temp.size() > 1) {
-				solveTie(temp);
-			} else {
-				System.out.println(tiePlayers.get(i).getPlayerName());
-			}
 		}
+		
+		results.add(" ");
+		results.add("The following list has the order of the players in round robin fashion: ");
+		
+		for(int i = 0; i < temp.size(); i++) {
+			results.add((i+1) + " " + temp.get(i).getPlayerName());
+			temp.get(i).setOrderOfPlay(i);
+		}
+		gameData.setPlayers(temp);
+		return results;
 	}
 	
+	private void solveTies(ArrayList<Player> tiePlayers) {
+		
+		
+	}
+	
+	private ArrayList<Player> sort(ArrayList<Player> array, int from, int to) {
+		for(int i = from; i < to; i++) {
+			for(int j = from; j < to; j++) {
+				if(array.get(i).getOrderOfPlay() > array.get(j).getOrderOfPlay() ) {
+					Player temp = array.get(i);
+					array.set(i, array.get(j));
+					array.set(j, temp);
+				}
+			}
+		}
+		return array;
+	}
 	public void placeArmies() {
 		
 	}
