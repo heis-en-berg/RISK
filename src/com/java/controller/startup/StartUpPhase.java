@@ -47,10 +47,6 @@ public class StartUpPhase {
 	public void assignCountriesToPlayers() {
 		
 		ArrayList<Player> players = gameData.getPlayers();
-		
-		// used to assign the countries to the players
-		HashMap<Integer, HashSet<String>> conqueredContriesPerPlayer = new HashMap<Integer, HashSet<String>>();
-
 
 		// used to obtain the country objects
 		HashMap<String, Country> countryObject = gameData.gameMap.getAllCountries();
@@ -68,7 +64,7 @@ public class StartUpPhase {
 		// this index keeps track of the current index of array countries
 		int indexKeeper = 0;
 		
-		// iterating the players Ids to assign them the countries
+		// iterating the players to assign them the countries
 		for(int i = 0; i < numberOfPlayers; i++) {
 			int numberOfCountriesToBeAssignedToPlayer = numOfCountriesToAssign/(numberOfPlayers - i);
 			for(int j = indexKeeper; j < numberOfCountriesToBeAssignedToPlayer; j++) {

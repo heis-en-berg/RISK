@@ -1,10 +1,10 @@
 package com.java.view;
 
-import com.java.controller.dice.Dice;
 import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
+import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 
 import java.util.ArrayList;
@@ -66,22 +66,15 @@ public class RiskGameDriver {
 			
 			playerNames.add(playerNameInput.trim());
 		}
-
-		// array list of players returned when generated from the controller
-		ArrayList<Player> players = startUp.generatePlayers(playerNames);
-
-		// Country Assignment begins
-		startUp.assignCountriesToPlayers();
+		
+		startUp.generatePlayers(playerNames);
 
 		// now start the roundrobin order
 		System.out.println(" ");
 		initiateRoundRobin();
-
-		// List players and countries for each
-		System.out.println(" ");
-		System.out.println("List of players with owned countries");
-		HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer = gameData.gameMap
-				.getConqueredCountriesPerPlayer();
+		
+		// Country Assignment begins
+		startUp.assignCountriesToPlayers();
 
 		// Calculation of initial army
 		System.out.println("Calculation of initial armies done....");
@@ -89,17 +82,17 @@ public class RiskGameDriver {
 		// TODO Initial army placement start put this in another method
 		HashMap<String, Country> countryObjects = gameData.gameMap.getAllCountries();
 
-		for (Player player : startUp.gameData.getPlayers()) {
+		for (Player player : gameData.getPlayers()) {
 
 			Boolean firstTime = true;
-			HashSet<String> countriesPerPlayer = conqueredCountriesPerPlayer.get(player.getPlayerID());
+			HashSet<String> countriesPerPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(player.getPlayerID());
 
 			String[] countriesPerPlayerArray = Arrays.copyOf(countriesPerPlayer.toArray(), countriesPerPlayer.size(),
 					String[].class);
 			Integer numberOfArmiesAvailablePerPlayer = startUp.initialArmyCalculation(gameData.getNoOfPlayers());
 
 			System.out.println(" ");
-			System.out.println("Number of Countries per player: " + numberOfArmiesAvailablePerPlayer);
+			System.out.println("Number of Army per player: " + numberOfArmiesAvailablePerPlayer);
 
 			while (numberOfArmiesAvailablePerPlayer > 0) {
 
@@ -121,11 +114,13 @@ public class RiskGameDriver {
 
 				System.out
 						.println("Please pick the number associated with the country in order to place your armies: ");
+				//TODO : ERROR check
 				int chosedCountryByUser = input.nextInt();
 				String countryName = countriesPerPlayerArray[chosedCountryByUser];
 
-				System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to put in "
+				System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to place in "
 						+ countryName + "?");
+				//TODO : ERROR check
 				int numberOfArmiesByUser = input.nextInt();
 
 				Country selectedCountry = countryObjects.get(countryName);

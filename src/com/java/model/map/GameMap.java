@@ -223,7 +223,7 @@ public class GameMap implements Cloneable{
 		}
 	}
 
-	public HashMap<Integer, HashSet<String>> getConqueredCountriesPerPlayer() {
+	public HashMap<Integer, HashSet<String>> getConqueredCountriesPerPlayerObject() {
 		return conqueredCountriesPerPlayer;
 	}
 
