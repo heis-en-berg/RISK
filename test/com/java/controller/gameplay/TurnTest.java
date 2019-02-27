@@ -18,7 +18,7 @@ public class TurnTest {
     public void setUp(){
 
         gameData = new GameData();
-        player = new Player(1,"Sahil");
+        player = new Player(1,"P1");
         this.gameData.gameMap = new GameMap();
         this.gameData.players.add(player);
         this.gameData.gameMap.addContinent("Continent1",5);
@@ -48,8 +48,9 @@ public class TurnTest {
     public void calculateReinforcementArmy() {
 
         turn = new Turn(player,gameData);
-        int cal = turn.calculateReinforcementArmy();
-        assertEquals(14,cal);
+        int actaul_value = turn.calculateReinforcementArmy();
+        int expected_value = 14;
+        assertEquals(expected_value,actaul_value);
 
     }
 }
