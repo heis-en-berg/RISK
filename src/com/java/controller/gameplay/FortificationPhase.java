@@ -7,8 +7,8 @@ public interface FortificationPhase {
 
 	void startFortification();
 	HashMap<String, ArrayList<Integer>> getPotentialFortificationScenarios();
-	String choseCountryToFortifyfrom();
-	String choseCountryToFortifyto();
+	String chooseCountryToFortifyfrom();
+	String chooseCountryToFortifyto();
 	Integer getNoOfArmiesToMove();
 	Boolean fortify(String fromCountryId, String toCountryId, Integer noOfArmies);
 	
