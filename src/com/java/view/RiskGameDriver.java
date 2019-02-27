@@ -21,7 +21,6 @@ public class RiskGameDriver {
 		gameData = new GameData();
 		MapLoader maploader = new MapLoader(); // using this will load the map
 		gameData.gameMap = maploader.loadMap();
-		// gameData.generateDummyData();
 	}
 
 	public void startGame() {

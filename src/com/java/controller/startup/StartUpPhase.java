@@ -31,6 +31,7 @@ public class StartUpPhase {
 	}
 	
 	public ArrayList<Player> generatePlayers(ArrayList<String> playerNames){
+
 		ArrayList<Player> newPlayers = new ArrayList<Player>();
 
 		for(int i=0; i < playerNames.size(); i++){
