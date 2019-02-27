@@ -66,8 +66,8 @@ public class StartUpPhase {
 		
 		// iterating the players to assign them the countries
 		for(int i = 0; i < numberOfPlayers; i++) {
-			int numberOfCountriesToBeAssignedToPlayer = numOfCountriesToAssign/(numberOfPlayers - i);
-			for(int j = indexKeeper; j < numberOfCountriesToBeAssignedToPlayer; j++) {
+			int numberOfCountriesToBeAssignedToPlayer = (numOfCountriesToAssign - indexKeeper) / (numberOfPlayers - i);
+			for(int j = indexKeeper; j < indexKeeper + numberOfCountriesToBeAssignedToPlayer; j++) {
 				gameData.gameMap.setCountryConquerer(countiresToAssignArrayList.get(j), players.get(i).getPlayerID());
 			}
 			indexKeeper += numberOfCountriesToBeAssignedToPlayer;

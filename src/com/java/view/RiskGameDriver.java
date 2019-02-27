@@ -4,7 +4,6 @@ import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
-import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 
 import java.util.ArrayList;
