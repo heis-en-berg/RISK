@@ -130,6 +130,10 @@ public class GameMap implements Cloneable{
 		}
 		return this.adjacentCountries.get(countryName);
 	}
+	
+	public HashMap<String, HashSet<String>> getAdjacentCountriesObject() {
+		return adjacentCountries;
+	}
 
 	public Boolean removeAdjacenyBetweenCountries(String countryName, String adjacentCountryName) {
 		return (removeAdjacency(countryName, adjacentCountryName) && removeAdjacency(adjacentCountryName, countryName));
@@ -268,6 +272,5 @@ public class GameMap implements Cloneable{
 	public HashMap<Integer, HashSet<String>> getConqueredContinentsPerPlayer() {
 		return conqueredContinentsPerPlayer;
 	}
-
 
 }

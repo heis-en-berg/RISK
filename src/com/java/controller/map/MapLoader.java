@@ -23,7 +23,7 @@ public class MapLoader {
 
 	GameMap map = new GameMap();
 	Scanner scanner;
-	public static final String DEFAULT_MAP_FILE_PATH = "./map/default1.map";
+	public static final String DEFAULT_MAP_FILE_PATH = "./map/default.map";
 
 	public MapLoader() {
 		scanner = new Scanner(System.in);
@@ -164,6 +164,9 @@ public class MapLoader {
 			if (response) {
 				response = readandLoadCountries(mapFileBufferedReader);
 			}
+			if(!mapValidator.validateMap(map)) {
+				return false;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -293,7 +296,7 @@ public class MapLoader {
 			writer.close();
 			
 		} catch (IOException e) {
-			System.out.println("ERROR: Failur in map file creation");
+			System.out.println("ERROR: Failure in map file creation");
 		}
 	}
 
