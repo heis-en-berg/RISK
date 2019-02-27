@@ -17,6 +17,22 @@ public class GameData {
 
 	public static final Integer MIN_PLAYERS = 2;
 	public static final Integer MAX_PLAYERS = 6;
+	
+	public ArrayList<Player> getPlayers() {
+		return this.players;
+	}
+	
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
+	}
+
+	public Integer getNoOfPlayers() {
+		return noOfPlayers;
+	}
+
+	public void setNoOfPlayers(Integer noOfPlayers) {
+		this.noOfPlayers = noOfPlayers;
+	}
 
 	/*
 	 * Dummy Data Generator : To be used for development purpose only.
@@ -69,22 +85,5 @@ public class GameData {
 		this.gameMap.getCountry("C5").addArmy(5);
 		this.gameMap.getCountry("C6").addArmy(6);
 	}
-
-	public ArrayList<Player> getPlayers() {
-		return players;
-	}
-
-	public void setPlayers(ArrayList<Player> players) {
-		this.players = players;
-	}
-
-	public Integer getNoOfPlayers() {
-		return noOfPlayers;
-	}
-
-	public void setNoOfPlayers(Integer noOfPlayers) {
-		this.noOfPlayers = noOfPlayers;
-	}
-
 
 }

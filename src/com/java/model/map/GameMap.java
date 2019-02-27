@@ -214,7 +214,7 @@ public class GameMap implements Cloneable{
 
 		System.out.println("[[Countries]]");
 		for(String countryName: countryObjects.keySet()) {
-			System.out.println(countryName + " :: " + getAdjacentCountries(countryName).toString());
+			System.out.println(countryName + " :: " + getAdjacentCountries(countryName).toString() + " :: " + this.countryObjects.get(countryName).getCountryConquerorID());
 		}
 		
 		System.out.println("[[Continent]]");
@@ -223,19 +223,11 @@ public class GameMap implements Cloneable{
 		}
 	}
 
-	public HashMap<String, Country> getCountryObjects() {
-		return countryObjects;
-	}
-
 	public HashMap<Integer, HashSet<String>> getConqueredCountriesPerPlayer() {
 		return conqueredCountriesPerPlayer;
 	}
 
 	// SET THE WHOLE OBJECT NOT ADDING ELEMENTS using gettes and setters to acess private data 
-
-	public void setConqueredCountriesPerPlayer(HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer) {
-		this.conqueredCountriesPerPlayer = conqueredCountriesPerPlayer;
-	}
 
 	public void setConqueredContinentsPerPlayer(HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer) {
 		this.conqueredContinentsPerPlayer = conqueredContinentsPerPlayer;
