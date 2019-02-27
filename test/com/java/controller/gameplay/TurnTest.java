@@ -6,6 +6,8 @@ import com.java.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TurnTest {
@@ -13,14 +15,17 @@ public class TurnTest {
     private GameData gameData;
     private   Player player;
     private Turn turn;
+    private ArrayList<Player> players;
 
     @Before
     public void setUp(){
 
         gameData = new GameData();
+        players = new ArrayList<>();
         player = new Player(1,"P1");
         this.gameData.gameMap = new GameMap();
-        this.gameData.players.add(player);
+        players.add(player);
+        this.gameData.setPlayers(players);
         this.gameData.gameMap.addContinent("Continent1",5);
         this.gameData.gameMap.addContinent("Continent2",6);
         this.gameData.gameMap.addCountry("C1","Continent1");
