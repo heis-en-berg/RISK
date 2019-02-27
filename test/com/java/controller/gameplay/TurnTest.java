@@ -48,9 +48,9 @@ public class TurnTest {
     public void calculateReinforcementArmy() {
 
         turn = new Turn(player,gameData);
-        int actaul_value = turn.calculateReinforcementArmy();
+        int actual_value = turn.calculateReinforcementArmy();
         int expected_value = 14;
-        assertEquals(expected_value,actaul_value);
+        assertEquals(expected_value,actual_value);
 
     }
 }
