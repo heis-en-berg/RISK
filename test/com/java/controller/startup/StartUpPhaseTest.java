@@ -6,16 +6,14 @@ import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class StartUpPhaseTest {
 
@@ -23,8 +21,8 @@ public class StartUpPhaseTest {
     static StartUpPhase startUp;
     static ArrayList<Player> expectedPlayer;
 
-    @BeforeAll
-    public static void beforeEverything(){
+    @Before
+    public void beforeEverything(){
         // now map
         gameData = new GameData();
         MapLoader maploader = new MapLoader();
@@ -60,7 +58,7 @@ public class StartUpPhaseTest {
     }
 
     @Test
-    void generatePlayers() {
+    public void generatePlayers() {
 
         ArrayList<Player> actualPlayers = gameData.getPlayers();
 
@@ -73,7 +71,7 @@ public class StartUpPhaseTest {
     }
 
     @Test
-    void assignCountriesToPlayers() {
+    public void assignCountriesToPlayers() {
         startUp.assignCountriesToPlayers();
         ArrayList<Player> players = gameData.getPlayers();
 
@@ -99,10 +97,10 @@ public class StartUpPhaseTest {
     }
 
     @Test
-    void initialArmyCalculation() {
+    public void initialArmyCalculation() {
     }
 
     @Test
-    void generateRoundRobin() {
+    public void generateRoundRobin() {
     }
 }
