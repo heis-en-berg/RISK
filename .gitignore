@@ -9,7 +9,6 @@ out/production/soen6441_risk/com/java/view/RiskGameDriver.class
 out/production/soen6441_risk/com/java/model/player/Player.class
 out/production/soen6441_risk/com/java/model/map/GameMap.class
 out/production/soen6441_risk/com/java/model/map/Country.class
-test/com/java/controller/startup/StartUpPhaseTest.java
 out/production/soen6441_risk/com/java/model/map/Continent.class
 out/production/soen6441_risk/com/java/model/gamedata/GameData.class
 out/production/soen6441_risk/com/java/model/enums/ArmyTypeEnum.class
