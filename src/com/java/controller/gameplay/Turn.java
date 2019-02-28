@@ -188,13 +188,13 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	}
 
 	@Override
-	public String choseCountryToFortifyfrom() {
+	public String chooseCountryToFortifyfrom() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String choseCountryToFortifyto() {
+	public String chooseCountryToFortifyto() {
 		// TODO Auto-generated method stub
 		return null;
 	}
