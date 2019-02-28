@@ -49,7 +49,7 @@ public class StartUpPhase {
 		
 		ArrayList<Player> players = gameData.getPlayers();
 
-		// used to obtain the country objects
+		// Used to obtain the country objects
 		HashMap<String, Country> countryObject = gameData.gameMap.getAllCountries();
 
 		// start randomly assigning the countries evenly to the players
