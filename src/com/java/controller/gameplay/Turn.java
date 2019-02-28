@@ -172,11 +172,43 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	 */
 	@Override
 	public void startFortification() {
-		getPotentialFortificationScenarios();
+		
+		boolean doFortify = false;
+		Scanner input = new Scanner(System.in);  
+		System.out.println("Would you like to fortify? (YES/NO)");
+		String playerDecision = scanner.nextLine();
+		input.close();
+		
+		switch(playerDecision.toLowerCase()){
+        case "yes":
+        	doFortify = true;
+            break;
+        }
+		
+		if(!doFortify) {
+			System.out.println("Player does not wish to fortify. Ending turn..");
+			return;
+		} else {
+			System.out.println("Fetching potential fortification scenarios for player..");
+		}
+		
+		HashMap fortificationScenarios = getPotentialFortificationScenarios();
+		
+		if(fortificationScenarios != null) {
+			/*for (TypeKey name: example.keySet()){
+	            String key =name.toString();
+	            String value = example.get(name).toString();  
+	            System.out.println(key + " " + value);  
+			}*/ 
+		} else {
+			System.out.println("There are currently no fortification opportunities for this player.. Sorry!");
+			return;
+		} 
+		
 		Integer noOfArmies = getNoOfArmiesToMove();
-		String fromCountryName = choseCountryToFortifyfrom();
-		String toCountryName = choseCountryToFortifyto();
-		fortify(fromCountryName,toCountryName,noOfArmies);
+		String fromCountryName = chooseCountryToFortifyfrom();
+		String toCountryName = chooseCountryToFortifyto();
+		//placeArmy above should be refactored to accommodate both reinforcement & fortification phases 
 		// TODO Auto-generated method stub
 
 	}
@@ -205,9 +237,4 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		return null;
 	}
 
-	@Override
-	public Boolean fortify(String fromCountryName, String toCountryName, Integer noOfArmies) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
