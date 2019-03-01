@@ -21,24 +21,32 @@ import java.util.Scanner;
  *
  * @author Arnav Bhardwaj
  * @author Cristian Rodriguez
- * @since 1.0.0
+ * @version 1.0.0
  */
 public class RiskGameDriver {
 
 	private GameData gameData;
 	private StartUpPhase startUp;
 
+    /**
+     * Constructor will allow to load the map from user selection.
+     * It would assign the parsed values from the map and store it in gameData object to use.
+     */
 	public RiskGameDriver() {
 		gameData = new GameData();
 		MapLoader maploader = new MapLoader(); // using this will load the map
 		gameData.gameMap = maploader.loadMap();
 	}
 
+    /**
+     * begins the console interface by initating the startup
+     */
 	public void startGame() {
 		// Call the helpers here
 		initiateStartUpPhase();
 	}
 
+  
 	private void initiateStartUpPhase() {
 		// need to call the controller start uphase
 		startUp = new StartUpPhase(gameData);
@@ -53,7 +61,8 @@ public class RiskGameDriver {
 
 			numOfPlayerStr = input.nextLine();
 
-		} while (isNaN(numOfPlayerStr) || Integer.parseInt(numOfPlayerStr) < GameData.MIN_PLAYERS
+		} while (isNaN(numOfPlayerStr)
+                || Integer.parseInt(numOfPlayerStr) < GameData.MIN_PLAYERS
 				|| Integer.parseInt(numOfPlayerStr) > Math.min(GameData.MAX_PLAYERS, gameData.gameMap.getNumberOfCountries()));
 
 		numOfPlayer = Integer.parseInt(numOfPlayerStr);
