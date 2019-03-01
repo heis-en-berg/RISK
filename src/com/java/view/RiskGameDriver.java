@@ -46,7 +46,7 @@ public class RiskGameDriver {
 		initiateStartUpPhase();
 	}
 
-  
+
 	private void initiateStartUpPhase() {
 		// need to call the controller start uphase
 		startUp = new StartUpPhase(gameData);
