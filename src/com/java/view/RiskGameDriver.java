@@ -12,6 +12,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 
+/**
+ * RiskGameDriver class is used as a view in which the user will interact with a given console.
+ * It allows the risk game to start by loading the map selected by user from console.
+ * Players then get to chose the number of players and the names to play, system provides an id based on that amount.
+ * In roundrobin fashion each player will be assigned a country at random.
+ * Each player will be able to place their armies on the assigned country based on the army total.
+ *
+ * @author Arnav Bhardwaj
+ * @author Cristian Rodriguez
+ * @since 1.0.0
+ */
 public class RiskGameDriver {
 
 	private GameData gameData;
@@ -77,7 +88,6 @@ public class RiskGameDriver {
 		// Calculation of initial army
 		System.out.println("Calculation of initial armies done....");
 
-		// TODO Initial army placement start put this in another method
 		HashMap<String, Country> countryObjects = gameData.gameMap.getAllCountries();
 
 		for (Player player : gameData.getPlayers()) {
@@ -110,16 +120,19 @@ public class RiskGameDriver {
 				firstTime = false;
 				System.out.println("You have " + numberOfArmiesAvailablePerPlayer + " armies left.");
 
-				System.out
-						.println("Please pick the number associated with the country in order to place your armies: ");
+				System.out.println("Please pick the number associated with the country in order to place your armies: ");
+
 				//TODO : ERROR check
 				int chosedCountryByUser = input.nextInt();
 				String countryName = countriesPerPlayerArray[chosedCountryByUser];
 
 				System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to place in "
 						+ countryName + "?");
+
 				//TODO : ERROR check
 				int numberOfArmiesByUser = input.nextInt();
+
+				input.close();
 
 				Country selectedCountry = countryObjects.get(countryName);
 				selectedCountry.addArmy(numberOfArmiesByUser);
