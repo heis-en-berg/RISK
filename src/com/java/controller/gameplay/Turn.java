@@ -13,22 +13,19 @@ import static java.lang.Thread.sleep;
 
 public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase{
 
-	public GameData gameData;
-	public Player player;
+	private GameData gameData;
+	private Player player;
 	private Dice dice;
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
-
-	/*Colors for console output. */
-	private static final String ANSI_RESET = "\u001B[0m";
-	private static final String ANSI_RED = "\u001B[31m";
-	private static final String ANSI_BOLD = "\033[0;1m";
+	private Scanner input;
 
 	public Turn(Player player, GameData gameData) {
 
 		this.gameData = gameData;
 		this.player = player;
 		dice = new Dice(); //To be used in attack phase.
+		input = new Scanner(System.in);
 	}
 
 	public void startTurn(){
@@ -40,14 +37,6 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	public void clearConsole(){
 		for (int line = 0; line < 50; ++line)
 			System.out.println();
-	}
-
-	public void highlightStatementInRed(String str){
-		System.out.print(ANSI_RED + str + ANSI_RESET);
-	}
-
-	public void boldStatement(String str){
-		System.out.print(ANSI_BOLD + str + ANSI_RESET);
 	}
 
 	/*
@@ -87,22 +76,21 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	@Override
 	public void placeArmy(Integer reinforcementArmy) {
 
-		Scanner input = new Scanner(System.in);
 		Integer currentPlayerID = player.getPlayerID();
 		HashSet<String> countriesOwned = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
 
 		this.clearConsole();
-		highlightStatementInRed("Reinforcement Phase Begins...\n");
+		System.out.println("Reinforcement Phase Begins..\n");
 		try {
 			sleep(1500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		this.clearConsole();
+		clearConsole();
 
 		while (reinforcementArmy > 0){
-			System.out.print("Total Reinforcement Army Count Remaining -> ");
-			this.boldStatement("["+String.valueOf(reinforcementArmy)+"]\n");
+
+			System.out.print("Total Reinforcement Army Count Remaining -> ["+ String.valueOf(reinforcementArmy)+"]\n");
 
 			/*Information about the countries owned by the player and enemy countries. */
 			for(String countries: countriesOwned) {
@@ -122,13 +110,13 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 			/*Check for an invalid country name.*/
 			if(this.gameData.gameMap.getCountry(countryNameByUser) == null) {
 				this.clearConsole();
-				this.highlightStatementInRed("'"+countryNameByUser+"' is an invalid country name. Please verify the country name from the list.\n\n");
+				System.out.println("'"+countryNameByUser+"' is an invalid country name. Please verify the country name from the list.\n\n");
 				continue;
 			}
 			/*Check for a valid country name, but the country belonging to a different player.*/
 			if(this.gameData.gameMap.getCountry(countryNameByUser).getCountryConquerorID() != currentPlayerID){
-				this.clearConsole();
-				this.highlightStatementInRed("'"+countryNameByUser + "' does not belong to you yet!!. Please verify your countries owned from the list below.\n\n");
+				clearConsole();
+				System.out.println("'"+countryNameByUser + "' does not belong to you yet!!. Please verify your countries owned from the list below.\n\n");
 				continue;
 			}
 
@@ -137,30 +125,28 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 			try {
 				Integer numberOfArmiesToBePlacedByUser = Integer.parseInt(input.nextLine());
 				if (numberOfArmiesToBePlacedByUser > reinforcementArmy) {
-					this.clearConsole();
-					this.highlightStatementInRed("Input value '"+numberOfArmiesToBePlacedByUser+ "' should not be greater than the Total Reinforcement Army Count ");
-					this.boldStatement("("+String.valueOf(reinforcementArmy)+")\n\n");
+					clearConsole();
+					System.out.println("Input value '"+numberOfArmiesToBePlacedByUser+ "' should not be greater than the Total Reinforcement Army Count "+"("+String.valueOf(reinforcementArmy)+")\n\n");
 					continue;
 				}
 				if(!(numberOfArmiesToBePlacedByUser > 0)){
-					this.clearConsole();
-					this.highlightStatementInRed("Please input a value greater than 0.\n\n");
+					clearConsole();
+					System.out.println("Please input a value greater than 0.\n\n");
 					continue;
 				}
-				this.clearConsole();
-				this.highlightStatementInRed("Successful...Country chosen " + countryNameByUser + " ,Number of armies placed: " + numberOfArmiesToBePlacedByUser + "\n\n");
+				clearConsole();
+				System.out.println("Successful...Country chosen " + countryNameByUser + " ,Number of armies placed: " + numberOfArmiesToBePlacedByUser + "\n\n");
 				this.gameData.gameMap.getCountry(countryNameByUser).addArmy(numberOfArmiesToBePlacedByUser);
 				reinforcementArmy -= numberOfArmiesToBePlacedByUser;
 			}catch (NumberFormatException ex){
 				this.clearConsole();
-				this.highlightStatementInRed(ex.getMessage()+", please enter numeric values only!\n\n");
+				System.out.println(ex.getMessage()+", please enter numeric values only!\n\n");
 				continue;
 			}
 		}
-		input.close();
 		/*End of reinforcement phase, Print the final overview.*/
-		this.clearConsole();
-		this.highlightStatementInRed("Reinforcement Phase is now complete. Here's an overview: \n\n");
+		clearConsole();
+		System.out.println("Reinforcement Phase is now complete. Here's an overview: \n\n");
 		for(String countries: countriesOwned) {
 			System.out.println("Country owned by you: "+countries + " ,Army Count: " + this.gameData.gameMap.getCountry(countries).getCountryArmyCount());
 		}
@@ -172,47 +158,42 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	 */
 	@Override
 	public void startFortification() {
-		
-		Scanner scanner = new Scanner(System.in);
+
 		boolean doFortify = false;
-		Scanner input = new Scanner(System.in);  
 		System.out.println("Would you like to fortify? (YES/NO)");
-		String playerDecision = scanner.nextLine();
-		input.close();
-		
+		String playerDecision = input.nextLine();
+
 		switch(playerDecision.toLowerCase()){
-        case "yes":
-        	doFortify = true;
-            break;
-        }
-		
+			case "yes":
+				doFortify = true;
+				break;
+		}
+
 		if(!doFortify) {
 			System.out.println("Player does not wish to fortify. Ending turn..");
 			return;
 		} else {
 			System.out.println("Fetching potential fortification scenarios for player..");
 		}
-		
+
 		HashMap fortificationScenarios = getPotentialFortificationScenarios();
-		
+
 		if(fortificationScenarios != null) {
 			/*for (TypeKey name: example.keySet()){
 	            String key =name.toString();
-	            String value = example.get(name).toString();  
-	            System.out.println(key + " " + value);  
-			}*/ 
+	            String value = example.get(name).toString();
+	            System.out.println(key + " " + value);
+			}*/
 		} else {
 			System.out.println("There are currently no fortification opportunities for this player.. Sorry!");
 			return;
-		} 
-		
+		}
+
 		Integer noOfArmies = getNoOfArmiesToMove();
 		String fromCountryName = chooseCountryToFortifyfrom();
 		String toCountryName = chooseCountryToFortifyto();
-		//placeArmy above should be refactored to accommodate both reinforcement & fortification phases 
+		//placeArmy above should be refactored to accommodate both reinforcement & fortification phases
 		// TODO Auto-generated method stub
-		scanner.close();
-
 	}
 
 	@Override
@@ -238,11 +219,4 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Boolean fortify(String fromCountryId, String toCountryId, Integer noOfArmies) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
