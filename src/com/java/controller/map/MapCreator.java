@@ -36,7 +36,7 @@ public class MapCreator extends MapEditor {
 					break;
 			case 10: editedMap = originalMap.clone();
 			 		 System.out.println("Changes discarded");
-			 		 break;
+			 		 return null;
 			case 11: if(mapValidator.validateMap(editedMap)) {
 						return editedMap;
 					 }
@@ -50,7 +50,7 @@ public class MapCreator extends MapEditor {
 		Integer userChoice = 0;
 		System.out.println("\nCreate a new Map: \n1. Add Author\n2. Add a Continent\n3. Remove a Continent\n"
 				+ "4. Add a Country\n5. Remove a Country\n6. Add Adjacency\n7. Remove Adjacency\n"
-				+ "8. Show Map Content\n9. Validate Map\n10. Discard changes\n11. Save and Exit");
+				+ "8. Show Map Content\n9. Validate Map\n10. Discard changes and Go back\n11. Save and Exit");
 		System.out.print("Enter choice: ");
 		try {
 			userChoice = Integer.parseInt(scanner.nextLine());

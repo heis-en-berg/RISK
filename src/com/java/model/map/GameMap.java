@@ -34,10 +34,19 @@ public class GameMap implements Cloneable{
 			gameMap = (GameMap) super.clone();
 			gameMap.countryObjects = new HashMap<>(countryObjects);
 			gameMap.continentObjects = new HashMap<>(continentObjects);
-			gameMap.adjacentCountries = new HashMap<>(adjacentCountries);
-			gameMap.continentCountries = new HashMap<>(continentCountries);
-			gameMap.conqueredCountriesPerPlayer = new HashMap<>(conqueredCountriesPerPlayer);
-			gameMap.conqueredContinentsPerPlayer = new HashMap<>(conqueredContinentsPerPlayer);
+			
+			HashMap<String, HashSet<String>> newAdjacentCountriesObject = new HashMap<>();
+			for(String countryName : this.adjacentCountries.keySet()) {
+				newAdjacentCountriesObject.put(countryName, new HashSet<>(adjacentCountries.get(countryName)));
+			}
+			gameMap.adjacentCountries = newAdjacentCountriesObject;
+			
+			HashMap<String, HashSet<String>> newContinentCountries = new HashMap<>();
+			for(String continentName : this.continentCountries.keySet()) {
+				newContinentCountries.put(continentName, new HashSet<>(continentCountries.get(continentName)));
+			}
+			gameMap.continentCountries = newContinentCountries;
+			
 		} catch (CloneNotSupportedException e) {
 			System.out.println("Gamemap Cloning error");
 		}
@@ -74,6 +83,10 @@ public class GameMap implements Cloneable{
 
 		/* Removes country object from countryObjects */
 		this.countryObjects.remove(countryName);
+	}
+	
+	public Integer getNumberOfCountries() {
+		return countryObjects.size();
 	}
 	
 	public HashMap<String, Country> getAllCountries(){

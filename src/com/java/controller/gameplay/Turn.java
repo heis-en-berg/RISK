@@ -173,6 +173,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	@Override
 	public void startFortification() {
 		
+		Scanner scanner = new Scanner(System.in);
 		boolean doFortify = false;
 		Scanner input = new Scanner(System.in);  
 		System.out.println("Would you like to fortify? (YES/NO)");
@@ -210,6 +211,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		String toCountryName = chooseCountryToFortifyto();
 		//placeArmy above should be refactored to accommodate both reinforcement & fortification phases 
 		// TODO Auto-generated method stub
+		scanner.close();
 
 	}
 
@@ -233,6 +235,12 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 	@Override
 	public Integer getNoOfArmiesToMove() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean fortify(String fromCountryId, String toCountryId, Integer noOfArmies) {
 		// TODO Auto-generated method stub
 		return null;
 	}

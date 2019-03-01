@@ -37,13 +37,13 @@ public class RiskGameDriver {
 
 		do {
 
-			System.out.println("\nNote: You can only have players between 2 to 6");
+			System.out.println("\nNote: You can only have players between 2 to " + gameData.gameMap.getNumberOfCountries());
 			System.out.println("Enter the number of players: ");
 
 			numOfPlayerStr = input.nextLine();
 
 		} while (isNaN(numOfPlayerStr) || Integer.parseInt(numOfPlayerStr) < GameData.MIN_PLAYERS
-				|| Integer.parseInt(numOfPlayerStr) > GameData.MAX_PLAYERS);
+				|| Integer.parseInt(numOfPlayerStr) > Math.min(GameData.MAX_PLAYERS, gameData.gameMap.getNumberOfCountries()));
 
 		numOfPlayer = Integer.parseInt(numOfPlayerStr);
 

@@ -54,6 +54,11 @@ public class MapLoader {
 		} else {
 			MapCreator mapCreator = new MapCreator(map);
 			map = mapCreator.createMap();
+			if(map == null) {
+				map = new GameMap();
+				return loadMap();
+			}
+			
 		}
 		Integer editOrContinueChoice = 0;
 		

@@ -46,8 +46,8 @@ public class MapValidator {
 
 		Boolean change = true;
 
-		HashMap<String, HashSet<String>> connectivity = (HashMap<String, HashSet<String>>) map
-				.getAdjacentCountriesObject().clone();
+		HashMap<String, HashSet<String>> connectivity = (HashMap<String, HashSet<String>>) map.clone()
+				.getAdjacentCountriesObject();
 
 		while (change) {
 			change = false;
