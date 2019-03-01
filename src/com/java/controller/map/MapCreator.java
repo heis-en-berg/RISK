@@ -47,18 +47,17 @@ public class MapCreator extends MapEditor {
 	}
 
 	private Integer getCreateMapUserChoice() {
-		Integer userChoice = 0;
 		System.out.println("\nCreate a new Map: \n1. Add Author\n2. Add a Continent\n3. Remove a Continent\n"
 				+ "4. Add a Country\n5. Remove a Country\n6. Add Adjacency\n7. Remove Adjacency\n"
 				+ "8. Show Map Content\n9. Validate Map\n10. Discard changes and Go back\n11. Save and Exit");
 		System.out.print("Enter choice: ");
-		try {
-			userChoice = Integer.parseInt(scanner.nextLine());
-		} catch(NumberFormatException e) {
+		
+		String userChoiceStr = scanner.nextLine();
+		if(isNaN(userChoiceStr) || Integer.parseInt(userChoiceStr) < 1 || Integer.parseInt(userChoiceStr) > 11) {
 			System.out.println("Invalid input!!");
-			userChoice = 0;
+			userChoiceStr = "0";
 		}
-		return userChoice;
+		return Integer.parseInt(userChoiceStr);
 	}
 	
 	private void addMapAuthor() {
@@ -71,6 +70,5 @@ public class MapCreator extends MapEditor {
 		editedMap.setMapAuthor(mapAuthorName);
 		System.out.println("Author: " + mapAuthorName);
 	}
-	
 	
 }

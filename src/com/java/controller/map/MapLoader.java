@@ -94,19 +94,20 @@ public class MapLoader {
 	}
 
 	private Integer getChoiceToUseDeafaultMap() {
+		
 		System.out.println("Options");
 		System.out.println("1. Load default map");
 		System.out.println("2. Load your own map");
 		System.out.println("3. Create map");
 		System.out.println();
 		System.out.print("Enter choice: ");
-		Integer choice = scanner.nextInt();
-
-		if (!(choice >= 1 && choice <= 3)) {
+		String choiceStr = scanner.nextLine();
+		
+		if (isNaN(choiceStr) || !(Integer.parseInt(choiceStr) >= 1 && Integer.parseInt(choiceStr) <= 3)) {
 			System.out.println("Invalid input");
 			return null;
 		}
-		return choice;
+		return Integer.parseInt(choiceStr);
 	}
 
 	private String getAndValidateUserMapFilePath() {
@@ -303,6 +304,15 @@ public class MapLoader {
 		} catch (IOException e) {
 			System.out.println("ERROR: Failure in map file creation");
 		}
+	}
+	
+	private boolean isNaN(final String string) {
+		try {
+			Integer.parseInt(string);
+		} catch (final Exception e) {
+			return true;
+		}
+		return false;
 	}
 
 }

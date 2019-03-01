@@ -56,18 +56,17 @@ public class MapEditor {
 	}
 	
 	private Integer getEditMapUserChoice() {
-		Integer userChoice = 0;
 		System.out.println("\nEdit map: \n1. Change Author\n2. Add a Continent\n3. Remove a Continent\n"
 				+ "4. Add a Country\n5. Remove a Country\n6. Add Adjacency\n7. Remove Adjacency\n"
 				+ "8. Show Map Content\n9. Validate Map\n10. Discard changes\n11. Save and Exit");
 		System.out.print("Enter choice: ");
-		try {
-			userChoice = Integer.parseInt(scanner.nextLine());
-		} catch(NumberFormatException e) {
+		
+		String userChoiceStr = scanner.nextLine();
+		if(isNaN(userChoiceStr) || Integer.parseInt(userChoiceStr) < 1 || Integer.parseInt(userChoiceStr) > 11) {
 			System.out.println("Invalid input!!");
-			userChoice = 0;
+			userChoiceStr = "0";
 		}
-		return userChoice;
+		return Integer.parseInt(userChoiceStr);
 	}
 
 	protected void showMapContent() {
@@ -195,6 +194,15 @@ public class MapEditor {
 		}
 		editedMap.setMapAuthor(mapAuthorName);
 		System.out.println("Map Author updated to : " + editedMap.getMapAuthor());
+	}
+	
+	protected boolean isNaN(final String string) {
+		try {
+			Integer.parseInt(string);
+		} catch (final Exception e) {
+			return true;
+		}
+		return false;
 	}
 
 }

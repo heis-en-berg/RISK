@@ -110,20 +110,35 @@ public class RiskGameDriver {
 				firstTime = false;
 				System.out.println("You have " + numberOfArmiesAvailablePerPlayer + " armies left.");
 
-				System.out
-						.println("Please pick the number associated with the country in order to place your armies: ");
-				//TODO : ERROR check
-				int chosedCountryByUser = input.nextInt();
-				String countryName = countriesPerPlayerArray[chosedCountryByUser];
+				String chosedCountryByUser = "";
+				do {
+					System.out.println("Please pick the number associated with the country in order to place your armies: ");
+					chosedCountryByUser = input.nextLine();
+					if(isNaN(chosedCountryByUser) || Integer.parseInt(chosedCountryByUser) < 0 
+							|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length) {
+						System.out.println("Invalid Input!!");
+					}
+				} while(isNaN(chosedCountryByUser) || Integer.parseInt(chosedCountryByUser) < 0 
+						|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length);
+				
+				String countryName = countriesPerPlayerArray[Integer.parseInt(chosedCountryByUser)];
 
-				System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to place in "
-						+ countryName + "?");
-				//TODO : ERROR check
-				int numberOfArmiesByUser = input.nextInt();
-
+				String numberOfArmiesByUser = "";
+				
+				do {
+					System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to place in "
+							+ countryName + "?");
+					numberOfArmiesByUser = input.nextLine();
+					if(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0 
+							|| Integer.parseInt(numberOfArmiesByUser) > numberOfArmiesAvailablePerPlayer) {
+						System.out.println("Invalid input!!");
+					}
+				} while(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0 
+						|| Integer.parseInt(numberOfArmiesByUser) > numberOfArmiesAvailablePerPlayer);
+				
 				Country selectedCountry = countryObjects.get(countryName);
-				selectedCountry.addArmy(numberOfArmiesByUser);
-				numberOfArmiesAvailablePerPlayer = numberOfArmiesAvailablePerPlayer - numberOfArmiesByUser;
+				selectedCountry.addArmy(Integer.parseInt(numberOfArmiesByUser));
+				numberOfArmiesAvailablePerPlayer -= Integer.parseInt(numberOfArmiesByUser);
 			}
 		}
 
@@ -148,7 +163,6 @@ public class RiskGameDriver {
 		try {
 			Integer.parseInt(string);
 		} catch (final Exception e) {
-			System.out.println("Invalid Input");
 			return true;
 		}
 		return false;
