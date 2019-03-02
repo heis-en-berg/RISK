@@ -6,9 +6,11 @@ import com.java.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class TurnTest {
 

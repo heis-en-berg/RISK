@@ -219,4 +219,10 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Boolean fortify(String fromCountryId, String toCountryId, Integer noOfArmies) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -102,7 +102,7 @@ public class StartUpPhase {
 		return null;
 	}
 
-	public ArrayList<String> generateRoundRobin(){
+	public ArrayList<Player> generateRoundRobin(){
 
 		//iterate over players and set the order of play
 		ArrayList<Player> temp = new ArrayList<Player>();
@@ -116,7 +116,7 @@ public class StartUpPhase {
 		while(!tiePlayers.isEmpty()) {
 			results.add(" ");
 
-			// assign the player object to the roll die interger ammount
+			// assign the player object to the roll die integer amount
 			for(int k = 0; k < aux; k++){
 				tiePlayers.get(k).setOrderOfPlay(dice.rollDice());
 				results.add("Player " + tiePlayers.get(k).getPlayerName() + " rolled the dice: " + tiePlayers.get(k).getOrderOfPlay());
@@ -152,16 +152,11 @@ public class StartUpPhase {
 				}
 			}
 		}
-		
-		results.add(" ");
-		results.add("The following list has the order of the players in round robin fashion: ");
-		
 		for(int i = 0; i < temp.size(); i++) {
-			results.add((i+1) + " " + temp.get(i).getPlayerName());
-			temp.get(i).setOrderOfPlay(i);
+			temp.get(i).setOrderOfPlay(i+1);
 		}
 		gameData.setPlayers(temp);
-		return results;
+		return gameData.getPlayers();
 	}
 
 

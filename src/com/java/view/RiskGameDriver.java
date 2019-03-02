@@ -152,9 +152,11 @@ public class RiskGameDriver {
 	}
 
 	private void initiateRoundRobin() {
-		ArrayList<String> results = startUp.generateRoundRobin();
-		for (int i = 0; i < results.size(); i++) {
-			System.out.println(results.get(i));
+		System.out.println(" ");
+		System.out.println("The following list has the order of the players in round robin fashion: ");
+		ArrayList<Player> results = startUp.generateRoundRobin();
+		for(int i = 0; i < results.size(); i++) {
+			System.out.println((i+1) + " " + results.get(i).getPlayerName());
 		}
 	}
 

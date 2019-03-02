@@ -6,23 +6,27 @@ import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 
 public class StartUpPhaseTest {
 
     static GameData gameData;
     static StartUpPhase startUp;
     static ArrayList<Player> expectedPlayer;
+    static ArrayList<Player> results;
 
-    @Before
-    public void beforeEverything(){
+    @BeforeClass
+    public static void beforeEverything() {
         // now map
         gameData = new GameData();
         MapLoader maploader = new MapLoader();
@@ -30,6 +34,7 @@ public class StartUpPhaseTest {
         startUp = new StartUpPhase(gameData);
         gameData.setNoOfPlayers(6);
         gameData.gameMap = new GameMap();
+        results = startUp.generateRoundRobin();
         // create players
         expectedPlayer = new ArrayList<Player>();
         expectedPlayer.add(new Player(1, "Karan"));
@@ -91,16 +96,34 @@ public class StartUpPhaseTest {
                     assertNotEquals(country, countryNotExpected);
                 }
             }
-
         }
-
     }
 
     @Test
     public void initialArmyCalculation() {
+    	
+    	Integer[] expectedValues = {40, 35, 30, 25, 20};
+    	Integer[] data = {2, 3, 4, 5, 6};
+    	
+    	Integer result;
+    	Integer expected;
+    	
+    	for(int i = 0; i < expectedValues.length; i++) {
+    		result = startUp.initialArmyCalculation(data[i]);
+    		expected = expectedValues[i];
+    		assertEquals(expected, result);
+    	}
     }
 
     @Test
     public void generateRoundRobin() {
+    	
+    	int expected;
+    	int actual;
+    	for(int i = 0; i < results.size(); i++) {
+    		expected = (int)results.get(i).getOrderOfPlay();
+    		actual = i + 1;
+    		assertEquals(expected, actual);
+    	}
     }
 }
