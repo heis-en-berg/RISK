@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7241e1c45914d15dd403d0162d60af5a67a8344e
 public class StartUpPhaseTest {
 
     static GameData gameData;
