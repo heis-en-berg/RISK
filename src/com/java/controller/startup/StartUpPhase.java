@@ -232,10 +232,16 @@ public class StartUpPhase {
 		// Each element of the array is compared with the rest of elements.
 		for(int i = from; i < to; i++) {
 			for(int j = from; j < to; j++) {
-				if(array.get(i).getOrderOfPlay() > array.get(j).getOrderOfPlay() ) {
-					Player temp = array.get(i);
-					array.set(i, array.get(j));
-					array.set(j, temp);
+				try {
+					if(array.get(i).getOrderOfPlay() > array.get(j).getOrderOfPlay() ) {
+						Player temp = array.get(i);
+						array.set(i, array.get(j));
+						array.set(j, temp);
+					}
+				}
+				catch(Exception e) {
+					// If something goes wrong with the return.
+					return array;
 				}
 			}
 		}

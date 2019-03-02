@@ -49,9 +49,9 @@ public class RiskGameDriver {
 	public void startGame() {
 		// Call the helpers here
 		initiateStartUpPhase();
-		initialArmyPlacement();
-		ramdomAssignationOfCountries();
 		initiateRoundRobin();
+		ramdomAssignationOfCountries();
+		initialArmyPlacement();
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class RiskGameDriver {
 		// Retrives the number of players provided by the user.
 		do {
 
-			System.out.println("\nNote: You can only have players between 2 to " + gameData.gameMap.getNumberOfCountries());
+			System.out.println("\nNote: You can only have players between 2 to " + Math.min(GameData.MAX_PLAYERS, gameData.gameMap.getNumberOfCountries()));
 			System.out.println("Enter the number of players: ");
 
 			numOfPlayerStr = input.nextLine();
@@ -157,7 +157,7 @@ public class RiskGameDriver {
 					chosedCountryByUserStr = input.nextLine();
 
 				} while (isNaN(chosedCountryByUserStr) 
-						|| Integer.parseInt(chosedCountryByUserStr) > countriesPerPlayerArray.length 
+						|| Integer.parseInt(chosedCountryByUserStr) > countriesPerPlayerArray.length - 1
 						|| Integer.parseInt(chosedCountryByUserStr) < 0);
 				
 				int chosedCountryByUser = Integer.parseInt(chosedCountryByUserStr);
@@ -174,12 +174,12 @@ public class RiskGameDriver {
 
 				} while (isNaN(numberOfArmiesByUserStr)
 						|| Integer.parseInt(numberOfArmiesByUserStr) > numberOfArmiesAvailablePerPlayer
-						|| Integer.parseInt(numberOfArmiesByUserStr) < 0);
+						|| Integer.parseInt(numberOfArmiesByUserStr) < 1);
 				
 				
 				int numberOfArmiesByUser = Integer.parseInt(numberOfArmiesByUserStr);
 
-				input.close();
+				//input.close();
 				
 				// Adds the army to the country.
 				Country selectedCountry = countryObjects.get(countryName);
