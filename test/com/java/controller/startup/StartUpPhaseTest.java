@@ -16,12 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-<<<<<<< HEAD
-
-=======
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
->>>>>>> aa057aa474a3202867e3abc453150f672c6a567d
 
 public class StartUpPhaseTest {
 
