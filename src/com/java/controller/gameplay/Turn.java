@@ -218,8 +218,8 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	@Override
 	public HashMap<String, ArrayList<Integer>> getPotentialFortificationScenarios() {
 		// TODO Auto-generated method stub
-		
-		= this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
+		ArrayList<String> poolOfPotentialCountries = new ArrayList<String>();
+		poolOfPotentialCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
 		return null;
 	}
 
