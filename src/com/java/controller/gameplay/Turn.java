@@ -196,27 +196,40 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		
 		HashMap<String, ArrayList<String>> fortificationScenarios = getPotentialFortificationScenarios();
 		
-		if(fortificationScenarios != null) {
-			/*for (TypeKey name: example.keySet()){
-	            String key =name.toString();
-	            String value = example.get(name).toString();  
-	            System.out.println(key + " " + value);  
-			}*/ 
-		} else {
+		if(fortificationScenarios == null) {
 			System.out.println("There are currently no fortification opportunities for current player.. Sorry!");
 			return;
 		} 
 		
-		// while selection doesn't match int options printed
-		System.out.println("Choose scenario by number");
-		//playerDecision = scanner.nextLine();
+		int option = 1;
+		int playerOptionSelection = 0;
+		int noOfArmiesToMove = -1;
 		
-		Integer noOfArmies = getNoOfArmiesToMove();
-		String fromCountryName = chooseCountryToFortifyfrom();
-		String toCountryName = chooseCountryToFortifyto();
-		//placeArmy above should be refactored to accommodate both reinforcement & fortification phases 
+		// print the options out for the player to see and also maintain an ordered set 
+		for (String fromCountry: fortificationScenarios.keySet()){
+            String value = example.get(name).toString();  
+            System.out.println(option + ":" + " FROM " + fromCountry + " TO " + value);
+            option++;
+		}
+			
+		// while selection doesn't match int options printed prompt user 
+		while (! (0 < playerOptionSelection <= fortificationScenarios.size())) {
+			System.out.println("Please choose one of the suggested scenarios by number [1 - " + fortificationScenarios.size() + "]");
+			playerOptionSelection = scanner.nextInt();
+		}
 		
-
+		// while number of armies to be moved is not coherent prompt user 
+		while (! (0 <= noOfArmiesToMove < this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount())) {
+			System.out.println("How many armies would you like to move from " + fromCountry + " ?");
+			noOfArmiesToMove = scanner.nextInt();
+		}
+		
+		this.gameData.gameMap.getCountry(fromCountry).deductArmy(noOfArmiesToMove);
+		this.gameData.gameMap.getCountry(toCountry).addArmy(noOfArmiesToMove);
+		
+		System.out.println("New army count for " + fromCountry + " " + this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
+		System.out.println("New army count for " + toCountry + " " + this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
+		
 	}
 
 	@Override
