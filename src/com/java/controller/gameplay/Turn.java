@@ -13,8 +13,9 @@ import static java.lang.Thread.sleep;
 
 public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase{
 
-	private GameData gameData;
-	private Player player;
+	public GameData gameData;
+	public Player player;
+	public Integer currentPlayerID;
 	private Dice dice;
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
@@ -24,6 +25,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		this.gameData = gameData;
 		this.player = player;
+		this.currentPlayerID = player.getPlayerID();
 		dice = new Dice(); //To be used in attack phase.
 		input = new Scanner(System.in);
 	}
@@ -31,7 +33,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	public void startTurn(){
 		startReinforcement();
 		//startAttack();      For build 2.
-		startFortification();
+		fortify();
 	}
 
 	public void clearConsole(){
@@ -55,7 +57,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		Integer totalReinforecementArmyCount = 0;
 		Integer totalCountriesOwnedByPlayer;
-		Integer currentPlayerID = player.getPlayerID();
+		
 
 		/*Count the total number of continents owned by the player and retrieve the continent's control value. */
 		HashSet<String> conqueredContinentsPerPlayer= this.gameData.gameMap.getConqueredContinentsPerPlayer(currentPlayerID);
@@ -157,12 +159,16 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	 * @see com.java.controller.gameplay.FortificationPhase
 	 */
 	@Override
-	public void startFortification() {
-
+	public void fortify() {
+		
+		// First get confirmation from the player that fortification is desired.
+		// If it isn't, return and avoid the overhead of additional computation and checks.
 		boolean doFortify = false;
 		System.out.println("Would you like to fortify? (YES/NO)");
 		String playerDecision = input.nextLine();
-
+		String playerDecision = scanner.nextLine();
+		//input.close();
+		
 		switch(playerDecision.toLowerCase()){
 			case "yes":
 				doFortify = true;
@@ -175,31 +181,93 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		} else {
 			System.out.println("Fetching potential fortification scenarios for player..");
 		}
-
-		HashMap fortificationScenarios = getPotentialFortificationScenarios();
-
-		if(fortificationScenarios != null) {
-			/*for (TypeKey name: example.keySet()){
-	            String key =name.toString();
-	            String value = example.get(name).toString();
-	            System.out.println(key + " " + value);
-			}*/
-		} else {
-			System.out.println("There are currently no fortification opportunities for this player.. Sorry!");
+	
+		// Now fetch all possibilities for player (this could get long as the game progresses and more land is acquired)
+		HashMap<String, ArrayList<String>> fortificationScenarios = getPotentialFortificationScenarios();
+		
+		if(fortificationScenarios.isEmpty()) {
+			System.out.println("There are currently no fortification opportunities for current player.. Sorry!");
 			return;
+		} 
+		
+		int option = 1;
+		int playerOptionSelection = 0;
+		int noOfArmiesToMove = -1;
+		
+		// print the options out for the player to see and choose from 
+		for (String fromCountry: fortificationScenarios.keySet()){
+            //String value = example.get(name).toString();  
+            System.out.println(option + ":" + " FROM " + fromCountry + " TO " + value);
+            option++;
 		}
-
-		Integer noOfArmies = getNoOfArmiesToMove();
-		String fromCountryName = chooseCountryToFortifyfrom();
-		String toCountryName = chooseCountryToFortifyto();
-		//placeArmy above should be refactored to accommodate both reinforcement & fortification phases
-		// TODO Auto-generated method stub
+		
+		playerDecision="";
+			
+		// while selection doesn't match any of the offered options, prompt user 
+		while (! fortificationScenarios.contains(playerDecision)) {
+			System.out.println("Please choose one of the suggested countries to move armies FROM: ");
+			playerDecision = scanner.nextLine();
+		}
+		String fromCountry = playerDecision;
+		
+		playerDecision="";
+		
+		// check that the from - to combination specifically makes sense as a valid path
+		while (! fortificationScenarios.get(fromCountry)) {
+			System.out.println("Please choose one of the suggested countries to move armies TO: ");
+			playerDecision = scanner.nextLine();
+		}
+		
+		// while number of armies to be moved is not coherent, prompt user 
+		// 0 is a valid selection 
+		while (! (0 <= noOfArmiesToMove < this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount())) {
+			System.out.println("How many armies would you like to move from " + fromCountry + " to " + toCountry + " ?");
+			noOfArmiesToMove = scanner.nextInt();
+		}
+		
+		this.gameData.gameMap.getCountry(fromCountry).deductArmy(noOfArmiesToMove);
+		this.gameData.gameMap.getCountry(toCountry).addArmy(noOfArmiesToMove);
+		
+		System.out.println("New army count for " + fromCountry + " " + this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
+		System.out.println("New army count for " + toCountry + " " + this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
+		
 	}
 
 	@Override
-	public HashMap<String, ArrayList<Integer>> getPotentialFortificationScenarios() {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<String, ArrayList<String>> getPotentialFortificationScenarios() {
+
+		HashMap<String, ArrayList<String>> fortificationScenarios  = new HashMap<String, ArrayList<String>>();
+		HashSet<String> poolOfPotentialCountries = new HashSet<String>();
+		HashSet<String> adjacentCountries = new HashSet<String>();
+		
+		// Step 1: get the comprehensive list of all countries currently conquered by player
+		poolOfPotentialCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
+		
+		// Step 2: limit the scope by eliminating some of the countries as options to fortify *from*.
+		// This is enforced by the known minimum requirement of at least 1 army on the ground at all times.
+    	// Given that the "from" and "to" matter => we will key our hash of scenarios on "froms" and append all potential "to's" as values for a from key
+		
+		for (String potentialCountry : poolOfPotentialCountries){
+		    if(this.gameData.gameMap.getCountry(potentialCountry).getCountryArmyCount() > 1 ) {
+		    	// once we ensure a country has more than 1 army, it becomes a potential key
+		    	// ****
+		    	// Step 3: now try to build the paths by carefully checking neighbors and whether or not they're in scope
+		    	adjacentCountries = getAdjacentCountries(potentialCountry);
+		    	for (String adjacentCountry : adjacentCountries){
+		    		// need to ensure the adjacent country is also owned by that very same player - otherwise there's no path
+		    		if(poolOfPotentialCountries.contains(adjacentCountry)) {
+		    			fortificationScenarios.putIfAbsent(potentialCountry, new ArrayList<String>());
+		    			fortificationScenarios.get(potentialCountry).add(adjacentCountry);
+		    		}
+		    	}
+		    }
+		}
+		
+		if(fortificationScenarios.isEmpty()) {
+			return null;
+		} 
+		
+		return fortificationScenarios;
 	}
 
 	@Override
