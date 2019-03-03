@@ -167,14 +167,15 @@ public class RiskGameDriver {
 		/*There will be another round if the number of players is greater than one.*/
 		while(playerList.size() != 1) {
 			for (player = reset_turn; player < playerList.size(); ) {
-				currentPlayer = this.gameData.getPlayers().get(player);
+				currentPlayer = playerList.get(player);
 				/* Exclude turn for the player with no countries. The player has been defeated.*/
 				if (this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
 					turn = new Turn(currentPlayer, this.gameData);
 					turn.startTurn();
 					player++;
 				} else {
-					playerList.remove(currentPlayer);
+					this.gameData.removePlayers(currentPlayer);
+					playerList = this.gameData.getPlayers();
 				}
 			}
 			// Reset turn for player one.
