@@ -158,20 +158,30 @@ public class RiskGameDriver {
 
 	private void startTurn() {
 
+		Turn turn;
 		ArrayList<Player> playerList = this.gameData.getPlayers();
 		Player currentPlayer;
-		for(int player = 0 ; player < playerList.size();){
-			currentPlayer = this.gameData.getPlayers().get(player);
-			/* Exclude turn for the player with no countries. The player has been defeated.*/
-			if(this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
-				Turn turn = new Turn(currentPlayer, this.gameData);
-				turn.startTurn();
-				player++;
+		int reset_turn = 0;
+		int player;
+
+		/*There will be another round if the number of players is greater than one.*/
+		while(playerList.size() != 1) {
+			for (player = reset_turn; player < playerList.size(); ) {
+				currentPlayer = this.gameData.getPlayers().get(player);
+				/* Exclude turn for the player with no countries. The player has been defeated.*/
+				if (this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
+					turn = new Turn(currentPlayer, this.gameData);
+					turn.startTurn();
+					player++;
+				} else {
+					playerList.remove(currentPlayer);
+				}
 			}
-			else{
-				playerList.remove(currentPlayer);
-			}
+			// Reset turn for player one.
+			player = reset_turn;
 		}
+		/*The one player left in the playerList has conquered the whole map.*/
+		System.out.println("Congratulations! "+playerList.get(0).getPlayerName() + " wins the game.");
 	}
 
 	private boolean isNaN(final String string) {
