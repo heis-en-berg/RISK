@@ -175,6 +175,8 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	@Override
 	public void fortify() {
 		
+		// First get confirmation from the player that fortification is desired.
+		// If it isn't, return and avoid the overhead of additional computation and checks.
 		boolean doFortify = false;
 		Scanner input = new Scanner(System.in);  
 		System.out.println("Would you like to fortify? (YES/NO)");
@@ -194,9 +196,10 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 			System.out.println("Fetching potential fortification scenarios for player..");
 		}
 		
+		// Now fetch all possibilities for player (this could get long as the game progresses and more land is acquired)
 		HashMap<String, ArrayList<String>> fortificationScenarios = getPotentialFortificationScenarios();
 		
-		if(fortificationScenarios == null) {
+		if(fortificationScenarios.isEmpty()) {
 			System.out.println("There are currently no fortification opportunities for current player.. Sorry!");
 			return;
 		} 
@@ -205,22 +208,34 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		int playerOptionSelection = 0;
 		int noOfArmiesToMove = -1;
 		
-		// print the options out for the player to see and also maintain an ordered set 
+		// print the options out for the player to see and choose from 
 		for (String fromCountry: fortificationScenarios.keySet()){
-            String value = example.get(name).toString();  
+            //String value = example.get(name).toString();  
             System.out.println(option + ":" + " FROM " + fromCountry + " TO " + value);
             option++;
 		}
+		
+		playerDecision="";
 			
-		// while selection doesn't match int options printed prompt user 
-		while (! (0 < playerOptionSelection <= fortificationScenarios.size())) {
-			System.out.println("Please choose one of the suggested scenarios by number [1 - " + fortificationScenarios.size() + "]");
-			playerOptionSelection = scanner.nextInt();
+		// while selection doesn't match any of the offered options, prompt user 
+		while (! fortificationScenarios.contains(playerDecision)) {
+			System.out.println("Please choose one of the suggested countries to move armies FROM: ");
+			playerDecision = scanner.nextLine();
+		}
+		String fromCountry = playerDecision;
+		
+		playerDecision="";
+		
+		// check that the from - to combination specifically makes sense as a valid path
+		while (! fortificationScenarios.get(fromCountry)) {
+			System.out.println("Please choose one of the suggested countries to move armies TO: ");
+			playerDecision = scanner.nextLine();
 		}
 		
-		// while number of armies to be moved is not coherent prompt user 
+		// while number of armies to be moved is not coherent, prompt user 
+		// 0 is a valid selection 
 		while (! (0 <= noOfArmiesToMove < this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount())) {
-			System.out.println("How many armies would you like to move from " + fromCountry + " ?");
+			System.out.println("How many armies would you like to move from " + fromCountry + " to " + toCountry + " ?");
 			noOfArmiesToMove = scanner.nextInt();
 		}
 		
