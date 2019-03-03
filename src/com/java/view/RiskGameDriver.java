@@ -1,16 +1,13 @@
 package com.java.view;
 
+import com.java.controller.gameplay.Turn;
 import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
 import com.java.model.player.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 public class RiskGameDriver {
 
@@ -141,6 +138,7 @@ public class RiskGameDriver {
 				numberOfArmiesAvailablePerPlayer -= Integer.parseInt(numberOfArmiesByUser);
 			}
 		}
+		startTurn();
 
 	}
 
@@ -156,7 +154,17 @@ public class RiskGameDriver {
 	}
 
 	private void startTurn() {
-		// TODO Auto-generated method stub
+
+		ArrayList<Player> playerList = this.gameData.getPlayers();
+		Player currentPlayer;
+		for(int player = 0 ; player < playerList.size(); player++){
+			currentPlayer = this.gameData.getPlayers().get(player);
+			/* Exclude turn for the player with no countries. The player has been defeated.*/
+			if(this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
+				Turn turn = new Turn(currentPlayer, this.gameData);
+				turn.startTurn();
+			}
+		}
 	}
 
 	private boolean isNaN(final String string) {
