@@ -143,7 +143,6 @@ public class RiskGameDriver {
 			}
 		}
 		startTurn();
-
 	}
 
 	private void initiateRoundRobin() {
@@ -161,12 +160,16 @@ public class RiskGameDriver {
 
 		ArrayList<Player> playerList = this.gameData.getPlayers();
 		Player currentPlayer;
-		for(int player = 0 ; player < playerList.size(); player++){
+		for(int player = 0 ; player < playerList.size();){
 			currentPlayer = this.gameData.getPlayers().get(player);
 			/* Exclude turn for the player with no countries. The player has been defeated.*/
 			if(this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
 				Turn turn = new Turn(currentPlayer, this.gameData);
 				turn.startTurn();
+				player++;
+			}
+			else{
+				playerList.remove(currentPlayer);
 			}
 		}
 	}

@@ -8,43 +8,23 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class TurnTest {
 
-//    public static int getBoundIntegerFromUser(IntegerAsker asker) {
-//        int input = asker.ask("\nEnter the country name to place armies: ");
-//        while (input < 1 || input > 10)
-//            input = asker.ask("Wrong number, try again.");
-//        return input;
-//    }
-
-//    public static class IntegerAsker {
-//        private final Scanner scanner;
-//        private final PrintStream out;
-//
-//        public IntegerAsker(InputStream in, PrintStream out) {
-//            scanner = new Scanner(in);
-//            this.out = out;
-//        }
-//
-//        public int ask(String message) {
-//            out.println(message);
-//            return scanner.nextInt();
-//        }
-//    }
-
     private GameData gameData;
-    private Turn turn;
+    private Turn turn, turn2;
     private Player playerOne,playerTwo;
     private ArrayList<Player> players;
 
     @Before
     public void setUp() {
 
+        // Load the game with a dummy map and data.
         gameData = new GameData();
         gameData.gameMap = new GameMap();
 
+        // Test data with two players, two continents and six countries.
         players = new ArrayList<>();
         playerOne = new Player(1, "P1");
         playerTwo = new Player(2, "P2");
@@ -77,30 +57,29 @@ public class TurnTest {
         gameData.gameMap.getCountry("C4").addArmy(1);
         gameData.gameMap.getCountry("C5").addArmy(5);
         gameData.gameMap.getCountry("C6").addArmy(6);
-
-        turn = new Turn(playerOne, gameData);
-
     }
 
+    /**
+     * Calculate total reinforcement army with no conquered continents.
+     */
     @Test
-    public void calculateReinforcementArmy() {
+    public void testCalculateReinforcementArmyNoConqueredContinent() {
 
+        turn = new Turn(playerTwo, gameData);
         int actual_value = turn.calculateReinforcementArmy();
-        int expected_value = 14;
+        int expected_value = 3;
         assertEquals(expected_value, actual_value);
-
     }
 
+    /**
+     * Calculate total reinforcement army with conquered continents having control values.
+     */
     @Test
-    public void placeArmy() {
-//        turn.placeArmy(14);
-//        IntegerAsker asker = mock(IntegerAsker.class);
-//        when(asker.ask("\nEnter the country name to place armies: ")).thenReturn("C1");
-//        when(asker.ask("Wrong number, try again.")).thenReturn(3);
-//
-//        getBoundIntegerFromUser(asker);
-//
-//        verify(asker).ask("Wrong number, try again.");
+    public void testCalculateReinforcementArmyWithConqueredContinent() {
 
+        turn2 = new Turn(playerOne,gameData);
+        int actual_value = turn2.calculateReinforcementArmy();
+        int expected_value = 14;
+        assertEquals(expected_value,actual_value);
     }
 }
