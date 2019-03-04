@@ -147,46 +147,10 @@ public class RiskGameDriver {
 				}
 
 				firstTime = false;
-				
-				String chosenCountryByUserStr = "";
-				
-				// The user chooses a country and place the army
-				do {
-					System.out.println("\nYou have " + numberOfArmiesAvailablePerPlayer + " armies left.");
-					System.out.println("Please pick the number associated with the country in order to place your armies: ");
-
-					chosenCountryByUserStr = input.nextLine();
-
-				} while (isNaN(chosenCountryByUserStr)
-						|| Integer.parseInt(chosenCountryByUserStr) > countriesPerPlayerArray.length - 1
-						|| Integer.parseInt(chosenCountryByUserStr) < 0);
-				
-				int chosedCountryByUser = Integer.parseInt(chosenCountryByUserStr);
-				String countryName = countriesPerPlayerArray[chosedCountryByUser];
-				
-				String numberOfArmiesByUserStr = "";
-				
-				// The user chooses how many army wants to put in a choosed country.
-				do {
-
-					System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to place in " + countryName + "?");
-
-					numberOfArmiesByUserStr = input.nextLine();
-
-				} while (isNaN(numberOfArmiesByUserStr)
-						|| Integer.parseInt(numberOfArmiesByUserStr) > numberOfArmiesAvailablePerPlayer
-						|| Integer.parseInt(numberOfArmiesByUserStr) < 1);
-				
-				
-				int numberOfArmiesByUser = Integer.parseInt(numberOfArmiesByUserStr);
-
-				//input.close();
-				
-				// Adds the army to the country.
-				System.out.println("You have " + numberOfArmiesAvailablePerPlayer + " armies left.");
 
 				String chosedCountryByUser = "";
 				do {
+					System.out.println("\nYou have " + numberOfArmiesAvailablePerPlayer + " armies left.");
 					System.out.println("Please pick the number associated with the country in order to place your armies: ");
 					chosedCountryByUser = input.nextLine();
 					if(isNaN(chosedCountryByUser) || Integer.parseInt(chosedCountryByUser) < 0 
@@ -204,11 +168,13 @@ public class RiskGameDriver {
 					System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to place in "
 							+ countryName + "?");
 					numberOfArmiesByUser = input.nextLine();
+
 					if(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0 
 							|| Integer.parseInt(numberOfArmiesByUser) > numberOfArmiesAvailablePerPlayer) {
 						System.out.println("Invalid input!!");
 					}
-				} while(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0 
+
+				} while(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0
 						|| Integer.parseInt(numberOfArmiesByUser) > numberOfArmiesAvailablePerPlayer);
 
 				Country selectedCountry = countryObjects.get(countryName);
@@ -269,11 +235,12 @@ public class RiskGameDriver {
 		int reset_turn = 0;
 		int player;
 
-		/*There will be another round if the number of players is greater than one.*/
+		//There will be another round if the number of players is greater than one.
 		while(playerList.size() != 1) {
 			for (player = reset_turn; player < playerList.size(); ) {
 				currentPlayer = playerList.get(player);
-				/* Exclude turn for the player with no countries. The player has been defeated.*/
+
+				// Exclude turn for the player with no countries. The player has been defeated.
 				if (this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
 					turn = new Turn(currentPlayer, this.gameData);
 					turn.startTurn();
@@ -286,18 +253,9 @@ public class RiskGameDriver {
 			// Reset turn for player one.
 			player = reset_turn;
 		}
-		/*The one player left in the playerList has conquered the whole map.*/
+
+		//The one player left in the playerList has conquered the whole map.
 		System.out.println("Congratulations! "+playerList.get(0).getPlayerName() + " wins the game.");
-	}
-
-
-	private boolean isNaN(final String string) {
-		try {
-			Integer.parseInt(string);
-		} catch (final Exception e) {
-			return true;
-		}
-		return false;
 	}
 
 }
