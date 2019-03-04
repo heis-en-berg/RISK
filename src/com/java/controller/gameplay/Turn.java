@@ -17,13 +17,9 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	public Player player;
 	public Integer currentPlayerID;
 	private Dice dice;
+	private Scanner input;
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
-
-	/*Colors for console output. */
-	private static final String ANSI_RESET = "\u001B[0m";
-	private static final String ANSI_RED = "\u001B[31m";
-	private static final String ANSI_BOLD = "\033[0;1m";
 
 	public Turn(Player player, GameData gameData) {
 
@@ -31,6 +27,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		this.player = player;
 		this.currentPlayerID = player.getPlayerID();
 		dice = new Dice(); //To be used in attack phase.
+		input = new Scanner(System.in);
 	}
 
 	public void startTurn(){
@@ -42,14 +39,6 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	public void clearConsole(){
 		for (int line = 0; line < 50; ++line)
 			System.out.println();
-	}
-
-	public void highlightStatementInRed(String str){
-		System.out.print(ANSI_RED + str + ANSI_RESET);
-	}
-
-	public void boldStatement(String str){
-		System.out.print(ANSI_BOLD + str + ANSI_RESET);
 	}
 
 	/*
@@ -68,7 +57,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		Integer totalReinforecementArmyCount = 0;
 		Integer totalCountriesOwnedByPlayer;
-		
+		Integer currentPlayerID = player.getPlayerID();
 
 		/*Count the total number of continents owned by the player and retrieve the continent's control value. */
 		HashSet<String> conqueredContinentsPerPlayer= this.gameData.gameMap.getConqueredContinentsPerPlayer(currentPlayerID);
@@ -89,22 +78,21 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	@Override
 	public void placeArmy(Integer reinforcementArmy) {
 
-		Scanner input = new Scanner(System.in);
 		Integer currentPlayerID = player.getPlayerID();
 		HashSet<String> countriesOwned = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
 
 		this.clearConsole();
-		highlightStatementInRed("Reinforcement Phase Begins...\n");
+		System.out.println("Reinforcement Phase Begins..\n");
 		try {
 			sleep(1500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		this.clearConsole();
+		clearConsole();
 
 		while (reinforcementArmy > 0){
-			System.out.print("Total Reinforcement Army Count Remaining -> ");
-			this.boldStatement("["+String.valueOf(reinforcementArmy)+"]\n");
+
+			System.out.print("Total Reinforcement Army Count Remaining -> ["+ String.valueOf(reinforcementArmy)+"]\n");
 
 			/*Information about the countries owned by the player and enemy countries. */
 			for(String countries: countriesOwned) {
@@ -124,13 +112,13 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 			/*Check for an invalid country name.*/
 			if(this.gameData.gameMap.getCountry(countryNameByUser) == null) {
 				this.clearConsole();
-				this.highlightStatementInRed("'"+countryNameByUser+"' is an invalid country name. Please verify the country name from the list.\n\n");
+				System.out.println("'"+countryNameByUser+"' is an invalid country name. Please verify the country name from the list.\n\n");
 				continue;
 			}
 			/*Check for a valid country name, but the country belonging to a different player.*/
 			if(this.gameData.gameMap.getCountry(countryNameByUser).getCountryConquerorID() != currentPlayerID){
-				this.clearConsole();
-				this.highlightStatementInRed("'"+countryNameByUser + "' does not belong to you yet!!. Please verify your countries owned from the list below.\n\n");
+				clearConsole();
+				System.out.println("'"+countryNameByUser + "' does not belong to you yet!!. Please verify your countries owned from the list below.\n\n");
 				continue;
 			}
 
@@ -139,30 +127,28 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 			try {
 				Integer numberOfArmiesToBePlacedByUser = Integer.parseInt(input.nextLine());
 				if (numberOfArmiesToBePlacedByUser > reinforcementArmy) {
-					this.clearConsole();
-					this.highlightStatementInRed("Input value '"+numberOfArmiesToBePlacedByUser+ "' should not be greater than the Total Reinforcement Army Count ");
-					this.boldStatement("("+String.valueOf(reinforcementArmy)+")\n\n");
+					clearConsole();
+					System.out.println("Input value '"+numberOfArmiesToBePlacedByUser+ "' should not be greater than the Total Reinforcement Army Count "+"("+String.valueOf(reinforcementArmy)+")\n\n");
 					continue;
 				}
 				if(!(numberOfArmiesToBePlacedByUser > 0)){
-					this.clearConsole();
-					this.highlightStatementInRed("Please input a value greater than 0.\n\n");
+					clearConsole();
+					System.out.println("Please input a value greater than 0.\n\n");
 					continue;
 				}
-				this.clearConsole();
-				this.highlightStatementInRed("Successful...Country chosen " + countryNameByUser + " ,Number of armies placed: " + numberOfArmiesToBePlacedByUser + "\n\n");
+				clearConsole();
+				System.out.println("Successful...Country chosen " + countryNameByUser + " ,Number of armies placed: " + numberOfArmiesToBePlacedByUser + "\n\n");
 				this.gameData.gameMap.getCountry(countryNameByUser).addArmy(numberOfArmiesToBePlacedByUser);
 				reinforcementArmy -= numberOfArmiesToBePlacedByUser;
 			}catch (NumberFormatException ex){
 				this.clearConsole();
-				this.highlightStatementInRed(ex.getMessage()+", please enter numeric values only!\n\n");
+				System.out.println(ex.getMessage()+", please enter numeric values only!\n\n");
 				continue;
 			}
 		}
-		input.close();
 		/*End of reinforcement phase, Print the final overview.*/
-		this.clearConsole();
-		this.highlightStatementInRed("Reinforcement Phase is now complete. Here's an overview: \n\n");
+		clearConsole();
+		System.out.println("Reinforcement Phase is now complete. Here's an overview: \n\n");
 		for(String countries: countriesOwned) {
 			System.out.println("Country owned by you: "+countries + " ,Army Count: " + this.gameData.gameMap.getCountry(countries).getCountryArmyCount());
 		}
