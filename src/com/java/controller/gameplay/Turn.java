@@ -283,9 +283,9 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 			return null;
 		} 
 		
-		// Before we return the set, we have to slightly manipulate it to basically draw "full paths" 
-		// and make potentially longer connections beyond just "immediate neighbors"
-		// This follows the "what's yours is also mine" principle among a given key and its values
+		// Before we return the set, we have to slightly manipulate it while copying to the final structure
+		// This is to basically draw "full paths" and make potentially longer connections beyond just "immediate neighbors"
+		// This follows the principle of "what's yours is also mine" among a given key and its values
 		for (String keySourceCountry: prelimFortificationScenarios.keySet()){
             for(String correspondingDestinationCountry : prelimFortificationScenarios.get(keySourceCountry)) {
             	allFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
