@@ -170,7 +170,7 @@ public class MapEditor {
 		Integer continentControlValue = -1;
 		do {
 			try {
-				System.out.print("Please Enter the control value of the Continent: " + newContinentName + ":");
+				System.out.print("Please Enter the control value for the Continent " + newContinentName + ":");
 				continentControlValue = Integer.parseInt(scanner.nextLine().trim());
 				if(continentControlValue < 0) {
 					System.out.println("Invalid Input.");

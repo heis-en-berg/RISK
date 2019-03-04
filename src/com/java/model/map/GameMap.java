@@ -107,7 +107,7 @@ public class GameMap implements Cloneable{
 
 	public void removeContinent(String continentName) {
 		this.continentObjects.remove(continentName);
-		Object[] continentCountriesSet = continentCountries.get(continentName).toArray();
+		Object[] continentCountriesSet = getContinentCountries(continentName).toArray();
 		for(Object continentCountry : continentCountriesSet) {
 			removeCountry(continentCountry.toString());
 		}
