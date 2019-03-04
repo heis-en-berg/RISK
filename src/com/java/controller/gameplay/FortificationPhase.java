@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public interface FortificationPhase {
 
-	HashMap<String, ArrayList<Integer>> getPotentialFortificationScenarios();
+	HashMap<String, ArrayList<String>> getPotentialFortificationScenarios();
+	void buildFortificationPath(HashMap<String, ArrayList<String>> fortificationScenarios, String rootCountry);
 	
 }
