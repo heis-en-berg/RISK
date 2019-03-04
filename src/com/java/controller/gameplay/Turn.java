@@ -162,12 +162,11 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		
 		// First get confirmation from the player that fortification is desired.
 		// If it isn't, return and avoid the overhead of additional computation and checks.
-		/*boolean doFortify = false;
+		boolean doFortify = false;
 		String playerDecision = "no";
-		Scanner scanner = new Scanner(System.in);  
 		System.out.println("Would you like to fortify? (YES/NO)");
-		if(scanner.hasNextLine()){
-			  playerDecision = scanner.nextLine();
+		if(input.hasNextLine()){
+			  playerDecision = input.nextLine();
 		}
 		
 		
@@ -179,11 +178,11 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		
 		if(!doFortify) {
 			System.out.println("Player does not wish to fortify. Ending turn..");
-			scanner.close();
+			//input.close();
 			return;
 		} else {
 			System.out.println("Fetching potential fortification scenarios for player..");
-		}*/
+		}
 		
 		// Now fetch all possibilities for player (this could get long as the game progresses and more land is acquired)
 		// All logic and complexity are delegated to the getPotentialFortificationScenarios method
@@ -191,13 +190,13 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		
 		if(fortificationScenarios == null) {
 			System.out.println("There are currently no fortification opportunities for current player.. Sorry!");
-			//scanner.close();
+			//input.close();
 			return;
 		} 
 		
 		if(fortificationScenarios.isEmpty()) {
 			System.out.println("There are currently no fortification opportunities for current player.. Sorry!");
-			//scanner.close();
+			//input.close();
 			return;
 		} 
 		
@@ -218,21 +217,21 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		
 		// Recycle variable
 		// clear the decision variable holder between choices
-		/*playerDecision="";
+		playerDecision="";
 			
 		// while selection doesn't match any of the offered options, prompt user 
 		while (! fortificationScenarios.containsKey(playerDecision)) {
 			System.out.println("Please choose one of the suggested countries to move armies FROM: ");
-			playerDecision = scanner.nextLine().toLowerCase();
+			playerDecision = input.nextLine();
 		}
 		String fromCountry = playerDecision;
 		
 		// while number of armies to be moved is not coherent, prompt user 
 		// 0 is a valid selection 
-		int noOfArmiesToMove = -1;
+		Integer noOfArmiesToMove = -1;
 		while (! ((0 <= noOfArmiesToMove) && ( noOfArmiesToMove < armiesPerPotentialFortificationSourceCountry.get(fromCountry)))) {
 			System.out.println("How many armies would you like to move from " + fromCountry + " ?");
-			noOfArmiesToMove = scanner.nextInt();
+			noOfArmiesToMove = Integer.parseInt(input.nextLine());
 		}
 		
 		playerDecision="";
@@ -240,11 +239,11 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		// check that the {from - to} combination specifically makes sense as a valid path
 		while (! fortificationScenarios.get(fromCountry).contains(playerDecision)) {
 			System.out.println("Please choose one of the valid countries to move armies INTO (knowing that you've chosen to move them from country " + fromCountry + "): ");
-			playerDecision = scanner.nextLine().toLowerCase();
+			playerDecision = input.nextLine();
 		}
 		String toCountry = playerDecision;
 		
-		scanner.close();
+		//input.close();
 		
 		// At this stage all that's left to do really is adjust the army counts in the respective countries to reflect they player's fortification move
 		this.gameData.gameMap.getCountry(fromCountry).deductArmy(noOfArmiesToMove);
@@ -252,7 +251,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		
 		System.out.println("New army count for " + fromCountry + " " + this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
 		System.out.println("New army count for " + toCountry + " " + this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
-		*/
+		
 	}
 
 	@Override
