@@ -1,11 +1,11 @@
 package com.java.model.gamedata;
 
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.java.model.cards.CardsDeck;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
+
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameData {
 
@@ -24,6 +24,10 @@ public class GameData {
 	
 	public void setPlayers(ArrayList<Player> players) {
 		this.players = players;
+	}
+
+	public void removePlayers(Player player){
+		this.players.remove(player);
 	}
 
 	public Integer getNoOfPlayers() {

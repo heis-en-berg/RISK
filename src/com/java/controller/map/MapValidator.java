@@ -204,7 +204,7 @@ public class MapValidator {
 		String currentLine = null;
 
 		currentLine = nextLine(mapFileBufferedReader);
-		if (!currentLine.equals("[Map]")) {
+		if (currentLine == null || !currentLine.equals("[Map]")) {
 			System.out.println("ERROR: [Map] tag missing");
 			return false;
 		}

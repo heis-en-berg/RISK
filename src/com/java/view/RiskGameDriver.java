@@ -1,5 +1,6 @@
 package com.java.view;
 
+import com.java.controller.gameplay.Turn;
 import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
@@ -7,10 +8,10 @@ import com.java.model.map.Country;
 import com.java.model.player.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Arrays;
 
 /**
  * RiskGameDriver class is used as a view in which the user will interact with a given console.
@@ -182,12 +183,40 @@ public class RiskGameDriver {
 				//input.close();
 				
 				// Adds the army to the country.
+				System.out.println("You have " + numberOfArmiesAvailablePerPlayer + " armies left.");
+
+				String chosedCountryByUser = "";
+				do {
+					System.out.println("Please pick the number associated with the country in order to place your armies: ");
+					chosedCountryByUser = input.nextLine();
+					if(isNaN(chosedCountryByUser) || Integer.parseInt(chosedCountryByUser) < 0 
+							|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length) {
+						System.out.println("Invalid Input!!");
+					}
+				} while(isNaN(chosedCountryByUser) || Integer.parseInt(chosedCountryByUser) < 0 
+						|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length);
+				
+				String countryName = countriesPerPlayerArray[Integer.parseInt(chosedCountryByUser)];
+
+				String numberOfArmiesByUser = "";
+				
+				do {
+					System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to place in "
+							+ countryName + "?");
+					numberOfArmiesByUser = input.nextLine();
+					if(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0 
+							|| Integer.parseInt(numberOfArmiesByUser) > numberOfArmiesAvailablePerPlayer) {
+						System.out.println("Invalid input!!");
+					}
+				} while(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0 
+						|| Integer.parseInt(numberOfArmiesByUser) > numberOfArmiesAvailablePerPlayer);
+
 				Country selectedCountry = countryObjects.get(countryName);
-				selectedCountry.addArmy(numberOfArmiesByUser);
-				numberOfArmiesAvailablePerPlayer = numberOfArmiesAvailablePerPlayer - numberOfArmiesByUser;
+				selectedCountry.addArmy(Integer.parseInt(numberOfArmiesByUser));
+				numberOfArmiesAvailablePerPlayer -= Integer.parseInt(numberOfArmiesByUser);
 			}
 		}
-
+		startTurn();
 	}
 	
 	/**
@@ -233,8 +262,42 @@ public class RiskGameDriver {
 	}
 
 	private void startTurn() {
-		// TODO Auto-generated method stub
+
+		Turn turn;
+		ArrayList<Player> playerList = this.gameData.getPlayers();
+		Player currentPlayer;
+		int reset_turn = 0;
+		int player;
+
+		/*There will be another round if the number of players is greater than one.*/
+		while(playerList.size() != 1) {
+			for (player = reset_turn; player < playerList.size(); ) {
+				currentPlayer = playerList.get(player);
+				/* Exclude turn for the player with no countries. The player has been defeated.*/
+				if (this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
+					turn = new Turn(currentPlayer, this.gameData);
+					turn.startTurn();
+					player++;
+				} else {
+					this.gameData.removePlayers(currentPlayer);
+					playerList = this.gameData.getPlayers();
+				}
+			}
+			// Reset turn for player one.
+			player = reset_turn;
+		}
+		/*The one player left in the playerList has conquered the whole map.*/
+		System.out.println("Congratulations! "+playerList.get(0).getPlayerName() + " wins the game.");
 	}
-	
+
+
+	private boolean isNaN(final String string) {
+		try {
+			Integer.parseInt(string);
+		} catch (final Exception e) {
+			return true;
+		}
+		return false;
+	}
 
 }
