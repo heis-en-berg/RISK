@@ -132,7 +132,7 @@ public class RiskGameDriver {
 				// Displays the lists of countries owned by a player.
 				System.out.println("Player: " + player.getPlayerName() + " owns the following countries: ");
 
-				// At the beggining every country has at least one army.
+				// At the begining every country has at least one army.
 				for (int i = 0; i < countriesPerPlayerArray.length; i++) {
 
 					String countryName = countriesPerPlayerArray[i];
@@ -147,20 +147,20 @@ public class RiskGameDriver {
 
 				firstTime = false;
 				
-				String chosedCountryByUserStr = "";
+				String chosenCountryByUserStr = "";
 				
 				// The user chooses a country and place the army
 				do {
 					System.out.println("\nYou have " + numberOfArmiesAvailablePerPlayer + " armies left.");
 					System.out.println("Please pick the number associated with the country in order to place your armies: ");
 
-					chosedCountryByUserStr = input.nextLine();
+					chosenCountryByUserStr = input.nextLine();
 
-				} while (isNaN(chosedCountryByUserStr) 
-						|| Integer.parseInt(chosedCountryByUserStr) > countriesPerPlayerArray.length - 1
-						|| Integer.parseInt(chosedCountryByUserStr) < 0);
+				} while (isNaN(chosenCountryByUserStr)
+						|| Integer.parseInt(chosenCountryByUserStr) > countriesPerPlayerArray.length - 1
+						|| Integer.parseInt(chosenCountryByUserStr) < 0);
 				
-				int chosedCountryByUser = Integer.parseInt(chosedCountryByUserStr);
+				int chosedCountryByUser = Integer.parseInt(chosenCountryByUserStr);
 				String countryName = countriesPerPlayerArray[chosedCountryByUser];
 				
 				String numberOfArmiesByUserStr = "";
@@ -213,12 +213,16 @@ public class RiskGameDriver {
 	
 	/**
      * Helper method to test if a given strin can be converted to a int.
+     * @param stringInput determines if the string typed by user is an integer
+     * @return the evaluation of true if it is an integer or false otherwise
      */
-	private boolean isNaN(final String string) {
+	private boolean isNaN(final String stringInput) {
 		try {
-			Integer.parseInt(string);
+			Integer.parseInt(stringInput);
+
 		} catch (final Exception e) {
-			System.out.println("Invalid Input");
+
+		    System.out.println("Invalid Input");
 			return true;
 		}
 		return false;
