@@ -257,8 +257,11 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	@Override
 	public HashMap<String, ArrayList<String>> getPotentialFortificationScenarios() {
 
+		// Draft structure to preliminarily pave the way for path building - this one will contain only directly adjacent countries owned by the player
+		HashMap<String, ArrayList<String>> prelimFortificationScenarios  = new HashMap<String, ArrayList<String>>();
 		// What will be returned if there are paths which can be leveraged for fortification
-		HashMap<String, ArrayList<String>> fortificationScenarios  = new HashMap<String, ArrayList<String>>();
+		// This will include full (extended) paths of countries owned by the player - wherever applicable (i.e the sum of paths, not just directly adjacent countries)
+		HashMap<String, ArrayList<String>> allFortificationScenarios  = new HashMap<String, ArrayList<String>>();
 		
 		// Step 1: get the comprehensive list of all countries currently conquered by the player
 		HashSet<String> poolOfPotentialCountries = new HashSet<String>();
@@ -272,24 +275,26 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		    if(this.gameData.gameMap.getCountry(potentialSourceCountry).getCountryArmyCount() > 1 ) {
 		    	// Step 3: buildFortificationPath is the main iterative logic which will "draw" the preliminary short paths among direct neighboring countries
 		    	// and populate the fortificationScenarios as necessary
-		    	buildFortificationPath(fortificationScenarios,potentialSourceCountry);
+		    	buildFortificationPath(prelimFortificationScenarios,potentialSourceCountry);
 		    }
 		}
 		
-		if(fortificationScenarios.isEmpty()) {
+		if(prelimFortificationScenarios.isEmpty()) {
 			return null;
 		} 
 		
 		// Before we return the set, we have to slightly manipulate it to basically draw "full paths" 
 		// and make potentially longer connections beyond just "immediate neighbors"
 		// This follows the "what's yours is also mine" principle among a given key and its values
-		/*for (String keySourceCountry: fortificationScenarios.keySet()){
-            for(String correspondingDestinationCountry : fortificationScenarios.get(keySourceCountry)) {
-            	fortificationScenarios.get(keySourceCountry).addAll(fortificationScenarios.get(correspondingDestinationCountry));
+		for (String keySourceCountry: prelimFortificationScenarios.keySet()){
+            for(String correspondingDestinationCountry : prelimFortificationScenarios.get(keySourceCountry)) {
+            	allFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
+            	allFortificationScenarios.get(keySourceCountry).add(correspondingDestinationCountry);
+            	allFortificationScenarios.get(keySourceCountry).addAll(prelimFortificationScenarios.get(correspondingDestinationCountry));
             }
-		}*/
+		}
 		
-		return fortificationScenarios;
+		return allFortificationScenarios;
 	}
 	
 	@Override
