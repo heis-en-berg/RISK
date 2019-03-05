@@ -7,7 +7,6 @@ package com.java.controller.startup;
 import java.util.*;
 
 import com.java.controller.dice.Dice;
-import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
 import com.java.model.map.GameMap;
@@ -251,11 +250,7 @@ public class StartUpPhase {
 		return array;
 	}
 	
-	// TODO: Implement this method in the next built or erase it. 
-	public CardsDeck generateCardsDeck() {
-		return null;
-	}
-	
+
 	// TODO: Implement this method in the next built or erase it. 
 	public void placeArmies() {
 	}
