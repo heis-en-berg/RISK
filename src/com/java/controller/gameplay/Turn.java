@@ -10,6 +10,21 @@ import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * The Turn class is used as a controller which entirely manages the rundown of a given player's turn in the game.
+ * For the scope of version 1.0.0 it includes the fully implemented functionality for both the reinforcement and fortification phases.
+ * During reinforcement, players get allocated a minimum number of armies which they position in any self-owned country of their choice.
+ * Subsequently, fortification allows players to relocate their existing armies on the ground and move them between countries they own,
+ * provided a continuous path exists between the source and destination.
+ *
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez 
+ * @version 1.0.0
+ */
+
 public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase {
 
 	public GameData gameData;
@@ -18,7 +33,11 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	private Scanner input;
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
-
+    
+	/**
+     * Turn Constructor will allow the initialization of core data shared across both phases.
+     */
+	
 	public Turn(Player player, GameData gameData) {
 
 		this.gameData = gameData;
@@ -26,12 +45,20 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		this.currentPlayerID = player.getPlayerID();
 		input = new Scanner(System.in);
 	}
+	
+	/**
+     * The startTurn() method organizes the flow of the game by ordering phase-execution.
+     */
 
 	public void startTurn() {
 		startReinforcement();
 		// startAttack(); For build 2.
 		fortify();
 	}
+	
+	/**
+     * The clearConsole() method facilitates a better user-experience with the prompts (and updates) displayed on the console.
+     */
 
 	public void clearConsole() {
 		for (int line = 0; line < 50; ++line)
@@ -173,16 +200,18 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		}
 	}
 
-	/*
-	 * Fortification Phase
+	/**
+	 * Method to guide the player through various fortification options when applicable.
 	 * 
-	 * @see com.java.controller.gameplay.FortificationPhase
+	 * @param none
+	 * @return void
 	 */
+	
 	public void fortify() {
+		
+		System.out.println("*** Fortification Phase Begins.. ***\n");
 
 		// First get confirmation from the player that fortification is desired.
-		// If it isn't, return and avoid the overhead of additional computation and
-		// checks.
 		boolean doFortify = false;
 		String playerDecision = "no";
 		System.out.println("Would you like to fortify? (YES/NO)");
@@ -198,27 +227,24 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		if (!doFortify) {
 			System.out.println("Player does not wish to fortify. Ending turn..");
-			// input.close();
+			System.out.println("*** Fortification Phase Ends.. ***\n");
 			return;
 		} else {
 			System.out.println("Fetching potential fortification scenarios for player..");
 		}
 
-		// Now fetch all possibilities for player (this could get long as the game
-		// progresses and more land is acquired)
-		// All logic and complexity are delegated to the
-		// getPotentialFortificationScenarios method
+		// Now fetch all possibilities for player (this could get long as the game progresses and more land is acquired)
 		HashMap<String, ArrayList<String>> fortificationScenarios = getPotentialFortificationScenarios();
 
 		if (fortificationScenarios == null) {
 			System.out.println("There are currently no fortification opportunities for current player.. Sorry!");
-			// input.close();
+			System.out.println("*** Fortification Phase Ends.. ***\n");
 			return;
 		}
 
 		if (fortificationScenarios.isEmpty()) {
 			System.out.println("There are currently no fortification opportunities for current player.. Sorry!");
-			// input.close();
+			System.out.println("*** Fortification Phase Ends.. ***\n");
 			return;
 		}
 
@@ -229,8 +255,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		for (String keySourceCountry : fortificationScenarios.keySet()) {
 			armiesPerPotentialFortificationSourceCountry.put(keySourceCountry,
 					this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount());
-			// the range is one less because of the minimum requirement of having at least 1
-			// army on the ground at all times.
+			// the range is one less because of the minimum requirement of having at least 1 army on the ground at all times.
 			int possibleNumOfArmyRange = armiesPerPotentialFortificationSourceCountry.get(keySourceCountry) - 1;
 			for (String correspondingDestinationCountry : fortificationScenarios.get(keySourceCountry)) {
 				if (!correspondingDestinationCountry.equalsIgnoreCase(keySourceCountry)) {
@@ -272,8 +297,6 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		}
 		String toCountry = playerDecision;
 
-		// input.close();
-
 		// At this stage all that's left to do really is adjust the army counts in the
 		// respective countries to reflect they player's fortification move
 		this.gameData.gameMap.getCountry(fromCountry).deductArmy(Integer.parseInt(noOfArmiesToMove));
@@ -284,23 +307,27 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		System.out.println("New army count for " + toCountry + " "
 				+ this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
 
+		System.out.println("*** Fortification Phase Ends.. ***\n");
 	}
+	
+	/**
+	 * Helper method to build a comprehensive map of all the possible fortification paths (for both immediate and extended neighbors)
+	 * It has all the necessary checks and validation to ensure the path includes only countries owned by the given current player in the turn.
+	 * Moreover, ensures that candidates suggested as "source countries" to move armies from satisfy the minimal requirements of army presence on the ground.
+	 * 
+	 * @param none
+	 * @return Hashmap of all potential fortification scenarios for player.
+	 */
 
 	@Override
 	public HashMap<String, ArrayList<String>> getPotentialFortificationScenarios() {
 
-		// Draft structure to preliminarily pave the way for path building - this one
-		// will contain only directly adjacent countries owned by the player
+		// Draft/prelim structure which contains only directly adjacent countries owned by the player
 		HashMap<String, ArrayList<String>> prelimFortificationScenarios = new HashMap<String, ArrayList<String>>();
-		// What will be returned if there are paths which can be leveraged for
-		// fortification
-		// This will include full (extended) paths of countries owned by the player -
-		// wherever applicable (i.e the sum of paths, not just directly adjacent
-		// countries)
+		// What will be returned: includes full (extended) paths of countries owned by the player
 		HashMap<String, ArrayList<String>> allFortificationScenarios = new HashMap<String, ArrayList<String>>();
 
-		// Step 1: get the comprehensive list of all countries currently conquered by
-		// the player
+		// Step 1: get the comprehensive list of all countries currently conquered by player
 		HashSet<String> poolOfPotentialCountries = new HashSet<String>();
 		poolOfPotentialCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
 
@@ -345,7 +372,15 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		return allFortificationScenarios;
 	}
-
+	
+	/**
+	 * Small helper method to preliminarily build the short paths among potential immediate adjacent countries.
+	 * This is NOT the final and full picture for fortification scenarios, it is merely a stepping stone.
+	 * 
+	 * @param HashMapStructure to be populated, and a country to be checked for adjacency
+	 * @return void
+	 */
+	
 	@Override
 	public void buildFortificationPath(HashMap<String, ArrayList<String>> fortificationScenarios, String rootCountry) {
 
