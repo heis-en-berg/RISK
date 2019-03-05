@@ -1,4 +1,4 @@
-package com.java.controller.gameplay;
+ package com.java.controller.gameplay;
 
 import com.java.model.gamedata.GameData;
 import com.java.model.player.Player;
@@ -319,31 +319,22 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		// Step 2: draw preliminary paths - irrespective of army counts & extended neighbors
 		for (String potentialSourceCountry : poolOfPotentialCountries) {
-				buildFortificationPath(prelimFortificationScenarios, potentialSourceCountry);
+			buildFortificationPath(prelimFortificationScenarios, potentialSourceCountry);
 		}
 
 		if (prelimFortificationScenarios.isEmpty()) {
 			return null;
 		}
 
-		// Before we return the set, we have to slightly manipulate it while copying to
-		// i.e draw "full paths" and make potentially longer connections beyond just "immediate neighbors"
-		// This follows the principle of "what's yours is also mine" among a given key
-		// and its values
+		// Before we return the set, we have to slightly manipulate it 
+		// to ensure the only keys featured are valid source countries which meet the min requirements (at least 2)
 		for (String keySourceCountry : prelimFortificationScenarios.keySet()) {
-			// this hash is keyed on source country - skip keys where army count does not meet requirements (at least 2)
 			if (this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount() < 2) {
 				continue;
 			}
 			for (String correspondingDestinationCountry : prelimFortificationScenarios.get(keySourceCountry)) {	
 				allFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
 				allFortificationScenarios.get(keySourceCountry).add(correspondingDestinationCountry);
-				if (!prelimFortificationScenarios.containsKey(correspondingDestinationCountry)) {
-					continue;
-				}
-				// add all the neighbors
-				allFortificationScenarios.get(keySourceCountry)
-						.addAll(prelimFortificationScenarios.get(correspondingDestinationCountry));
 			}
 		}
 		
@@ -356,26 +347,48 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	}
 	
 	/**
-	 * Small helper method to preliminarily build the short paths among potential immediate adjacent countries.
+	 * Small helper method to ensure countries in scope are recursively traversed and included in the "path"
 	 * This is NOT the final and full picture for fortification scenarios, it is merely a stepping stone.
+	 * The main getPotentialFortificationScenarios method eliminates the invalid source candidates based on army counts
 	 *
 	 * @param fortificationScenarios a HashStructure to be populated
 	 * @param rootCountry country to be checked for adjacency
 	 */
+	
 	@Override
 	public void buildFortificationPath(HashMap<String, ArrayList<String>> fortificationScenarios, String rootCountry) {
-
+		ArrayList<String> longestConqueredPathFromRoot = new ArrayList<String>();
+		longestConqueredPathFromRoot.add(rootCountry);
+		traverseNeighbouringCountries(longestConqueredPathFromRoot, rootCountry);
+		fortificationScenarios.put(rootCountry, longestConqueredPathFromRoot);	
+	}
+	
+	
+	/**
+	 * Small helper method to recursively traverse all countries owned by player
+	 * and build a steady path starting from the root country passed in.
+	 * 
+	 *
+	 * @param longestConqueredPathFromRoot to be drawn based on adjacency and country ownership
+	 * @param rootCountry country to serve as root of search
+	 */
+	
+	
+	public void traverseNeighbouringCountries(ArrayList<String> longestConqueredPathFromRoot, String rootCountry) {
+		
 		HashSet<String> adjacentCountries = new HashSet<String>();
 		adjacentCountries = this.gameData.gameMap.getAdjacentCountries(rootCountry);
 		for (String adjacentCountry : adjacentCountries) {
-			// need to ensure the adjacent country is also owned by that very same player -
-			// otherwise there's no path
-			if (this.gameData.gameMap.getCountry(adjacentCountry).getCountryConquerorID() == currentPlayerID) {
-				fortificationScenarios.putIfAbsent(rootCountry, new ArrayList<String>());
-				fortificationScenarios.get(rootCountry).add(adjacentCountry);
+			// ensure adjacent country also owned by same player - otherwise no path to/through it
+			if (this.gameData.gameMap.getCountry(adjacentCountry).getCountryConquerorID() == currentPlayerID 
+					&& ! longestConqueredPathFromRoot.contains(adjacentCountry)) 
+			{
+				longestConqueredPathFromRoot.add(adjacentCountry);
+				traverseNeighbouringCountries(longestConqueredPathFromRoot, adjacentCountry);
 			}
 		}
 	}
+	
 
 	/**
 	 * Helper method to test if a given strin can be converted to a int.

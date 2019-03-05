@@ -7,9 +7,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * FortificationTest class tests the fortification paths retrieval for a given scenario. 
@@ -95,8 +97,11 @@ public class FortificationTest {
         expected_dest_for_C2.add("C3");
         expected_dest_for_C2.add("C2");
         expected_paths.put("C2", expected_dest_for_C2);
-        System.out.println(actual_paths.equals(expected_paths));
-        //assertEquals(actual_paths.get("C2"),expected_dest_for_C2);
+
+        // sort the Lists because we care about contents (not order of options)
+        Collections.sort(expected_dest_for_C2);
+        Collections.sort(actual_paths.get("C2"));
+        assertEquals(actual_paths.get("C2"),expected_dest_for_C2);
         
         ArrayList<String> expected_dest_for_C3 = new ArrayList<String>();
         expected_dest_for_C3.add("C1");
@@ -104,10 +109,11 @@ public class FortificationTest {
         expected_dest_for_C3.add("C4");
         expected_dest_for_C3.add("C2");
         expected_paths.put("C3", expected_dest_for_C3);
-        //assertEquals(actual_paths.get("C3"),expected_dest_for_C3);
         
-        System.out.println(actual_paths.equals(expected_paths));
-
-       
+        Collections.sort(expected_dest_for_C3);
+        Collections.sort(actual_paths.get("C3"));
+        assertEquals(actual_paths.get("C3"),expected_dest_for_C3);
+        
+        
     }
 }
