@@ -317,21 +317,9 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		HashSet<String> poolOfPotentialCountries = new HashSet<String>();
 		poolOfPotentialCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
 
-		// Step 2: limit the scope by eliminating some of the countries as options to
-		// fortify *from*.
-		// This is enforced by the known minimum requirement of at least 1 army on the
-		// ground at all times.
-		// Given that the "from" and "to" matter => key the hashmap of scenarios on
-		// "froms" and append all potential "to's" as lists of values for a given "from
-		// key"
-
+		// Step 2: draw preliminary paths - irrespective of army counts & extended neighbors
 		for (String potentialSourceCountry : poolOfPotentialCountries) {
-			if (this.gameData.gameMap.getCountry(potentialSourceCountry).getCountryArmyCount() > 1) {
-				// Step 3: buildFortificationPath is the main iterative logic which will "draw"
-				// the preliminary short paths among direct neighboring countries
-				// and populate the fortificationScenarios as necessary
 				buildFortificationPath(prelimFortificationScenarios, potentialSourceCountry);
-			}
 		}
 
 		if (prelimFortificationScenarios.isEmpty()) {
@@ -339,21 +327,29 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		}
 
 		// Before we return the set, we have to slightly manipulate it while copying to
-		// the final structure
-		// This is to basically draw "full paths" and make potentially longer
-		// connections beyond just "immediate neighbors"
+		// i.e draw "full paths" and make potentially longer connections beyond just "immediate neighbors"
 		// This follows the principle of "what's yours is also mine" among a given key
 		// and its values
 		for (String keySourceCountry : prelimFortificationScenarios.keySet()) {
+			// this hash is keyed on source country - skip keys where army count does not meet requirements (at least 2)
+			if (this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount() < 2) {
+				continue;
+			}
 			for (String correspondingDestinationCountry : prelimFortificationScenarios.get(keySourceCountry)) {	
 				allFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
 				allFortificationScenarios.get(keySourceCountry).add(correspondingDestinationCountry);
 				if (!prelimFortificationScenarios.containsKey(correspondingDestinationCountry)) {
 					continue;
 				}
+				// add all the neighbors
 				allFortificationScenarios.get(keySourceCountry)
 						.addAll(prelimFortificationScenarios.get(correspondingDestinationCountry));
 			}
+		}
+		
+		// in case all countries conquered by player have 1 army count
+		if (allFortificationScenarios.isEmpty()) {
+			return null;
 		}
 
 		return allFortificationScenarios;
