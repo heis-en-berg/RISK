@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 
-import static java.lang.Thread.sleep;
-
 /**
  * The Turn class is used as a controller which entirely manages the rundown of a given player's turn in the game.
  * For the scope of version 1.0.0 it includes the fully implemented functionality for both the reinforcement and fortification phases.
@@ -38,8 +36,9 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
  
 	/**
      * Turn Constructor will allow the initialization of core data shared across both phases.
+	 * @param player current player object
+	 * @param gameData current state of the game
      */
-	
 	public Turn(Player player, GameData gameData) {
 
 		this.gameData = gameData;
@@ -51,7 +50,6 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	/**
      * The startTurn() method organizes the flow of the game by ordering phase-execution.
      */
-
 	public void startTurn() {
 		startReinforcement();
 		// startAttack(); For build 2.
@@ -59,7 +57,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	}
 
 	/*
-	 * Reinforcement Phase
+	 * Reinforcement Phase begins with startReinforcement.
 	 *
 	 * @see com.java.controller.gameplay.ReinforcementPhase
 	 */
@@ -70,6 +68,10 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		placeArmy(totalReinforcementArmyCount);
 	}
 
+	/**
+	 * placeArmy method allows the player to position the armies in the player's owned countries.
+	 * @param reinforcementArmy total reinforcement army count to be placed by the current player.
+	 */
 	@Override
 	public void placeArmy(Integer reinforcementArmy) {
 
@@ -145,9 +147,13 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 			System.out.println("Country owned by you: " + countries + " ,Army Count: "
 					+ this.gameData.gameMap.getCountry(countries).getCountryArmyCount());
 		}
-		System.out.println("\n****Reinforcement Phase Ends for player "+ this.playerName +"..****\n");
+		System.out.println("\n**** Reinforcement Phase Ends for player "+ this.playerName +"..****\n");
 	}
 
+	/**
+	 * Function to count the reinforcement army based on the number of territories and continents owned.
+	 * @return total reinforcement army count
+	 */
 	@Override
 	public Integer calculateReinforcementArmy() {
 
@@ -180,11 +186,8 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		return totalReinforecementArmyCount;
 	}
 
-/**
+	/**
 	 * Method to guide the player through various fortification options when applicable.
-	 * 
-	 * @param none
-	 * @return void
 	 */
 	public void fortify() {
 
@@ -294,12 +297,11 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		System.out.println("\n****Fortification Phase Ends for player "+ this.playerName +"..****\n");
 	}
 
-/**
+	/**
 	 * Helper method to build a comprehensive map of all the possible fortification paths (for both immediate and extended neighbors)
 	 * It has all the necessary checks and validation to ensure the path includes only countries owned by the given current player in the turn.
 	 * Moreover, ensures that candidates suggested as "source countries" to move armies from satisfy the minimal requirements of army presence on the ground.
-	 * 
-	 * @param none
+	 *
 	 * @return Hashmap of all potential fortification scenarios for player.
 	 */
 
@@ -360,9 +362,9 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	/**
 	 * Small helper method to preliminarily build the short paths among potential immediate adjacent countries.
 	 * This is NOT the final and full picture for fortification scenarios, it is merely a stepping stone.
-	 * 
-	 * @param HashMapStructure to be populated, and a country to be checked for adjacency
-	 * @return void
+	 *
+	 * @param fortificationScenarios a HashStructure to be populated
+	 * @param rootCountry country to be checked for adjacency
 	 */
 	@Override
 	public void buildFortificationPath(HashMap<String, ArrayList<String>> fortificationScenarios, String rootCountry) {

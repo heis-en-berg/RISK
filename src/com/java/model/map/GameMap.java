@@ -67,7 +67,7 @@ public class GameMap implements Cloneable{
 
 	/**
 	 * Removes country from the map. Only to be used by MapEditor, before Startup Phase.
-	 * @param countryName
+	 * @param countryName name of the country to be removed
 	 */
 	public void removeCountry(String countryName) {
 		Country country = this.countryObjects.get(countryName);

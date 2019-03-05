@@ -3,25 +3,28 @@ package com.java.controller.gameplay;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertEquals;
 
+/**
+ * TurnTest class tests the total reinforcement count for two scenarios.
+ * @version 1.0
+ */
 public class TurnTest {
 
-    private GameData gameData;
-    private Turn turn, turn2;
-    private Player playerOne,playerTwo;
-    private ArrayList<Player> players;
+    private static GameData gameData;
+    private static Turn turn, turn2;
+    private static Player playerOne,playerTwo;
+    private static ArrayList<Player> players;
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    static public void setUp() {
 
-        // Load the game with a dummy map and data.
+        // Load the game with a dummy map and dummy data.
         gameData = new GameData();
         gameData.gameMap = new GameMap();
 
@@ -61,7 +64,7 @@ public class TurnTest {
     }
 
     /**
-     * Calculate total reinforcement army with no conquered continents.
+     * Calculate total reinforcement army for a player with no conquered continents and no conquered countries.
      */
     @Test
     public void testCalculateReinforcementArmyNoConqueredContinent() {
@@ -73,7 +76,7 @@ public class TurnTest {
     }
 
     /**
-     * Calculate total reinforcement army with conquered continents having control values.
+     * Calculate total reinforcement army for a player with conquered continents having control values.
      */
     @Test
     public void testCalculateReinforcementArmyWithConqueredContinent() {

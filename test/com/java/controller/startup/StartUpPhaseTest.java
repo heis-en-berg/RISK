@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 
@@ -27,8 +28,9 @@ public class StartUpPhaseTest {
         startUp = new StartUpPhase(gameData);
         gameData.setNoOfPlayers(6);
         gameData.gameMap = new GameMap();
-        results = startUp.generateRoundRobin();
+        
         // create players
+        results = new ArrayList<Player>();
         expectedPlayer = new ArrayList<Player>();
         expectedPlayer.add(new Player(1, "Karan"));
         expectedPlayer.add(new Player(2, "Arnav"));
@@ -39,12 +41,13 @@ public class StartUpPhaseTest {
 
         ArrayList<String> names = new ArrayList<String>();
 
-        for (int i = 0; i<names.size(); i++){
+        for (int i = 0; i<gameData.getNoOfPlayers(); i++){
             names.add(expectedPlayer.get(i).getPlayerName());
         }
-
-
+        
         gameData.setPlayers(expectedPlayer);
+
+        //results = startUp.generateRoundRobin();
 
         // Add test data
         gameData.gameMap.addCountry("C1","Continent1");
@@ -53,23 +56,26 @@ public class StartUpPhaseTest {
         gameData.gameMap.addCountry("C4", "Continent2");
         gameData.gameMap.addCountry("C5", "Continent2");
         gameData.gameMap.addCountry("C6", "Continent2");
+        
     }
 
     @Test
     public void generatePlayers() {
-
+    
         ArrayList<Player> actualPlayers = gameData.getPlayers();
-
+        
         // check if the ids and names are same
-        for (int i = 0; i<actualPlayers.size(); i++) {
+        for (int i = 0; i < actualPlayers.size(); i++) {
             assertEquals(expectedPlayer.get(i).getPlayerID(), actualPlayers.get(i).getPlayerID());
             assertEquals(expectedPlayer.get(i).getPlayerName(), actualPlayers.get(i).getPlayerName());
 
         }
+        
     }
 
     @Test
     public void assignCountriesToPlayers() {
+    	
         startUp.assignCountriesToPlayers();
         ArrayList<Player> players = gameData.getPlayers();
 
@@ -87,6 +93,7 @@ public class StartUpPhaseTest {
                 }
             }
         }
+        
     }
 
     @Test
@@ -94,15 +101,16 @@ public class StartUpPhaseTest {
     	
     	Integer[] expectedValues = {40, 35, 30, 25, 20};
     	Integer[] data = {2, 3, 4, 5, 6};
-    	
+    	Double factor = (double) (gameData.gameMap.getNumberOfCountries()/42);
     	Integer result;
     	Integer expected;
     	
     	for(int i = 0; i < expectedValues.length; i++) {
     		result = startUp.initialArmyCalculation(data[i]);
-    		expected = expectedValues[i];
+    		expected = (int) (expectedValues[i] * factor);
     		assertEquals(expected, result);
     	}
+    	
     }
 
     @Test
@@ -115,5 +123,6 @@ public class StartUpPhaseTest {
     		actual = i + 1;
     		assertEquals(expected, actual);
     	}
+    	
     }
 }
