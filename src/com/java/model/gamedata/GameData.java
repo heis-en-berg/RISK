@@ -43,8 +43,7 @@ public class GameData {
 	 * The maximum number of players is 6.
 	 * */
 	public static final Integer MAX_PLAYERS = 6;
-	
-	
+		
 	/**
 	 * Getter players.
 	 * 
@@ -56,6 +55,8 @@ public class GameData {
 	
 	/**
 	 * Setter player.
+	 * 
+	 * @param players the collection of players.
 	 * */
 	public void setPlayers(ArrayList<Player> players) {
 		this.players = players;
@@ -63,6 +64,8 @@ public class GameData {
 	
 	/**
 	 * Remove one player of the main collection of players.
+	 * 
+	 * @param player the player to be removed 
 	 * */
 	public void removePlayers(Player player){
 		this.players.remove(player);
@@ -78,7 +81,9 @@ public class GameData {
 	}
 	
 	/**
+	 * Set the number of players.
 	 * 
+	 * @param noOfPlayers the number of players.
 	 * */
 	public void setNoOfPlayers(Integer noOfPlayers) {
 		this.noOfPlayers = noOfPlayers;

@@ -35,6 +35,9 @@ public class Country {
 	
 	/**
 	 * A country is created by provinding the name and the continent name.
+	 * 
+	 * @param countryName the country name.
+	 * @param continentName the continent name.
 	 * */
 	public Country(String countryName, String continentName) {
 		this.countryName = countryName;
@@ -51,6 +54,11 @@ public class Country {
 		return this.countryName;
 	}
 	
+	/**
+	 * Update the country's name.
+	 * 
+	 * @param the country name
+	 * */
 	public void updateCountryName(String countryName) {
 		this.countryName = countryName;
 	}
@@ -64,10 +72,20 @@ public class Country {
 		return this.countryContinentName;
 	}
 	
+	/**
+	 * Updates the continent name.
+	 * 
+	 * @param countryContinentName the continent name
+	 * */
 	public void updateCountryContinentName(String countryContinentName) {
 		this.countryContinentName = countryContinentName;
 	}
 	
+	/**
+	 * Sets the conqueror player id.
+	 * 
+	 * @param countryConquerorID the player id
+	 * */
 	public void setConquerorID(Integer countryConquerorID) {
 		this.countryConquerorID = countryConquerorID;
 	}
@@ -90,6 +108,11 @@ public class Country {
 		return this.armyCount;
 	}
 	
+	/**
+	 * Set the amount of army.
+	 * 
+	 * @param armyCount the amount of army.
+	 * */
 	public void setArmyCount(Integer armyCount) {
 		this.armyCount = armyCount;
 	}
@@ -97,6 +120,7 @@ public class Country {
 	/**
 	 * Gets the new value of army after adding new army.
 	 * 
+	 * @param armyCount the army count.
 	 * @return the new value of army after adding army.
 	 * */
 	public Integer addArmy(Integer armyCount) {
@@ -107,6 +131,7 @@ public class Country {
 	/**
 	 * Gets the new value of army after subtracting new army.
 	 * 
+	 * @param armyCount the army count.
 	 * @return the new value of army after subtracting army.
 	 * */
 	public Integer deductArmy(Integer armyCount) {

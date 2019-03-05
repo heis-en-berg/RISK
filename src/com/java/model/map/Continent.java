@@ -51,6 +51,7 @@ public class Continent {
 	/**
 	 * Updates the continent name.
 	 * 
+	 * @param continentName the continent name.
 	 * */
 	public void updateContinentName(String continentName) {
 		this.continentName = continentName;
@@ -65,6 +66,11 @@ public class Continent {
 		return continentControlValue;
 	}
 
+	/**
+	 * Sets the continent control value.
+	 * 
+	 * @param continentControlValue the continent control value.
+	 * */
 	public void setContinentControlValue(Integer continentControlValue) {
 		this.continentControlValue = continentControlValue;
 	}
@@ -81,6 +87,7 @@ public class Continent {
 	/**
 	 * Setter of the conqueror player ID.
 	 * 
+	 * @param countryConquerorID player conqueror id.
 	 * */
 	public void setContinentConquerorID(Integer countryConquerorID) {
 		this.continentConquerorID = countryConquerorID;
