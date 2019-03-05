@@ -216,8 +216,6 @@ public class RiskGameDriver {
 			Integer.parseInt(stringInput);
 
 		} catch (final Exception e) {
-
-		    System.out.println("Invalid Input");
 			return true;
 		}
 		return false;
