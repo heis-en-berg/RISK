@@ -48,7 +48,7 @@ public class MapLoader {
 
 			while (!loadMapFromFile(userMapFilePath)) {
 				System.out.println("Error in file content");
-				getChoiceToUseDeafaultMap();
+				return loadMap();
 			}
 			System.out.println("Map Loaded successfully");
 		} else {

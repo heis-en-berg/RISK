@@ -116,6 +116,9 @@ public class StartUpPhase {
 	 */
 	public Integer initialArmyCalculation(Integer numPlayers) {
 		Integer numberOfArmiesPerPlayer = new Integer(0);
+		
+		Double factor = (double) (gameData.gameMap.getNumberOfCountries() / gameData.gameMap.DEFAULT_NUMBER_OF_COUNTRIES);
+		
 		switch(numPlayers) {
 			case 2:
 				numberOfArmiesPerPlayer = 40;
@@ -133,7 +136,7 @@ public class StartUpPhase {
 				numberOfArmiesPerPlayer = 20;
 				break;
 		}
-		return numberOfArmiesPerPlayer;
+		return (int) (numberOfArmiesPerPlayer * factor);
 	}
 	
 	/**
