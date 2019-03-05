@@ -12,7 +12,7 @@ import com.java.model.map.GameMap;
 
 /**
  * MapTest class tests the important aspects of map loader and validator, in
- * particular map connectivity and .map file validation .
+ * particular map connectivity and .map file validation.
  * 
  * @author Karan Dhingra
  * @version 1.0
@@ -30,8 +30,8 @@ public class MapTest {
 	public static void beforeEverything() {
 
 		mapValidator = new MapValidator();
-		invalidMapFilePath1 = "./map/invalid1.map";
-		invalidMapFilePath2 = "./map/invalid2.map";
+		invalidMapFilePath1 = "./map/invalid1_continent_missing.map";
+		invalidMapFilePath2 = "./map/invalid2_disconnected_map.map";
 
 		try {
 			mapLoaderMethod = MapLoader.class.getDeclaredMethod("loadMapFromFile", String.class);
