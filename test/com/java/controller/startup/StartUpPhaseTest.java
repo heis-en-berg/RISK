@@ -13,14 +13,39 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-
+/**
+ * StartUpPhaseTest class tests the important aspects of start up phase, for
+ * instance: player generation, random country assigment to players, the number of initial army based on 
+ * number of players and generate round robin.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Cristian Rodriguez
+ * @version 1.0
+ */
 public class StartUpPhaseTest {
-
+	/**
+	 * Holds the game data.
+	 * */
     static GameData gameData;
+    
+    /**
+     * Start up phase object to be tested.
+     * */
     static StartUpPhase startUp;
+    
+    /**
+     * Expected players to be tested.
+     * */
     static ArrayList<Player> expectedPlayer;
+    
+    /**
+     * Holds the results of round robin in order to be tested.
+     * */
     static ArrayList<Player> results;
-
+    
+    /**
+     * Game data and a dummy map is created in order to test the methods which use this data.
+     * */
     @BeforeClass
     public static void beforeEverything() {
         gameData = new GameData();
@@ -58,7 +83,10 @@ public class StartUpPhaseTest {
         gameData.gameMap.addCountry("C6", "Continent2");
         
     }
-
+    
+    /**
+     * Test the player generation by testing if the ids are given in a right way.
+     * */
     @Test
     public void generatePlayers() {
     
@@ -72,7 +100,10 @@ public class StartUpPhaseTest {
         }
         
     }
-
+    
+    /**
+     * Random assignation is tested by comparing if one country belongs to only one player.
+     * */
     @Test
     public void assignCountriesToPlayers() {
     	
@@ -95,7 +126,10 @@ public class StartUpPhaseTest {
         }
         
     }
-
+    
+    /**
+     * The initial number of army is given by a factor based on the number of countries. 
+     * */
     @Test
     public void initialArmyCalculation() {
     	
@@ -112,7 +146,10 @@ public class StartUpPhaseTest {
     	}
     	
     }
-
+    
+    /**
+     * Round robin generation is tested by comparing the order of play of each player.
+     * */
     @Test
     public void generateRoundRobin() {
     	
