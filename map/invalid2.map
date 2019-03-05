@@ -9,7 +9,7 @@ Europe=5
 Asia=7
 Australia=2
 [Territories]
-Alaska,North America,Northwest Territory,Alberta,Kamchatka
+Alaska,North America,Alberta,Kamchatka
 Northwest Territory,North America,Alaska,Alberta,Ontario,Greenland
 Alberta,North America,Alaska,Northwest Territory,Ontario,Western United States
 Greenland,North America,Northwest Territory,Ontario,Quebec,Iceland

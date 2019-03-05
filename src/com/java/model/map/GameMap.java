@@ -5,6 +5,8 @@ import java.util.HashSet;
 
 public class GameMap implements Cloneable{
 
+	public static final Integer DEFAULT_NUMBER_OF_COUNTRIES = 42;
+	
 	private HashMap<String, Country> countryObjects;
 	private HashMap<String, Continent> continentObjects;
 	private HashMap<String, HashSet<String>> adjacentCountries;
@@ -227,7 +229,8 @@ public class GameMap implements Cloneable{
 
 		System.out.println("[[Countries]]");
 		for(String countryName: countryObjects.keySet()) {
-			System.out.println(countryName + " :: " + getAdjacentCountries(countryName).toString() + " :: " + this.countryObjects.get(countryName).getCountryConquerorID());
+			System.out.println(countryName);
+			System.out.println("Adjacent Countries::" + getAdjacentCountries(countryName).toString());
 		}
 		
 		System.out.println("[[Continent]]");

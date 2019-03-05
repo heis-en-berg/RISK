@@ -24,6 +24,7 @@ import static java.lang.Thread.sleep;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  */
+
 public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase {
 
 	public GameData gameData;
@@ -178,6 +179,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		return totalReinforecementArmyCount;
 	}
+
 /**
 	 * Method to guide the player through various fortification options when applicable.
 	 * 
