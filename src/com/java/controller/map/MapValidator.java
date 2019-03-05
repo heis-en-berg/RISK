@@ -12,10 +12,22 @@ import com.java.model.map.Continent;
 import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 
+/**
+ * MapValidator handles the map validation part of the game. It can validate
+ * either a .map file or a user created map on console.
+ * 
+ * @author Karan Dhingra
+ */
 public class MapValidator {
 
 	GameMap map;
 
+	/**
+	 * Entry point to map validator for validating an already loaded map.
+	 * 
+	 * @param map map to be validated
+	 * @return true if map is valid, false otherwise
+	 */
 	public Boolean validateMap(GameMap map) {
 		this.map = map;
 
@@ -170,6 +182,12 @@ public class MapValidator {
 		return currentLine;
 	}
 
+	/**
+	 * Entry point to map validator for validating a .map file content.
+	 * 
+	 * @param mapFilePath .map file(to be validated) path in String format
+	 * @return true if content in .map file is valid, false otherwise
+	 */
 	public Boolean validateMapTextFile(String mapFilePath) throws IOException {
 
 		BufferedReader mapFileBufferedReader = null;
