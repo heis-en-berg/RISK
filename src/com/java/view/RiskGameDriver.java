@@ -53,6 +53,7 @@ public class RiskGameDriver {
 		initiateRoundRobin();
 		ramdomAssignationOfCountries();
 		initialArmyPlacement();
+		startTurn();
 	}
 	
 	/**
@@ -182,7 +183,6 @@ public class RiskGameDriver {
 				numberOfArmiesAvailablePerPlayer -= Integer.parseInt(numberOfArmiesByUser);
 			}
 		}
-		startTurn();
 	}
 	
 	/**

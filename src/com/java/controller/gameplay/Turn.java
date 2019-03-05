@@ -288,6 +288,9 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		// This follows the principle of "what's yours is also mine" among a given key and its values
 		for (String keySourceCountry: prelimFortificationScenarios.keySet()){
             for(String correspondingDestinationCountry : prelimFortificationScenarios.get(keySourceCountry)) {
+            	if(!prelimFortificationScenarios.containsKey(correspondingDestinationCountry)) {
+            		continue;
+            	}
             	allFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
             	allFortificationScenarios.get(keySourceCountry).add(correspondingDestinationCountry);
             	allFortificationScenarios.get(keySourceCountry).addAll(prelimFortificationScenarios.get(correspondingDestinationCountry));
