@@ -41,6 +41,10 @@ public class Country {
 		return this.armyCount;
 	}
 	
+	public void setArmyCount(Integer armyCount) {
+		this.armyCount = armyCount;
+	}
+	
 	public Integer addArmy(Integer armyCount) {
 		this.armyCount += armyCount;
 		return this.armyCount;
