@@ -211,7 +211,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 			System.out.println("\n****Fortification Phase Ends for player "+ this.playerName +"..****\n");
 			return;
 		} else {
-			System.out.println("Fetching potential fortification scenarios for " + this.playerName + "\n");
+			System.out.println("\n" + "Fetching potential fortification scenarios for " + this.playerName + "...\n");
 		}
 
 		// Now fetch all possibilities for player (this could get long as the game progresses and more land is acquired)
@@ -253,7 +253,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		// while selection doesn't match any of the offered options, prompt user
 		while (!fortificationScenarios.containsKey(playerDecision)) {
-			System.out.println("Please choose one of the suggested countries to move armies FROM: ");
+			System.out.println("\n" + "Please choose one of the suggested countries to move armies FROM: ");
 			playerDecision = input.nextLine();
 		}
 		String fromCountry = playerDecision;
@@ -262,7 +262,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		// 0 is a valid selection
 		String noOfArmiesToMove = "-1";
 		do {
-			System.out.println("How many armies would you like to move from " + fromCountry + " ?");
+			System.out.println("\n" + "How many armies would you like to move from " + fromCountry + "?");
 			noOfArmiesToMove = input.nextLine();
 		} while (isNaN(noOfArmiesToMove) || Integer.parseInt(noOfArmiesToMove) < 0 || Integer
 				.parseInt(noOfArmiesToMove) >= armiesPerPotentialFortificationSourceCountry.get(fromCountry));
@@ -273,7 +273,7 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		// path
 		while (!fortificationScenarios.get(fromCountry).contains(playerDecision)) {
 			System.out.println(
-					"Please choose one of the valid countries to move armies INTO (knowing that you've chosen to move them from country "
+					"\n" + "Please choose one of the valid countries to move armies INTO (knowing that you've chosen to move them from country "
 							+ fromCountry + "): ");
 			playerDecision = input.nextLine();
 		}
@@ -286,9 +286,9 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 
 		System.out.println("\nFortification Successful for "+ this.playerName +". Here is a summary of the new status-quo:\n");
 
-		System.out.println("Army count for " + fromCountry + " is now:"
+		System.out.println("Army count for " + fromCountry + " is now: "
 				+ this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
-		System.out.println("Army count for " + toCountry + " is now:"
+		System.out.println("Army count for " + toCountry + " is now: "
 				+ this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
 
 		System.out.println("\n****Fortification Phase Ends for player "+ this.playerName +"..****\n");
