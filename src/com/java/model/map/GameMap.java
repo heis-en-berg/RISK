@@ -229,7 +229,8 @@ public class GameMap implements Cloneable{
 
 		System.out.println("[[Countries]]");
 		for(String countryName: countryObjects.keySet()) {
-			System.out.println(countryName + " :: " + getAdjacentCountries(countryName).toString() + " :: " + this.countryObjects.get(countryName).getCountryConquerorID());
+			System.out.println(countryName);
+			System.out.println("Adjacent Countries::" + getAdjacentCountries(countryName).toString());
 		}
 		
 		System.out.println("[[Continent]]");

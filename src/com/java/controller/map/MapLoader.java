@@ -47,10 +47,10 @@ public class MapLoader {
 			} while (userMapFilePath == null);
 
 			while (!loadMapFromFile(userMapFilePath)) {
-				System.out.println("Error in file content");
+				System.out.println("\nError in file content");
 				return loadMap();
 			}
-			System.out.println("Map Loaded successfully");
+			System.out.println("\nMap Loaded successfully");
 		} else {
 			MapCreator mapCreator = new MapCreator(map);
 			map = mapCreator.createMap();
@@ -79,11 +79,11 @@ public class MapLoader {
 		Integer choice = null;
 		do {
 			System.out.println();
-			System.out.println("Options");
+			System.out.println("\nDo you want to edit the map or continue with the game?");
 			System.out.println("1. Edit map");
 			System.out.println("2. Continue");
 			System.out.println();
-			System.out.print("Enter choice: ");
+			System.out.print("\nEnter choice: ");
 			choice = scanner.nextInt();
 			if (!(choice == 1 || choice == 2)) {
 				System.out.println("Invalid Input");
@@ -95,12 +95,12 @@ public class MapLoader {
 
 	private Integer getChoiceToUseDeafaultMap() {
 		
-		System.out.println("Options");
+		System.out.println("\nPlease choose one of the following options to load the map");
 		System.out.println("1. Load default map");
 		System.out.println("2. Load your own map");
 		System.out.println("3. Create map");
 		System.out.println();
-		System.out.print("Enter choice: ");
+		System.out.print("\nEnter choice: ");
 		String choiceStr = scanner.nextLine();
 		
 		if (isNaN(choiceStr) || !(Integer.parseInt(choiceStr) >= 1 && Integer.parseInt(choiceStr) <= 3)) {
@@ -112,7 +112,7 @@ public class MapLoader {
 
 	private String getAndValidateUserMapFilePath() {
 		System.out.println();
-		System.out.print("Enter File Path: ");
+		System.out.print("\nEnter File Path: ");
 		String filePath = null;
 		while ((filePath = scanner.nextLine()).isEmpty()) {
 			if (!filePath.equals("")) {
@@ -120,7 +120,7 @@ public class MapLoader {
 			}
 		}
 		if (!new File(filePath).exists()) {
-			System.out.println("Ooooops, File not found. Try Again.");
+			System.out.println("\nOoooops, File not found. Try Again.");
 			return null;
 		}
 		return filePath;
@@ -158,7 +158,7 @@ public class MapLoader {
 		try {
 			mapFileBufferedReader = new BufferedReader(new FileReader(mapFilePath));
 		} catch (FileNotFoundException e1) {
-			System.out.println("File not Found");
+			System.out.println("\nFile not Found");
 			return false;
 		}
 
@@ -302,7 +302,7 @@ public class MapLoader {
 			writer.close();
 			
 		} catch (IOException e) {
-			System.out.println("ERROR: Failure in map file creation");
+			System.out.println("\nERROR: Failure in map file creation");
 		}
 	}
 	
