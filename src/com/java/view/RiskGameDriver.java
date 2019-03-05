@@ -238,7 +238,7 @@ public class RiskGameDriver {
 				currentPlayer = playerList.get(player);
 				// Exclude turn for the player with no countries. The player has been defeated.
 				if (this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
-					System.out.println("\n***** Turn Begins for player "+currentPlayer.getPlayerName() +" *****\\n");
+					System.out.println("\n***** Turn Begins for player "+currentPlayer.getPlayerName() +" *****\n");
 					turn = new Turn(currentPlayer, this.gameData);
 					turn.startTurn();
 					System.out.println("\n***** Turn Ends for player "+currentPlayer.getPlayerName() +" *****\n");
