@@ -1,11 +1,8 @@
 package com.java.controller.startup;
 
-import com.java.controller.map.MapLoader;
 import com.java.model.gamedata.GameData;
-import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -13,7 +10,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -26,9 +22,7 @@ public class StartUpPhaseTest {
 
     @BeforeClass
     public static void beforeEverything() {
-        // now map
         gameData = new GameData();
-        MapLoader maploader = new MapLoader();
 
         startUp = new StartUpPhase(gameData);
         gameData.setNoOfPlayers(6);
@@ -79,10 +73,7 @@ public class StartUpPhaseTest {
         startUp.assignCountriesToPlayers();
         ArrayList<Player> players = gameData.getPlayers();
 
-        // Used to obtain the country objects
-        HashMap<String, Country> countryObject = gameData.gameMap.getAllCountries();
-
-        // if one player id's country matches any of the other players meaning coutnries are assigned wrongly
+        // if one player id's country matches any of the other players meaning countries are assigned wrongly
         HashSet<String> countriesOwnedByPlayer0 =  gameData.gameMap.getConqueredCountriesPerPlayer(1);
 
         for(String country : countriesOwnedByPlayer0){

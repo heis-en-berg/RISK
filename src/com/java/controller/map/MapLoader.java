@@ -17,7 +17,6 @@ import com.java.model.map.GameMap;
 
 /**
  * @author Karan Dhingra
- * TODO: validate connectivity
  */
 public class MapLoader {
 
@@ -34,7 +33,7 @@ public class MapLoader {
 		Integer defaultMapChoice = null;
 
 		while (defaultMapChoice == null) {
-			defaultMapChoice = getChoiceToUseDeafaultMap();
+			defaultMapChoice = getChoiceToUseDefaultMap();
 		}
 
 		if (defaultMapChoice == 1) {
@@ -93,7 +92,7 @@ public class MapLoader {
 		return choice;
 	}
 
-	private Integer getChoiceToUseDeafaultMap() {
+	private Integer getChoiceToUseDefaultMap() {
 		
 		System.out.println("\nPlease choose one of the following options to load the map");
 		System.out.println("1. Load default map");
