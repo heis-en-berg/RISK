@@ -4,6 +4,12 @@ import java.util.Scanner;
 
 import com.java.model.map.GameMap;
 
+/**
+ * MapEditor implements the logic to make it possible for a user to edit an
+ * already loaded map into the game. 
+ * 
+ * @author Karan Dhingra
+ */
 public class MapEditor {
 
 	GameMap originalMap;
@@ -11,6 +17,10 @@ public class MapEditor {
 	Scanner scanner;
 	MapValidator mapValidator;
 
+	/**
+	 * Constructor to initialize local map object
+	 * @param map map to be edited 
+	 */
 	public MapEditor(GameMap map) {
 		this.originalMap = map;
 		this.editedMap = originalMap.clone();
@@ -18,51 +28,67 @@ public class MapEditor {
 		mapValidator = new MapValidator();
 	}
 
+	/**
+	 * A public method which manages the entire map edit process.
+	 * 
+	 * @return a valid edited map
+	 */
 	public GameMap editMap() {
 		Integer userChoice = 0;
 		do {
 			userChoice = getEditMapUserChoice();
-		} while(userChoice < 1 || userChoice > 11);
-		
+		} while (userChoice < 1 || userChoice > 11);
+
 		switch (userChoice) {
-			case 1: changeMapAuthor();
-					break;
-			case 2: addContinenToMap();
-					break;
-			case 3: removeContinentFromMap();
-					break;
-			case 4: addCountryToMap();
-					break;
-			case 5: removeCountryFromMap();
-					break;
-			case 6: addAdjacenecyBetweenCountries();
-					break;
-			case 7: removeAdjacenecyBetweenCountries();
-					break;
-			case 8: showMapContent();
-					break;
-			case 9: mapValidator.validateMap(editedMap);
-					break;
-			case 10: editedMap = originalMap.clone();
-					 System.out.println("Changes discarded");
-					 break;
-			case 11: if(mapValidator.validateMap(editedMap)) {
-						return editedMap;
-					 }
-					 break;
+		case 1:
+			changeMapAuthor();
+			break;
+		case 2:
+			addContinenToMap();
+			break;
+		case 3:
+			removeContinentFromMap();
+			break;
+		case 4:
+			addCountryToMap();
+			break;
+		case 5:
+			removeCountryFromMap();
+			break;
+		case 6:
+			addAdjacenecyBetweenCountries();
+			break;
+		case 7:
+			removeAdjacenecyBetweenCountries();
+			break;
+		case 8:
+			showMapContent();
+			break;
+		case 9:
+			mapValidator.validateMap(editedMap);
+			break;
+		case 10:
+			editedMap = originalMap.clone();
+			System.out.println("Changes discarded");
+			break;
+		case 11:
+			if (mapValidator.validateMap(editedMap)) {
+				return editedMap;
+			}
+			break;
 		}
-		
+
 		return editMap();
 	}
-	
+
 	private Integer getEditMapUserChoice() {
 		System.out.println("\nEdit map: \n1. Change Author\n2. Add a Continent\n3. Remove a Continent\n"
 				+ "4. Add a Country\n5. Remove a Country\n6. Add Adjacency\n7. Remove Adjacency\n"
 				+ "8. Show Map Content\n9. Validate Map\n10. Discard changes\n11. Save and Exit");
 		System.out.print("Enter choice: ");
-		
+
 		String userChoiceStr = scanner.nextLine();
-		if(isNaN(userChoiceStr) || Integer.parseInt(userChoiceStr) < 1 || Integer.parseInt(userChoiceStr) > 11) {
+		if (isNaN(userChoiceStr) || Integer.parseInt(userChoiceStr) < 1 || Integer.parseInt(userChoiceStr) > 11) {
 			System.out.println("Invalid input!!");
 			userChoiceStr = "0";
 		}
@@ -70,7 +96,7 @@ public class MapEditor {
 	}
 
 	protected void showMapContent() {
-		//TODO : Print with details and remove method from model
+		// TODO : Print with details and remove method from model
 		editedMap.printMap();
 	}
 
@@ -80,17 +106,17 @@ public class MapEditor {
 		System.out.println("Please enter the names of the countries to be disconnected: ");
 		System.out.print("Country : ");
 		countryName1 = scanner.nextLine().trim();
-		if(editedMap.getCountry(countryName1) == null) {
+		if (editedMap.getCountry(countryName1) == null) {
 			System.out.println(countryName1 + " doesn't exist in the map.");
 			return;
 		}
 		System.out.print("Country : ");
 		countryName2 = scanner.nextLine().trim();
-		if(editedMap.getCountry(countryName2) == null) {
+		if (editedMap.getCountry(countryName2) == null) {
 			System.out.println(countryName2 + " doesn't exist in the map.");
 			return;
 		}
-		if(!editedMap.removeAdjacenyBetweenCountries(countryName1, countryName2)) {
+		if (!editedMap.removeAdjacenyBetweenCountries(countryName1, countryName2)) {
 			System.out.println("No edge extsts between the countries");
 			return;
 		}
@@ -103,13 +129,13 @@ public class MapEditor {
 		System.out.println("Please enter the names of the countries to be connected: ");
 		System.out.print("Country : ");
 		countryName1 = scanner.nextLine().trim();
-		if(editedMap.getCountry(countryName1) == null) {
+		if (editedMap.getCountry(countryName1) == null) {
 			System.out.println(countryName1 + " doesn't exist in the map.");
 			return;
 		}
 		System.out.print("Country : ");
 		countryName2 = scanner.nextLine().trim();
-		if(editedMap.getCountry(countryName2) == null) {
+		if (editedMap.getCountry(countryName2) == null) {
 			System.out.println(countryName2 + " doesn't exist in the map.");
 			return;
 		}
@@ -121,7 +147,7 @@ public class MapEditor {
 		String countryName = null;
 		System.out.print("Please Enter the name of the Country to be removed: ");
 		countryName = scanner.nextLine().trim();
-		if(editedMap.getCountry(countryName) == null) {
+		if (editedMap.getCountry(countryName) == null) {
 			System.out.println(countryName + " doesn't exist in the map.");
 			return;
 		}
@@ -132,14 +158,14 @@ public class MapEditor {
 	protected void addCountryToMap() {
 		System.out.print("Please Enter the name of the new Country: ");
 		String newCountryName = scanner.nextLine().trim();
-		if(editedMap.getCountry(newCountryName) != null) {
+		if (editedMap.getCountry(newCountryName) != null) {
 			System.out.println("Country already exists");
 			return;
 		}
 		String continentName = null;
 		System.out.print("Please Enter the name of the Continent, that " + newCountryName + " belongs to: ");
 		continentName = scanner.nextLine().trim();
-		if(editedMap.getContinent(continentName) == null) {
+		if (editedMap.getContinent(continentName) == null) {
 			System.out.println(continentName + " doesn't exist in the map.");
 			return;
 		}
@@ -148,11 +174,11 @@ public class MapEditor {
 	}
 
 	protected void removeContinentFromMap() {
-		
+
 		String continentName = null;
 		System.out.print("Please Enter the name of the Continent to be removed: ");
 		continentName = scanner.nextLine().trim();
-		if(editedMap.getContinent(continentName) == null) {
+		if (editedMap.getContinent(continentName) == null) {
 			System.out.println(continentName + " doesn't exist in the map.");
 			return;
 		}
@@ -163,7 +189,7 @@ public class MapEditor {
 	protected void addContinenToMap() {
 		System.out.print("Please Enter the name of the new Continent: ");
 		String newContinentName = scanner.nextLine().trim();
-		if(editedMap.getContinent(newContinentName) != null) {
+		if (editedMap.getContinent(newContinentName) != null) {
 			System.out.println("Continent already exists");
 			return;
 		}
@@ -172,14 +198,14 @@ public class MapEditor {
 			try {
 				System.out.print("Please Enter the control value for the Continent " + newContinentName + ":");
 				continentControlValue = Integer.parseInt(scanner.nextLine().trim());
-				if(continentControlValue < 0) {
+				if (continentControlValue < 0) {
 					System.out.println("Invalid Input.");
 				}
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				System.out.println("Invalid Input.");
 				continentControlValue = -1;
 			}
-		} while(continentControlValue < 0);
+		} while (continentControlValue < 0);
 		editedMap.addContinent(newContinentName, continentControlValue);
 		System.out.println("Continent added successfully");
 	}
@@ -188,14 +214,14 @@ public class MapEditor {
 		System.out.println("Current Map Author: " + editedMap.getMapAuthor());
 		System.out.print("Please Enter the name of the author: ");
 		String mapAuthorName = scanner.nextLine().trim();
-		if(mapAuthorName.isEmpty() || mapAuthorName.length() == 0) {
+		if (mapAuthorName.isEmpty() || mapAuthorName.length() == 0) {
 			System.out.println("Invalid Name");
 			return;
 		}
 		editedMap.setMapAuthor(mapAuthorName);
 		System.out.println("Map Author updated to : " + editedMap.getMapAuthor());
 	}
-	
+
 	protected boolean isNaN(final String string) {
 		try {
 			Integer.parseInt(string);

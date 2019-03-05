@@ -16,6 +16,10 @@ import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 
 /**
+ * MapLoader manages the complete map generation operations for the game, in
+ * particular it allows user to load the default map, load user's .map file,
+ * create map, and edit map.
+ * 
  * @author Karan Dhingra
  */
 public class MapLoader {
@@ -28,6 +32,12 @@ public class MapLoader {
 		scanner = new Scanner(System.in);
 	}
 
+	/**
+	 * A public method which manages the entire map generation process including map
+	 * edit, console map creation, loading .map file and validating the loaded map.
+	 * 
+	 * @return a valid map
+	 */
 	public GameMap loadMap() {
 
 		Integer defaultMapChoice = null;
@@ -53,24 +63,24 @@ public class MapLoader {
 		} else {
 			MapCreator mapCreator = new MapCreator(map);
 			map = mapCreator.createMap();
-			if(map == null) {
+			if (map == null) {
 				map = new GameMap();
 				return loadMap();
 			}
-			
+
 		}
 		Integer editOrContinueChoice = 0;
-		
+
 		do {
 			editOrContinueChoice = getChoiceToContinueOrEditMap();
 			if (editOrContinueChoice == 1) {
 				MapEditor mapEditor = new MapEditor(map);
 				map = mapEditor.editMap();
 			}
-		} while(editOrContinueChoice != 2);
-		
+		} while (editOrContinueChoice != 2);
+
 		saveMapAsTextFile();
-		
+
 		return map;
 	}
 
@@ -93,7 +103,7 @@ public class MapLoader {
 	}
 
 	private Integer getChoiceToUseDefaultMap() {
-		
+
 		System.out.println("\nPlease choose one of the following options to load the map");
 		System.out.println("1. Load default map");
 		System.out.println("2. Load your own map");
@@ -101,7 +111,7 @@ public class MapLoader {
 		System.out.println();
 		System.out.print("\nEnter choice: ");
 		String choiceStr = scanner.nextLine();
-		
+
 		if (isNaN(choiceStr) || !(Integer.parseInt(choiceStr) >= 1 && Integer.parseInt(choiceStr) <= 3)) {
 			System.out.println("Invalid input");
 			return null;
@@ -124,18 +134,18 @@ public class MapLoader {
 		}
 		return filePath;
 	}
-	
+
 	private String nextLine(BufferedReader mapFileBufferedReader) throws IOException {
 		String currentLine = null;
-		
+
 		do {
 			currentLine = mapFileBufferedReader.readLine();
-		} while(currentLine != null && currentLine.length() == 0);
-		
-		if(currentLine != null) {
+		} while (currentLine != null && currentLine.length() == 0);
+
+		if (currentLine != null) {
 			currentLine = currentLine.trim();
 		}
-		
+
 		return currentLine;
 	}
 
@@ -146,14 +156,14 @@ public class MapLoader {
 
 		MapValidator mapValidator = new MapValidator();
 		try {
-			if(!mapValidator.validateMapTextFile(mapFilePath)) {
+			if (!mapValidator.validateMapTextFile(mapFilePath)) {
 				return false;
 			}
 		} catch (IOException e2) {
 			System.out.println(e2.getMessage());
 			return false;
 		}
-		
+
 		try {
 			mapFileBufferedReader = new BufferedReader(new FileReader(mapFilePath));
 		} catch (FileNotFoundException e1) {
@@ -169,7 +179,7 @@ public class MapLoader {
 			if (response) {
 				response = readandLoadCountries(mapFileBufferedReader);
 			}
-			if(!mapValidator.validateMap(map)) {
+			if (!mapValidator.validateMap(map)) {
 				return false;
 			}
 		} catch (IOException e) {
@@ -264,13 +274,13 @@ public class MapLoader {
 
 		return response;
 	}
-	
+
 	private void saveMapAsTextFile() {
 		File file = new File("./map/finalMap.map");
 		HashMap<String, Continent> continents;
 		HashMap<String, Country> countries;
-		
-		if(file.exists()) {
+
+		if (file.exists()) {
 			file.delete();
 		}
 		try {
@@ -279,32 +289,32 @@ public class MapLoader {
 			writer.write("[Map]\n");
 			writer.write("author=" + map.getMapAuthor() + "\n");
 			writer.write("warn=" + map.warn + "\n");
-			
+
 			writer.write("[Continents]\n");
 			continents = map.getAllContinents();
-			for(String continentName : continents.keySet()) {
+			for (String continentName : continents.keySet()) {
 				writer.write(continentName + "=" + continents.get(continentName).getContinentControlValue() + "\n");
 			}
-			
+
 			writer.write("[Territories]\n");
 			countries = map.getAllCountries();
-			for(String countryName : countries.keySet()) {
+			for (String countryName : countries.keySet()) {
 				writer.write(countryName + "," + map.getCountry(countryName).getCountryContinentName());
 				HashSet<String> neighbours = map.getAdjacentCountries(countryName);
-				for(String neighbour : neighbours) {
+				for (String neighbour : neighbours) {
 					writer.write("," + neighbour);
 				}
 				writer.write("\n");
 			}
-			
+
 			writer.flush();
 			writer.close();
-			
+
 		} catch (IOException e) {
 			System.out.println("\nERROR: Failure in map file creation");
 		}
 	}
-	
+
 	private boolean isNaN(final String string) {
 		try {
 			Integer.parseInt(string);
