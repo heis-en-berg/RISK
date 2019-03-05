@@ -1,6 +1,5 @@
 package com.java.controller.gameplay;
 
-import com.java.controller.dice.Dice;
 import com.java.model.gamedata.GameData;
 import com.java.model.player.Player;
 
@@ -16,7 +15,6 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 	public GameData gameData;
 	public Player player;
 	public Integer currentPlayerID;
-	private Dice dice;
 	private Scanner input;
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
@@ -26,7 +24,6 @@ public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase
 		this.gameData = gameData;
 		this.player = player;
 		this.currentPlayerID = player.getPlayerID();
-		dice = new Dice(); //To be used in attack phase.
 		input = new Scanner(System.in);
 	}
 
