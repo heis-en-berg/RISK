@@ -7,7 +7,12 @@ import com.java.model.map.GameMap;
  * on console. It extends MapEditor class to make use of all the map creation
  * methods in MapEditor to avoid redundancy in the code.
  * 
+ * @author Arnav Bhardwaj
  * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 1.0.0
  */
 public class MapCreator extends MapEditor {
 
@@ -20,9 +25,10 @@ public class MapCreator extends MapEditor {
 	}
 
 	/**
-	 * A public method which manages the map creation(on console) process.
+	 *  this will manage the map creation based on input from console.
 	 * 
-	 * @return a valid map
+	 * @return a completly parsed map to be able to used in the maploader object.
+	 * @see MapLoader
 	 */
 	public GameMap createMap() {
 
@@ -73,6 +79,10 @@ public class MapCreator extends MapEditor {
 		return createMap();
 	}
 
+	/**
+	 * provide the user with options to create the map on console
+	 * @return The value user has selected
+	 */
 	private Integer getCreateMapUserChoice() {
 		System.out.println("\nCreate a new Map: \n1. Add Author\n2. Add a Continent\n3. Remove a Continent\n"
 				+ "4. Add a Country\n5. Remove a Country\n6. Add Adjacency\n7. Remove Adjacency\n"
@@ -87,6 +97,9 @@ public class MapCreator extends MapEditor {
 		return Integer.parseInt(userChoiceStr);
 	}
 
+	/**
+	 * Takes input of the user's name and sets it as a author of the map file
+	 */
 	private void addMapAuthor() {
 		System.out.print("Please Enter the name of the author: ");
 		String mapAuthorName = scanner.nextLine().trim();

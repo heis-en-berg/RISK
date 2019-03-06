@@ -5,6 +5,12 @@ import java.util.Random;
 
 /**
  * A Dice class that is used when ever a player needs to obtain a random generated number between 1 and 6
+ *  * @author Arnav Bhardwaj
+ *  * @author Karan Dhingra
+ *  * @author Ghalia Elkerdi
+ *  * @author Sahil Singh Sodhi
+ *  * @author Cristian Rodriguez
+ *  * @version 1.0.0
  */
 public class Dice {
 
@@ -20,9 +26,4 @@ public class Dice {
 		return 	rand1.nextInt(6 - 1 +1) + 1;
 	}
 
-
-	public ArrayList<Integer> rollDice(Integer numberOfDice) {
-		return null;
-	}
-	
 }

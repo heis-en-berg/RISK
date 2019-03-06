@@ -7,8 +7,13 @@ import com.java.model.map.GameMap;
 /**
  * MapEditor implements the logic to make it possible for a user to edit an
  * already loaded map into the game. 
- * 
+ *
+ * @author Arnav Bhardwaj
  * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 1.0.0
  */
 public class MapEditor {
 
@@ -31,7 +36,7 @@ public class MapEditor {
 	/**
 	 * A public method which manages the entire map edit process.
 	 * 
-	 * @return a valid edited map
+	 * @return a properly parsed valid map for the load map to use and construct the data
 	 */
 	public GameMap editMap() {
 		Integer userChoice = 0;
@@ -81,6 +86,10 @@ public class MapEditor {
 		return editMap();
 	}
 
+	/**
+	 * User will be able to edt the contents of the map by selecting the options via menu
+	 * @return the option that user has selected
+	 */
 	private Integer getEditMapUserChoice() {
 		System.out.println("\nEdit map: \n1. Change Author\n2. Add a Continent\n3. Remove a Continent\n"
 				+ "4. Add a Country\n5. Remove a Country\n6. Add Adjacency\n7. Remove Adjacency\n"
@@ -95,34 +104,49 @@ public class MapEditor {
 		return Integer.parseInt(userChoiceStr);
 	}
 
+	/**
+	 * prints the contents of the map to the user.
+	 */
 	protected void showMapContent() {
-		// TODO : Print with details and remove method from model
 		editedMap.printMap();
 	}
 
+	/**
+	 * allow user to change the contires that are nebiours and edit it out of the map.
+	 * checks if the edge exits after removal to ensure that
+	 */
 	protected void removeAdjacenecyBetweenCountries() {
 		String countryName1 = null;
 		String countryName2 = null;
+
 		System.out.println("Please enter the names of the countries to be disconnected: ");
 		System.out.print("Country : ");
+
 		countryName1 = scanner.nextLine().trim();
 		if (editedMap.getCountry(countryName1) == null) {
 			System.out.println(countryName1 + " doesn't exist in the map.");
 			return;
 		}
+
 		System.out.print("Country : ");
 		countryName2 = scanner.nextLine().trim();
+
 		if (editedMap.getCountry(countryName2) == null) {
 			System.out.println(countryName2 + " doesn't exist in the map.");
 			return;
 		}
+
 		if (!editedMap.removeAdjacenyBetweenCountries(countryName1, countryName2)) {
 			System.out.println("No edge extsts between the countries");
 			return;
 		}
+
 		System.out.println("Edge removed successfully");
 	}
 
+	/**
+	 * based on the user input create a edge to add the countries as neighbours
+	 */
 	protected void addAdjacenecyBetweenCountries() {
 		String countryName1 = null;
 		String countryName2 = null;
@@ -143,6 +167,9 @@ public class MapEditor {
 		System.out.println("Edge added successfully");
 	}
 
+	/**
+	 * User enters the country name they wish to delete and check if it exists and delete it
+	 */
 	protected void removeCountryFromMap() {
 		String countryName = null;
 		System.out.print("Please Enter the name of the Country to be removed: ");
@@ -155,29 +182,41 @@ public class MapEditor {
 		System.out.println("Country removed successfully");
 	}
 
+	/**
+	 *User inputs a are used to create a country object in the list of map
+	 */
 	protected void addCountryToMap() {
 		System.out.print("Please Enter the name of the new Country: ");
 		String newCountryName = scanner.nextLine().trim();
+
 		if (editedMap.getCountry(newCountryName) != null) {
 			System.out.println("Country already exists");
 			return;
 		}
+
 		String continentName = null;
+
 		System.out.print("Please Enter the name of the Continent, that " + newCountryName + " belongs to: ");
 		continentName = scanner.nextLine().trim();
+
 		if (editedMap.getContinent(continentName) == null) {
 			System.out.println(continentName + " doesn't exist in the map.");
 			return;
 		}
+
 		editedMap.addCountry(newCountryName, continentName);
 		System.out.println("Country added successfully");
 	}
 
+	/**
+	 * Take the values from user to remove the continent name,this acts as a edit option
+	 */
 	protected void removeContinentFromMap() {
 
 		String continentName = null;
 		System.out.print("Please Enter the name of the Continent to be removed: ");
 		continentName = scanner.nextLine().trim();
+
 		if (editedMap.getContinent(continentName) == null) {
 			System.out.println(continentName + " doesn't exist in the map.");
 			return;
@@ -186,14 +225,19 @@ public class MapEditor {
 		System.out.println("Continent removed successfully");
 	}
 
+	/**
+	 * 
+	 */
 	protected void addContinenToMap() {
 		System.out.print("Please Enter the name of the new Continent: ");
 		String newContinentName = scanner.nextLine().trim();
+
 		if (editedMap.getContinent(newContinentName) != null) {
 			System.out.println("Continent already exists");
 			return;
 		}
 		Integer continentControlValue = -1;
+
 		do {
 			try {
 				System.out.print("Please Enter the control value for the Continent " + newContinentName + ":");
@@ -206,6 +250,7 @@ public class MapEditor {
 				continentControlValue = -1;
 			}
 		} while (continentControlValue < 0);
+
 		editedMap.addContinent(newContinentName, continentControlValue);
 		System.out.println("Continent added successfully");
 	}
