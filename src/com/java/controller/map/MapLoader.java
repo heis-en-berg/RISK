@@ -40,7 +40,6 @@ public class MapLoader {
 	/**
 	 * A public method which manages the entire map generation process including map
 	 * edit, console map creation, loading .map file and validating the loaded map.
-	 * 
 	 * @return a valid map
 	 */
 	public GameMap loadMap() {
@@ -89,6 +88,10 @@ public class MapLoader {
 		return map;
 	}
 
+	/**
+	 *  obtain the choice the of continuing with game with the map or allow edit to process results
+	 * @return choice of the user and apply logic based on their input.
+	 */
 	private Integer getChoiceToContinueOrEditMap() {
 		Integer choice = null;
 		do {
@@ -107,6 +110,10 @@ public class MapLoader {
 		return choice;
 	}
 
+	/**
+	 * Allow user to choose the options for the given input
+	 * @return the value selected by the user
+	 */
 	private Integer getChoiceToUseDefaultMap() {
 
 		System.out.println("\nPlease choose one of the following options to load the map");
@@ -124,6 +131,10 @@ public class MapLoader {
 		return Integer.parseInt(choiceStr);
 	}
 
+	/**
+	 * obtain the file path location from the user and double check all the results
+	 * @return the file path as a string to be
+	 */
 	private String getAndValidateUserMapFilePath() {
 		System.out.println();
 		System.out.print("\nEnter File Path: ");
@@ -140,6 +151,12 @@ public class MapLoader {
 		return filePath;
 	}
 
+	/**\
+	 * obtain the nextline of the scanner values
+	 * @param mapFileBufferedReader allows to use the buffereder
+	 * @return string of input from user based on the entire line
+	 * @throws IOException when there is no input
+	 */
 	private String nextLine(BufferedReader mapFileBufferedReader) throws IOException {
 		String currentLine = null;
 
@@ -154,6 +171,11 @@ public class MapLoader {
 		return currentLine;
 	}
 
+	/**
+	 * mapfile is loaded from the file path and it reads the data
+	 * @param mapFilePath takes in a file path from as a string
+	 * @return true if the file has been read and false otherwise with an message stating why
+	 */
 	private Boolean loadMapFromFile(String mapFilePath) {
 
 		Boolean response = true;
@@ -194,6 +216,12 @@ public class MapLoader {
 		return response;
 	}
 
+	/**
+	 * parsing the map file based on the hashbro rules
+	 * @param mapFileBufferedReader accepts the buffer reader to read text in the file
+	 * @return true if it reads all contents sucessfully, false if it doesnt read
+	 * @throws IOException
+	 */
 	private Boolean readMapMetaData(BufferedReader mapFileBufferedReader) throws IOException {
 		Boolean response = true;
 		String[] splitString;

@@ -183,7 +183,7 @@ public class MapEditor {
 	}
 
 	/**
-	 *User inputs a are used to create a country object in the list of map
+	 *User inputs a are used to create a country object in the list of map.
 	 */
 	protected void addCountryToMap() {
 		System.out.print("Please Enter the name of the new Country: ");
@@ -226,7 +226,7 @@ public class MapEditor {
 	}
 
 	/**
-	 * 
+	 * user will be able to place the countries inside the provided map.
 	 */
 	protected void addContinenToMap() {
 		System.out.print("Please Enter the name of the new Continent: ");
@@ -255,6 +255,10 @@ public class MapEditor {
 		System.out.println("Continent added successfully");
 	}
 
+	/**
+	 * allow the user to change details of the author's name.
+	 *
+	 */
 	protected void changeMapAuthor() {
 		System.out.println("Current Map Author: " + editedMap.getMapAuthor());
 		System.out.print("Please Enter the name of the author: ");
@@ -267,6 +271,11 @@ public class MapEditor {
 		System.out.println("Map Author updated to : " + editedMap.getMapAuthor());
 	}
 
+	/**
+	 * Check if the string provided by user can be parsed to the int value
+	 * @param string input string value
+	 * @return return a true if cant be convereted so the menu can be repeated to user, false means no need to repate the menu, valid input.
+	 */
 	protected boolean isNaN(final String string) {
 		try {
 			Integer.parseInt(string);
