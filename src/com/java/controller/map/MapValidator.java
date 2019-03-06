@@ -111,7 +111,12 @@ public class MapValidator {
 
 		return true;
 	}
-
+	
+	/**
+	 * Validates a map.
+	 * 
+	 * @return true if a map is valid.
+	 * */
 	private Boolean validateMapCountries() {
 
 		Boolean response = true;
@@ -132,7 +137,12 @@ public class MapValidator {
 
 		return response;
 	}
-
+	
+	/**
+	 * Helper method which validates if a string can be converted to an integer.
+	 * 
+	 * @param string the string to be tested.
+	 * */
 	private boolean isNaN(final String string) {
 		try {
 			Integer.parseInt(string);
@@ -141,7 +151,12 @@ public class MapValidator {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Validates the continents
+	 * 
+	 * @return true if the continents are valid.
+	 * */
 	private Boolean validateMapContinents() {
 
 		Boolean response = true;
@@ -160,7 +175,12 @@ public class MapValidator {
 		}
 		return response;
 	}
-
+	
+	/**
+	 * Validates the map metadata, in this case the author name.
+	 * 
+	 * @return true if the metadata is valid.
+	 * */
 	private Boolean validateMapMetaData() {
 
 		Boolean response = true;
@@ -172,7 +192,13 @@ public class MapValidator {
 
 		return response;
 	}
-
+	
+	/**
+	 * Get the file text line by line..
+	 * 
+	 * @return String the next line from the file.
+	 * @exception IOException
+	 * */
 	private String nextLine(BufferedReader mapFileBufferedReader) throws IOException {
 		String currentLine = null;
 
