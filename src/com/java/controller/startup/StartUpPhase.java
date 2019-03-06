@@ -1,7 +1,4 @@
-/**
- * SOEN 6441 Winter 2019
- * Risk Game
- */
+
 package com.java.controller.startup;
 
 import java.util.*;

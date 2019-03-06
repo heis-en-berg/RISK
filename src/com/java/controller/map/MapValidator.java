@@ -15,8 +15,13 @@ import com.java.model.map.GameMap;
 /**
  * MapValidator handles the map validation part of the game. It can validate
  * either a .map file or a user created map on console.
- * 
+ *
+ * @author Arnav Bhardwaj
  * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 1.0.0
  */
 public class MapValidator {
 

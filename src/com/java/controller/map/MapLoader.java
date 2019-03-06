@@ -19,8 +19,13 @@ import com.java.model.map.GameMap;
  * MapLoader manages the complete map generation operations for the game, in
  * particular it allows user to load the default map, load user's .map file,
  * create map, and edit map.
- * 
+ *
+ * @author Arnav Bhardwaj
  * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 1.0.0
  */
 public class MapLoader {
 
