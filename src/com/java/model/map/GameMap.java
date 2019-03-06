@@ -3,21 +3,66 @@ package com.java.model.map;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * This class models the game map
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez 
+ * @version 1.0.0
+ * */
 public class GameMap implements Cloneable{
-
+	
+	/**
+	 * Default number of countries from original risk game.
+	 * */
 	public static final Integer DEFAULT_NUMBER_OF_COUNTRIES = 42;
 	
+	/**
+	 * Map of country objects.
+	 * */
 	private HashMap<String, Country> countryObjects;
+	
+	/**
+	 * Map of continent objects.
+	 * */
 	private HashMap<String, Continent> continentObjects;
+	
+	/**
+	 * Map of adjacent countries.
+	 * */
 	private HashMap<String, HashSet<String>> adjacentCountries;
+	
+	/**
+	 * Map of continent countries.
+	 * */
 	private HashMap<String, HashSet<String>> continentCountries;
+	
+	/**
+	 * Map of conquered countries per player.
+	 * */
 	private HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer;
+	
+	/**
+	 * Map of conquered continents per player.
+	 * */
 	private HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer;
+	
+	/**
+	 * Map author property from game map file
+	 * */
 	private String mapAuthor;
-
+	
+	/**
+	 * Warn property from game map file
+	 * */
 	public String warn;
 
-
+	/**
+	 * Creates a default map by created instances of every map.
+	 * */
 	public GameMap() {
 		mapAuthor = "";
 		warn = "";
@@ -29,6 +74,10 @@ public class GameMap implements Cloneable{
 		conqueredContinentsPerPlayer = new HashMap<>();
 	}
 	
+	/**
+	 * Clones a game creating new objects.
+	 * 
+	 */
 	@Override
     public GameMap clone() {
 		GameMap gameMap = null;
@@ -55,7 +104,13 @@ public class GameMap implements Cloneable{
  
         return gameMap;        // return deep copy
     }
-
+	
+	/**
+	 * Adds the country to the map.
+	 * 
+	 * @param countryName the name of the country to be add.
+	 * @param countryContinentName the continent name.
+	 */
 	public void addCountry(String countryName, String countryContinentName) {
 		Country country = new Country(countryName, countryContinentName);
 		this.countryObjects.put(country.getCountryName(), country);
@@ -67,6 +122,7 @@ public class GameMap implements Cloneable{
 
 	/**
 	 * Removes country from the map. Only to be used by MapEditor, before Startup Phase.
+	 * 
 	 * @param countryName name of the country to be removed
 	 */
 	public void removeCountry(String countryName) {
@@ -87,14 +143,29 @@ public class GameMap implements Cloneable{
 		this.countryObjects.remove(countryName);
 	}
 	
+	/**
+	 * Getter the number of countries.
+	 * 
+	 * @return the number of countries in the map.
+	 * */
 	public Integer getNumberOfCountries() {
 		return countryObjects.size();
 	}
 	
+	/**
+	 * Gets alls countries.
+	 * 
+	 * @return a hash map with country name as a key and the country object as a value.
+	 * */
 	public HashMap<String, Country> getAllCountries(){
 		return this.countryObjects;
 	}
 
+	/**
+	 * Gets the country object by giving the country name.
+	 * 
+	 * @return the country object.
+	 * */
 	public Country getCountry(String countryName) {
 		if (!this.countryObjects.containsKey(countryName)) {
 			return null;
@@ -102,11 +173,22 @@ public class GameMap implements Cloneable{
 		return this.countryObjects.get(countryName);
 	}
 	
+	/**
+	 * Adds one continent to the collections of continents.
+	 * 
+	 * @param continentName the continent name.
+	 * @param controlValue the number of armies that are going to given when a player owns a continent.
+	 * */
 	public void addContinent(String continentName, Integer controlValue) {
 		Continent continent = new Continent(continentName, controlValue);
 		this.continentObjects.put(continent.getContinentName(), continent);
 	}
 
+	/**
+	 * Removes a continent from the collection of continents
+	 * 
+	 * @param continentName the continent name.
+	 * */
 	public void removeContinent(String continentName) {
 		this.continentObjects.remove(continentName);
 		Object[] continentCountriesSet = getContinentCountries(continentName).toArray();
@@ -116,29 +198,57 @@ public class GameMap implements Cloneable{
 		continentCountries.remove(continentName);
 	}
 	
+	/**
+	 * Getter of all continents.
+	 * 
+	 * @return the map of continents.
+	 * */
 	public HashMap<String, Continent> getAllContinents(){
 		return this.continentObjects;
 	}
-
+	
+	/**
+	 * Returns the Continent object by giving the continent name.
+	 * 
+	 * @param continentName the continent name.
+	 * @return the continent object.
+	 * */
 	public Continent getContinent(String continentName) {
 		if(!this.continentObjects.containsKey(continentName)) {
 			return null;
 		}
 		return this.continentObjects.get(continentName);
 	}
-
+	
+	/**
+	 * Sets an adjacency between countries in both ways.
+	 * 
+	 * @param countryName country name of the endpoint.
+	 * @param adjacentCountryName contry name of the endpoint.
+	 * */
 	public void setAdjacentCountry(String countryName, String adjacentCountryName) {
 		setAdjacency(countryName, adjacentCountryName);
 		setAdjacency(adjacentCountryName, countryName);
 	}
 	
+	/**
+	 * Sets an adjacency between countries.
+	 * 
+	 * @param fromCountry country name of the endpoint.
+	 * @param toCountry contry name of the endpoint.
+	 * */
 	private void setAdjacency(String fromCountry, String toCountry) {
 		if (!this.adjacentCountries.containsKey(fromCountry)) {
 			this.adjacentCountries.put(fromCountry, new HashSet<>());
 		}
 		this.adjacentCountries.get(fromCountry).add(toCountry);
 	}
-
+	
+	/**
+	 * Gets adjacents countries.
+	 * 
+	 * @param countryName country name
+	 * */
 	public HashSet<String> getAdjacentCountries(String countryName) {
 		if(!this.adjacentCountries.containsKey(countryName)) {
 			return new HashSet<>();
@@ -146,14 +256,33 @@ public class GameMap implements Cloneable{
 		return this.adjacentCountries.get(countryName);
 	}
 	
+	/**
+	 * Gets the map adjacents countries.
+	 * 
+	 * @return the map of the adjacent contries.
+	 * */
 	public HashMap<String, HashSet<String>> getAdjacentCountriesObject() {
 		return adjacentCountries;
 	}
-
+	
+	/**
+	 * Removes an adjacency between countries.
+	 * 
+	 * @param countryName the country name.
+	 * @param adjacentCountryName the adjacent country name.
+	 * @return true if countries are adjacent.
+	 * */
 	public Boolean removeAdjacenyBetweenCountries(String countryName, String adjacentCountryName) {
 		return (removeAdjacency(countryName, adjacentCountryName) && removeAdjacency(adjacentCountryName, countryName));
 	}
-
+	
+	/**
+	 * Removes an adjacency between countries.
+	 * 
+	 * @param countryName the country name.
+	 * @param adjacentCountryName the adjacent country name.
+	 * @return true if the adjacency is removed.
+	 * */
 	private Boolean removeAdjacency(String countryName, String adjacentCountryName) {
 		if (this.adjacentCountries.containsKey(countryName)
 				&& this.adjacentCountries.get(countryName).contains(adjacentCountryName)) {
@@ -162,7 +291,13 @@ public class GameMap implements Cloneable{
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Gets the countries that belong to a continent.
+	 * 
+	 * @param continentName the continent name.
+	 * @return set of countries.
+	 * */
 	public HashSet<String> getContinentCountries(String continentName){
 		if(!this.continentCountries.containsKey(continentName)) {
 			return new HashSet<String>();
@@ -170,6 +305,12 @@ public class GameMap implements Cloneable{
 		return this.continentCountries.get(continentName);
 	}
 
+	/**
+	 * Sets the country conqueror.
+	 * 
+	 * @param countryName the country name.
+	 * @param playerId the player id.
+	 * */
 	public void setCountryConquerer(String countryName, Integer playerId) {
 		if(!this.conqueredCountriesPerPlayer.containsKey(playerId)) {
 			this.conqueredCountriesPerPlayer.put(playerId, new HashSet<>());
@@ -179,7 +320,13 @@ public class GameMap implements Cloneable{
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(playerId);
 	}
-
+	
+	/**
+	 * Sets the continent conqueror.
+	 * 
+	 * @param continentName the continent name.
+	 * @param playerId the player id.
+	 * */
 	public void setContinentConquerer(String continentName, Integer playerId) {
 		if(!this.conqueredContinentsPerPlayer.containsKey(playerId)) {
 			this.conqueredContinentsPerPlayer.put(playerId, new HashSet<>());
@@ -188,14 +335,26 @@ public class GameMap implements Cloneable{
 		Continent continent = this.getContinent(continentName);
 		continent.setContinentConquerorID(playerId);
 	}
-
+	
+	/**
+	 * Gets the conquered countries per player.
+	 * 
+	 * @param playerId the player id.
+	 * @return the set of countries owned by a player.
+	 * */
 	public  HashSet<String> getConqueredCountriesPerPlayer(Integer playerId){
 		if(!this.conqueredCountriesPerPlayer.containsKey(playerId)) {
 			return new HashSet<>();
 		}
 		return this.conqueredCountriesPerPlayer.get(playerId);
 	}
-
+	
+	/**
+	 * Gets the conquered continents per player.
+	 * 
+	 * @param playerId the player id.
+	 * @return the set of continents owned by a player.
+	 * */
 	public  HashSet<String> getConqueredContinentsPerPlayer(Integer playerId){
 		if(!this.conqueredContinentsPerPlayer.containsKey(playerId)) {
 			return new HashSet<>();
@@ -203,6 +362,13 @@ public class GameMap implements Cloneable{
 		return this.conqueredContinentsPerPlayer.get(playerId);
 	}
 
+	/**
+	 * Updates the country conqueror.
+	 * 
+	 * @param countryName the country name.
+	 * @param oldConquererPlayerId the old conqueror id.
+	 * @param newConquererPlayerId the new coqueror id.
+	 * */
 	public void updateCountryConquerer(String countryName, Integer oldConquererPlayerId, Integer newConquererPlayerId) {
 		if(this.conqueredCountriesPerPlayer.get(oldConquererPlayerId).contains(countryName)) {
 			this.conqueredCountriesPerPlayer.get(oldConquererPlayerId).remove(countryName);
@@ -212,17 +378,27 @@ public class GameMap implements Cloneable{
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(newConquererPlayerId);
 	}
-
+	
+	/**
+	 * Sets the map author.
+	 * 
+	 * @param mapAuthor the author map.
+	 * */
 	public void setMapAuthor(String mapAuthor) {
 		this.mapAuthor = mapAuthor;
 	}
-
+	
+	/**
+	 * Gets the author map name.
+	 * 
+	 * @return the authors name.
+	 * */
 	public String getMapAuthor() {
 		return this.mapAuthor;
 	}
 	
-	/*
-	 * Just for development purpose
+	/**
+	 * Just prints the map for development purposes.
 	 */
 	public void printMap() {
 		System.out.println("Author: " +  getMapAuthor());
@@ -238,17 +414,30 @@ public class GameMap implements Cloneable{
 			System.out.println(continentName + " :: " + getContinentCountries(continentName).toString());
 		}
 	}
-
+	
+	/**
+	 * Getter of Conquered countries per player object
+	 * 
+	 * @return the map of conquered countries per player.
+	 * */
 	public HashMap<Integer, HashSet<String>> getConqueredCountriesPerPlayerObject() {
 		return conqueredCountriesPerPlayer;
 	}
-
-	// SET THE WHOLE OBJECT NOT ADDING ELEMENTS using gettes and setters to acess private data 
-
+	
+	/**
+	 * Setter of conquered continents per player
+	 * 
+	 * @param conqueredContinentsPerPlayer the map of conquered continents per player.
+	 * */
 	public void setConqueredContinentsPerPlayer(HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer) {
 		this.conqueredContinentsPerPlayer = conqueredContinentsPerPlayer;
 	}
-
+	
+	/**
+	 * Sets the country object map.
+	 * 
+	 * @param countryObjects the country object map. 
+	 * */
 	public void setCountryObjects(HashMap<String, Country> countryObjects) {
 		this.countryObjects = countryObjects;
 	}
@@ -257,26 +446,56 @@ public class GameMap implements Cloneable{
 		return continentObjects;
 	}
 
+	/**
+	 * Sets the continent object map.
+	 * 
+	 * @param continentObjects the continent object map. 
+	 * */
 	public void setContinentObjects(HashMap<String, Continent> continentObjects) {
 		this.continentObjects = continentObjects;
 	}
-
+	
+	/**
+	 * Gets the adjacents countries.
+	 * 
+	 * @return map of adjacent countries. 
+	 * */
 	public HashMap<String, HashSet<String>> getAdjacentCountries() {
 		return adjacentCountries;
 	}
-
+	
+	/**
+	 * Sets the adjacent countries map.
+	 * 
+	 * @param adjacentCountries the adjacent countries map. 
+	 * */
 	public void setAdjacentCountries(HashMap<String, HashSet<String>> adjacentCountries) {
 		this.adjacentCountries = adjacentCountries;
 	}
-
+	
+	/**
+	 * Gets the continents countries.
+	 * 
+	 * @return map of the continent countries. 
+	 * */
 	public HashMap<String, HashSet<String>> getContinentCountries() {
 		return continentCountries;
 	}
-
+	
+	/**
+	 * Sets the continent countries map.
+	 * 
+	 * @param continentCountries the continent countries map. 
+	 * */
 	public void setContinentCountries(HashMap<String, HashSet<String>> continentCountries) {
 		this.continentCountries = continentCountries;
 	}
-
+	
+	/**
+	 * Gets the conquered continents per player.
+	 * 
+	 * @return map of the conquered continents per player. 
+	 * */
 	public HashMap<Integer, HashSet<String>> getConqueredContinentsPerPlayer() {
 		return conqueredContinentsPerPlayer;
 	}
