@@ -41,7 +41,7 @@ public class MapTest {
 		}
 	}
 
-	/*
+	/**
 	 * Tests the map text file validator, using the file which has a continent
 	 * missing under Continent tag.
 	 */
@@ -54,7 +54,7 @@ public class MapTest {
 		}
 	}
 
-	/*
+	/**
 	 * Tests the map text file validator, using file with the disconnected map.
 	 */
 	@Test
@@ -66,7 +66,7 @@ public class MapTest {
 		}
 	}
 
-	/*
+	/**
 	 * Tests the validation of disconnected map
 	 */
 	@Test
@@ -87,7 +87,7 @@ public class MapTest {
 		assertFalse(mapValidator.validateMap(disconnectedGameMap));
 	}
 
-	/*
+	/**
 	 * Tests the validation of connected map
 	 */
 	@Test

@@ -15,7 +15,13 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * FortificationTest class tests the fortification paths retrieval for a given scenario. 
- * @version 1.0
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez 
+ * @version 1.0.0
  */
 public class FortificationTest {
 

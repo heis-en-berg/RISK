@@ -89,7 +89,8 @@ public class MapLoader {
 	}
 
 	/**
-	 *  obtain the choice the of continuing with game with the map or allow edit to process results
+	 * Obtain the choice the of continuing with game with the map or allow edit to process results
+	 * 
 	 * @return choice of the user and apply logic based on their input.
 	 */
 	private Integer getChoiceToContinueOrEditMap() {
@@ -112,6 +113,7 @@ public class MapLoader {
 
 	/**
 	 * Allow user to choose the options for the given input
+	 * 
 	 * @return the value selected by the user
 	 */
 	private Integer getChoiceToUseDefaultMap() {
@@ -132,7 +134,8 @@ public class MapLoader {
 	}
 
 	/**
-	 * obtain the file path location from the user and double check all the results
+	 * Obtain the file path location from the user and double check all the results
+	 * 
 	 * @return the file path as a string to be
 	 */
 	private String getAndValidateUserMapFilePath() {
@@ -220,7 +223,7 @@ public class MapLoader {
 	 * parsing the map file based on the hashbro rules
 	 * @param mapFileBufferedReader accepts the buffer reader to read text in the file
 	 * @return true if it reads all contents sucessfully, false if it doesnt read
-	 * @throws IOException
+	 * @throws IOException if the file is invalid.
 	 */
 	private Boolean readMapMetaData(BufferedReader mapFileBufferedReader) throws IOException {
 		Boolean response = true;
@@ -251,7 +254,14 @@ public class MapLoader {
 		}
 		return response;
 	}
-
+	
+	/**
+	 * Reads the continents from the file text and the loads it.
+	 * 
+	 * @param mapFileBufferedReader the buffer reader.
+	 * @return true if the continents are valid.
+	 * @throws IOException if the file is invalid.
+	 * */
 	private Boolean readandLoadContinents(BufferedReader mapFileBufferedReader) throws IOException {
 
 		Boolean response = true;
@@ -273,7 +283,14 @@ public class MapLoader {
 
 		return response;
 	}
-
+	
+	/**
+	 * Reads and load countries from the file text.
+	 * 
+	 * @param mapFileBufferedReader the buffer reader.
+	 * @return true if the countries are valid.
+	 * @throws IOException if the file is invalid.
+	 * */
 	private Boolean readandLoadCountries(BufferedReader mapFileBufferedReader)
 			throws NumberFormatException, IOException {
 
@@ -307,7 +324,10 @@ public class MapLoader {
 
 		return response;
 	}
-
+	
+	/**
+	 * Saves the map as a file text.
+	 * */
 	private void saveMapAsTextFile() {
 		File file = new File("./map/finalMap.map");
 		HashMap<String, Continent> continents;
@@ -347,7 +367,13 @@ public class MapLoader {
 			System.out.println("\nERROR: Failure in map file creation");
 		}
 	}
-
+	
+	/**
+	 * Tests if a string can be converted to an integer.
+	 * 
+	 * @param string to be tested
+	 * @return true if the string can not be converted.
+	 * */
 	private boolean isNaN(final String string) {
 		try {
 			Integer.parseInt(string);
