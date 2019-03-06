@@ -11,8 +11,14 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 /**
- * ReinforcementTest class tests the total reinforcement count for two scenarios.  
- * @version 1.0
+ * ReinforcementTest class tests the total reinforcement count for two scenarios. 
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez 
+ * @version 1.0.0
  */
 public class ReinforcementTest {
 
