@@ -23,7 +23,7 @@ import java.util.Scanner;
  * @version 1.0.0
  */
 
-public class Turn implements ReinforcementPhase, AttackPhase, FortificationPhase {
+public class Turn implements ReinforcementPhase, FortificationPhase {
 
 	public GameData gameData;
 	public Player player;
