@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Arrays;
 
+
 /**
  * RiskGameDriver class is used as a view in which the user will interact with a given console.
  * It allows the risk game to start by loading the map selected by user from console.
@@ -55,7 +56,7 @@ public class RiskGameDriver {
 		initialArmyPlacement();
 		startTurn();
 	}
-	
+
 	/**
      * The Start up phase intiates in this method by calling the helpers from StartUp phase. This method asks
      * for the names of the players and the number of players.
@@ -102,6 +103,7 @@ public class RiskGameDriver {
 		
 		// Array list to store the name of the players provided by the user.
 		startUp.generatePlayers(playerNames);
+		startUp.generateCardsDeck();
 	}
 	
 	/**
@@ -255,5 +257,4 @@ public class RiskGameDriver {
 		//The one player left in the playerList has conquered the whole map.
 		System.out.println("Congratulations! "+playerList.get(0).getPlayerName() + " wins the game.");
 	}
-
 }

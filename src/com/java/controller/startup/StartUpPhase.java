@@ -1,13 +1,17 @@
 
 package com.java.controller.startup;
 
-import java.util.*;
-
 import com.java.controller.dice.Dice;
+import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
-import com.java.model.map.GameMap;
 import com.java.model.player.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+
 
 /**
  * StartupPhase includes the logic to set up the game before it starts.
@@ -63,6 +67,15 @@ public class StartUpPhase {
 		gameData.setPlayers(newPlayers);
 		
 		return newPlayers;
+	}
+
+	public void generateCardsDeck() {
+		HashMap<String, Country> countryObject = gameData.gameMap.getAllCountries();
+		ArrayList<Country> countryList = new ArrayList<Country>();
+		for(Country country : countryObject.values()){
+			countryList.add(country);
+		}
+		gameData.cardsDeck = new CardsDeck(countryList);
 	}
 	
 	/**
