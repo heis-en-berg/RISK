@@ -14,4 +14,7 @@ public class Card {
     public Country getCountry() {
         return country;
     }
+    public ArmyType getArmyType() {
+        return armyType;
+    }
 }

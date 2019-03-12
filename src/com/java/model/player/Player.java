@@ -1,6 +1,10 @@
 package com.java.model.player;
 
 
+import com.java.model.cards.Card;
+
+import java.util.ArrayList;
+
 /**
  * This class models the player, it holds the id, the name, and the order to play
  * for the round robin.
@@ -29,6 +33,29 @@ public class Player implements Comparable<Player> {
 	 * */
 	private Integer orderOfPlay;
 
+	private ArrayList<Card> cardList;
+
+	private static int cardExchangeArmyCount = 5;
+
+	public static void setCardExchangeArmyCount() {
+		Player.cardExchangeArmyCount += 5;
+	}
+
+	public static int getCardExchangeArmyCount() {
+		return cardExchangeArmyCount;
+	}
+
+
+
+
+	public ArrayList<Card> getPlayerCardList() {
+		return cardList;
+	}
+
+	public void addToPlayerCardList(Card card) {
+		this.cardList.add(card);
+	}
+
 	/**
 	 * Creates a player by giving the id and the name
 	 * 
@@ -38,6 +65,7 @@ public class Player implements Comparable<Player> {
 	public Player(Integer playerID, String playerName) {
 		this.playerID = playerID;
 		this.playerName = playerName;
+		this.cardList = new ArrayList<Card>();
 	}
 	
 	/**
@@ -66,7 +94,9 @@ public class Player implements Comparable<Player> {
 	public Integer getOrderOfPlay() {
 		return orderOfPlay;
 	}
-	
+
+
+
 	/**
 	 * Setter of the order of play.
 	 * 

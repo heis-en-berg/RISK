@@ -9,6 +9,8 @@ public class CardsDeck {
 
     ArrayList<Card> deck = new ArrayList<Card>();
     ArmyType[] armyTypes = ArmyType.values();
+    private Card card;
+    private int top = 0;
 
     public CardsDeck(ArrayList<Country> countryList) {
         final int EACH_ARMY_TYPE_COUNT = (countryList.size()/armyTypes.length);
@@ -17,5 +19,11 @@ public class CardsDeck {
             deck.add(new Card(armyTypes[card/EACH_ARMY_TYPE_COUNT], countryList.get(card)));
         }
         Collections.shuffle(deck);
+    }
+
+    public Card getCard(){
+        card = deck.get(top);
+        deck.remove(top);
+        return card;
     }
 }
