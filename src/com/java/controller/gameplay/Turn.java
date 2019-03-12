@@ -1,5 +1,6 @@
  package com.java.controller.gameplay;
 
+import com.java.model.cards.Card;
 import com.java.model.gamedata.GameData;
 import com.java.model.player.Player;
 
@@ -64,8 +65,142 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 	@Override
 	public void startReinforcement() {
 
-		Integer totalReinforcementArmyCount = calculateReinforcementArmy();
+		ArrayList<Card> playerExchangeCards;
+		playerExchangeCards = getValidCards();
+		Integer totalReinforcementArmyCount = calculateTotalReinforcement(playerExchangeCards);
 		placeArmy(totalReinforcementArmyCount);
+	}
+
+	public int calculateTotalReinforcement(ArrayList<Card> playerExchangeCards){
+		int totalReinforcementArmyCount = 0;
+		totalReinforcementArmyCount += (reinforcementArmyCountFromCards(playerExchangeCards) + calculateReinforcementArmy());
+		return totalReinforcementArmyCount;
+	}
+
+	public void showCards(){
+		ArrayList<Card> playerCardList = player.getPlayerCardList();
+		ArrayList<String> playerCountryList = new ArrayList<String>();
+		int cardsCount = 0;
+		for (Card cards : playerCardList) {
+			System.out.println(cardsCount + ". " + cards.getCountry().getCountryName() + " " + cards.getArmyType());
+			playerCountryList.add(cards.getCountry().getCountryName());
+			cardsCount++;
+		}
+	}
+
+	public ArrayList<Card> getValidCards(){
+		ArrayList<Card> playerCardList = player.getPlayerCardList();
+		ArrayList<Card> playerExchangeCards = new ArrayList<>();
+		boolean can_exchange = false;
+
+		for (int i = 0; i < 5; i++) {
+			Card card = gameData.cardsDeck.getCard();
+			player.addToPlayerCardList(card);
+		}
+
+		System.out.println("*** Cards in hand ***");
+		this.showCards();
+		System.out.println("Do you wish to exchange cards ? (yes/no)");
+		String userInput = input.nextLine();
+		while (!((userInput.toLowerCase().equals("yes")) || (userInput.toLowerCase().equals("no")))) {
+			System.out.println("Please input either yes or no.");
+			userInput = input.nextLine();
+		}
+		if ((userInput.equals("yes")) || (userInput.equals("no") && playerCardList.size() > 4)) {
+			if(userInput.equals("no") && (playerCardList.size() > 4)){
+				System.out.println("You must exchange cards. You have 5 cards in your hand.");
+			}
+			this.showCards();
+			int count = 0;
+			Integer cardNumber;
+			while(!can_exchange) {
+				playerExchangeCards = new ArrayList<Card>();
+				System.out.println("Please enter three card numbers from the list of the same or different army types.");
+				for (int i = 0; i < 3; i++) {
+					cardNumber = input.nextInt();
+					while (cardNumber > playerCardList.size()) {
+						System.out.println("Please input correct number from list");
+						cardNumber = input.nextInt();
+					}
+					playerExchangeCards.add(playerCardList.get(cardNumber));
+				}
+				can_exchange = isValidExchange(playerExchangeCards);
+			}
+		}
+		return playerExchangeCards;
+	}
+
+	public int reinforcementArmyCountFromCards(ArrayList<Card> playerExchangeCards){
+		int countReinforcementFromCardExchange = 0;
+		boolean can_exchange = isValidExchange(playerExchangeCards);
+		boolean extraTerritoryMatchArmy = isExtraTerritoryMatchArmy(playerExchangeCards);
+		if(can_exchange == true){
+			if(extraTerritoryMatchArmy == true){
+				countReinforcementFromCardExchange += 2;
+			}
+			countReinforcementFromCardExchange += Player.getCardExchangeArmyCount();
+			Player.setCardExchangeArmyCount();
+		}
+		return countReinforcementFromCardExchange;
+	}
+
+	public boolean isValidExchange(ArrayList<Card> playerExchangeCards){
+		boolean condition_same = ((playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(1).getArmyType())) &&
+				playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(2).getArmyType()));
+		boolean condition_different = (!(playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(1).getArmyType()))) &&
+				(!(playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(2).getArmyType()))) &&
+				(!(playerExchangeCards.get(1).getArmyType().equals(playerExchangeCards.get(2).getArmyType())));
+		return (condition_same || condition_different);
+	}
+
+	public boolean isExtraTerritoryMatchArmy(ArrayList<Card> playerExchangeCards){
+		boolean extraTerritoryMatchArmy = false;
+		for(Card card : playerExchangeCards){
+			if (currentPlayerID == card.getCountry().getCountryConquerorID()) {
+				extraTerritoryMatchArmy = true;
+				break;
+			}
+		}
+		return extraTerritoryMatchArmy;
+	}
+
+	/**
+	 * Function to count the reinforcement army based on the number of territories and continents owned.
+	 * @return total reinforcement army count
+	 */
+	@Override
+	public Integer calculateReinforcementArmy() {
+
+		Integer totalReinforcementArmyCount = 0;
+		Integer totalCountriesOwnedByPlayer;
+		Integer currentPlayerID = player.getPlayerID();
+		ArrayList<Card> playerCardList = player.getPlayerCardList();
+		ArrayList<Card> playerExchangeCards;
+		ArrayList<String> playerCountryList = new ArrayList<String>();
+		boolean can_exchange = false;
+
+		/*
+		 * Count the total number of continents owned by the player and retrieve the
+		 * continent's control value.
+		 */
+		HashSet<String> conqueredContinentsPerPlayer = this.gameData.gameMap
+				.getConqueredContinentsPerPlayer(currentPlayerID);
+
+		for (String continent : conqueredContinentsPerPlayer) {
+			Integer controlValue = this.gameData.gameMap.getContinent(continent).getContinentControlValue();
+			totalReinforcementArmyCount += controlValue;
+		}
+
+		/*
+		 * Count the total number of countries owned by the player and provide a minimum
+		 * of three armies.
+		 */
+		totalCountriesOwnedByPlayer = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID).size();
+		totalReinforcementArmyCount += totalCountriesOwnedByPlayer
+				/ REINFORCEMENT_DIVISION_FACTOR > MINIMUM_REINFORCEMENT_ARMY_NUMBER
+				? totalCountriesOwnedByPlayer / REINFORCEMENT_DIVISION_FACTOR
+				: MINIMUM_REINFORCEMENT_ARMY_NUMBER;
+		return totalReinforcementArmyCount;
 	}
 
 	/**
@@ -150,41 +285,6 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		System.out.println("\n**** Reinforcement Phase Ends for player "+ this.playerName +"..****\n");
 	}
 
-	/**
-	 * Function to count the reinforcement army based on the number of territories and continents owned.
-	 * @return total reinforcement army count
-	 */
-	@Override
-	public Integer calculateReinforcementArmy() {
-
-		Integer totalReinforecementArmyCount = 0;
-		Integer totalCountriesOwnedByPlayer;
-		Integer currentPlayerID = player.getPlayerID();
-
-		/*
-		 * Count the total number of continents owned by the player and retrieve the
-		 * continent's control value.
-		 */
-		HashSet<String> conqueredContinentsPerPlayer = this.gameData.gameMap
-				.getConqueredContinentsPerPlayer(currentPlayerID);
-
-		for (String continent : conqueredContinentsPerPlayer) {
-			Integer controlValue = this.gameData.gameMap.getContinent(continent).getContinentControlValue();
-			totalReinforecementArmyCount += controlValue;
-		}
-
-		/*
-		 * Count the total number of countries owned by the player and provide a minimum
-		 * of three armies.
-		 */
-		totalCountriesOwnedByPlayer = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID).size();
-		totalReinforecementArmyCount += totalCountriesOwnedByPlayer
-				/ REINFORCEMENT_DIVISION_FACTOR > MINIMUM_REINFORCEMENT_ARMY_NUMBER
-				? totalCountriesOwnedByPlayer / REINFORCEMENT_DIVISION_FACTOR
-				: MINIMUM_REINFORCEMENT_ARMY_NUMBER;
-
-		return totalReinforecementArmyCount;
-	}
 
 	/**
 	 * Method to guide the player through various fortification options when applicable.
