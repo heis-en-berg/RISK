@@ -230,28 +230,40 @@ public class RiskGameDriver {
 
 		Turn turn;
 		ArrayList<Player> playerList = this.gameData.getPlayers();
-		Player currentPlayer;
+		Player currentPlayer; // first player that will start the game
+
 		int reset_turn = 0;
-		int player;
+		int playerCount;
 
 		//There will be another round if the number of players is greater than one.
 		while(playerList.size() != 1) {
-			for (player = reset_turn; player < playerList.size(); ) {
-				currentPlayer = playerList.get(player);
+
+			for (playerCount = reset_turn; playerCount < playerList.size(); ) {
+				currentPlayer = playerList.get(playerCount);
+
 				// Exclude turn for the player with no countries. The player has been defeated.
-				if (this.gameData.gameMap.getConqueredCountriesPerPlayer(player) != null) {
+				if (this.gameData.gameMap.getConqueredCountriesPerPlayer(playerCount) != null) {
+
 					System.out.println("\n***** Turn Begins for player "+currentPlayer.getPlayerName() +" *****\n");
-					turn = new Turn(currentPlayer, this.gameData);
-					turn.startTurn();
+
+					//turn = new Turn(currentPlayer, this.gameData);
+					//turn.startTurn();
+
+					// -----------NEW CODE REFCRATORED---------
+					currentPlayer.setGameData(this.gameData);
+					currentPlayer.startTurn();
+
 					System.out.println("\n***** Turn Ends for player "+currentPlayer.getPlayerName() +" *****\n");
-					player++;
+					playerCount++;
+
 				} else {
 					this.gameData.removePlayers(currentPlayer);
 					playerList = this.gameData.getPlayers();
 				}
+
 			}
 			// Reset turn for player one.
-			player = reset_turn;
+			playerCount = reset_turn;
 		}
 
 		//The one player left in the playerList has conquered the whole map.

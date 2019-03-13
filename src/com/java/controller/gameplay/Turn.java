@@ -45,13 +45,13 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		this.gameData = gameData;
 		this.player = player;
 		this.currentPlayerID = player.getPlayerID();
-		input = new Scanner(System.in);
 		this.playerName = player.getPlayerName();
 	}
 	/**
      * The startTurn() method organizes the flow of the game by ordering phase-execution.
      */
 	public void startTurn() {
+		input = new Scanner(System.in);
 		startReinforcement();
 		// startAttack(); For build 2.
 		fortify();
@@ -62,6 +62,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 	 *
 	 * @see com.java.controller.gameplay.ReinforcementPhase
 	 */
+	//TODO 1
 	@Override
 	public void startReinforcement() {
 
@@ -71,13 +72,13 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		placeArmy(totalReinforcementArmyCount);
 	}
 
-	public int calculateTotalReinforcement(ArrayList<Card> playerExchangeCards){
+	private int calculateTotalReinforcement(ArrayList<Card> playerExchangeCards){
 		int totalReinforcementArmyCount = 0;
 		totalReinforcementArmyCount += (reinforcementArmyCountFromCards(playerExchangeCards) + calculateReinforcementArmy());
 		return totalReinforcementArmyCount;
 	}
 
-	public void showCards(){
+	private void showCards(){
 		ArrayList<Card> playerCardList = player.getPlayerCardList();
 		ArrayList<String> playerCountryList = new ArrayList<String>();
 		int cardsCount = 0;
@@ -88,7 +89,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		}
 	}
 
-	public ArrayList<Card> getValidCards(){
+	private ArrayList<Card> getValidCards(){
 		ArrayList<Card> playerCardList = player.getPlayerCardList();
 		ArrayList<Card> playerExchangeCards = new ArrayList<>();
 		boolean can_exchange = false;
@@ -130,7 +131,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		return playerExchangeCards;
 	}
 
-	public int reinforcementArmyCountFromCards(ArrayList<Card> playerExchangeCards){
+	private int reinforcementArmyCountFromCards(ArrayList<Card> playerExchangeCards){
 		int countReinforcementFromCardExchange = 0;
 		boolean can_exchange = isValidExchange(playerExchangeCards);
 		boolean extraTerritoryMatchArmy = isExtraTerritoryMatchArmy(playerExchangeCards);
@@ -144,7 +145,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		return countReinforcementFromCardExchange;
 	}
 
-	public boolean isValidExchange(ArrayList<Card> playerExchangeCards){
+	private boolean isValidExchange(ArrayList<Card> playerExchangeCards){
 		boolean condition_same = ((playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(1).getArmyType())) &&
 				playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(2).getArmyType()));
 		boolean condition_different = (!(playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(1).getArmyType()))) &&
@@ -153,7 +154,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		return (condition_same || condition_different);
 	}
 
-	public boolean isExtraTerritoryMatchArmy(ArrayList<Card> playerExchangeCards){
+	private boolean isExtraTerritoryMatchArmy(ArrayList<Card> playerExchangeCards){
 		boolean extraTerritoryMatchArmy = false;
 		for(Card card : playerExchangeCards){
 			if (currentPlayerID == card.getCountry().getCountryConquerorID()) {
