@@ -1,4 +1,4 @@
- package com.java.controller.gameplay;
+package com.java.controller.gameplay;
 
 import com.java.model.cards.Card;
 import com.java.model.gamedata.GameData;
@@ -20,7 +20,7 @@ import java.util.Scanner;
  * @author Karan Dhingra
  * @author Ghalia Elkerdi
  * @author Sahil Singh Sodhi
- * @author Cristian Rodriguez 
+ * @author Cristian Rodriguez
  * @version 1.0.0
  */
 
@@ -34,12 +34,12 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
 
- 
+
 	/**
-     * Turn Constructor will allow the initialization of core data shared across both phases.
+	 * Turn Constructor will allow the initialization of core data shared across both phases.
 	 * @param player current player object
 	 * @param gameData current state of the game
-     */
+	 */
 	public Turn(Player player, GameData gameData) {
 
 		this.gameData = gameData;
@@ -49,8 +49,8 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		this.playerName = player.getPlayerName();
 	}
 	/**
-     * The startTurn() method organizes the flow of the game by ordering phase-execution.
-     */
+	 * The startTurn() method organizes the flow of the game by ordering phase-execution.
+	 */
 	public void startTurn() {
 		startReinforcement();
 		// startAttack(); For build 2.
@@ -73,7 +73,12 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 
 	public int calculateTotalReinforcement(ArrayList<Card> playerExchangeCards){
 		int totalReinforcementArmyCount = 0;
-		totalReinforcementArmyCount += (reinforcementArmyCountFromCards(playerExchangeCards) + calculateReinforcementArmy());
+		if(playerExchangeCards.isEmpty()){
+			totalReinforcementArmyCount += calculateReinforcementArmy();
+		}
+		else {
+			totalReinforcementArmyCount += (reinforcementArmyCountFromCards(playerExchangeCards) + calculateReinforcementArmy());
+		}
 		return totalReinforcementArmyCount;
 	}
 
@@ -93,10 +98,10 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		ArrayList<Card> playerExchangeCards = new ArrayList<>();
 		boolean can_exchange = false;
 
-		for (int i = 0; i < 5; i++) {
-			Card card = gameData.cardsDeck.getCard();
-			player.addToPlayerCardList(card);
-		}
+//		for (int i = 0; i < 2; i++) {
+//			Card card = gameData.cardsDeck.getCard();
+//			player.addToPlayerCardList(card);
+//		}
 
 		System.out.println("*** Cards in hand ***");
 		this.showCards();
@@ -106,7 +111,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 			System.out.println("Please input either yes or no.");
 			userInput = input.nextLine();
 		}
-		if ((userInput.equals("yes")) || (userInput.equals("no") && playerCardList.size() > 4)) {
+		if (((userInput.equals("yes")) && playerCardList.size()>2) || (userInput.equals("no") && playerCardList.size() > 4)) {
 			if(userInput.equals("no") && (playerCardList.size() > 4)){
 				System.out.println("You must exchange cards. You have 5 cards in your hand.");
 			}
@@ -126,6 +131,12 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 				}
 				can_exchange = isValidExchange(playerExchangeCards);
 			}
+		}
+		else if(userInput.toLowerCase().equals("no")){
+			System.out.println("Player "+playerName+" does not wish to exchange cards. ");
+		}
+		else{
+			System.out.println("You do not have sufficient number of cards in your hand.");
 		}
 		return playerExchangeCards;
 	}
@@ -292,7 +303,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 	public void fortify() {
 
 		System.out.println();
-		System.out.println("**** Fortification Phase Begins for player "+ this.playerName +"..****\n");		
+		System.out.println("**** Fortification Phase Begins for player "+ this.playerName +"..****\n");
 
 		// First get confirmation from the player that fortification is desired.
 
@@ -304,9 +315,9 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 		}
 
 		switch (playerDecision.toLowerCase()) {
-		case "yes":
-			doFortify = true;
-			break;
+			case "yes":
+				doFortify = true;
+				break;
 		}
 
 		if (!doFortify) {
@@ -381,7 +392,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 			playerDecision = input.nextLine();
 		}
 		String toCountry = playerDecision;
-		
+
 		// At this stage all that's left to do really is adjust the army counts in the
 		// respective countries to reflect they player's fortification move
 		this.gameData.gameMap.getCountry(fromCountry).deductArmy(Integer.parseInt(noOfArmiesToMove));
@@ -426,18 +437,18 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 			return null;
 		}
 
-		// Before we return the set, we have to slightly manipulate it 
+		// Before we return the set, we have to slightly manipulate it
 		// to ensure the only keys featured are valid source countries which meet the min requirements (at least 2)
 		for (String keySourceCountry : prelimFortificationScenarios.keySet()) {
 			if (this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount() < 2) {
 				continue;
 			}
-			for (String correspondingDestinationCountry : prelimFortificationScenarios.get(keySourceCountry)) {	
+			for (String correspondingDestinationCountry : prelimFortificationScenarios.get(keySourceCountry)) {
 				allFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
 				allFortificationScenarios.get(keySourceCountry).add(correspondingDestinationCountry);
 			}
 		}
-		
+
 		// in case all countries conquered by player have 1 army count
 		if (allFortificationScenarios.isEmpty()) {
 			return null;
@@ -445,7 +456,7 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 
 		return allFortificationScenarios;
 	}
-	
+
 	/**
 	 * Small helper method to ensure countries in scope are recursively traversed and included in the "path"
 	 * This is NOT the final and full picture for fortification scenarios, it is merely a stepping stone.
@@ -454,45 +465,45 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 	 * @param fortificationScenarios a HashStructure to be populated
 	 * @param rootCountry country to be checked for adjacency
 	 */
-	
+
 	@Override
 	public void buildFortificationPath(HashMap<String, ArrayList<String>> fortificationScenarios, String rootCountry) {
 		ArrayList<String> longestConqueredPathFromRoot = new ArrayList<String>();
 		longestConqueredPathFromRoot.add(rootCountry);
 		traverseNeighbouringCountries(longestConqueredPathFromRoot, rootCountry);
-		fortificationScenarios.put(rootCountry, longestConqueredPathFromRoot);	
+		fortificationScenarios.put(rootCountry, longestConqueredPathFromRoot);
 	}
-	
-	
+
+
 	/**
 	 * Small helper method to recursively traverse all countries owned by player
 	 * and build a steady path starting from the root country passed in.
-	 * 
+	 *
 	 *
 	 * @param longestConqueredPathFromRoot to be drawn based on adjacency and country ownership
 	 * @param rootCountry country to serve as root of search
 	 */
-	
-	
+
+
 	public void traverseNeighbouringCountries(ArrayList<String> longestConqueredPathFromRoot, String rootCountry) {
-		
+
 		HashSet<String> adjacentCountries = new HashSet<String>();
 		adjacentCountries = this.gameData.gameMap.getAdjacentCountries(rootCountry);
 		for (String adjacentCountry : adjacentCountries) {
 			// ensure adjacent country also owned by same player - otherwise no path to/through it
-			if (this.gameData.gameMap.getCountry(adjacentCountry).getCountryConquerorID() == currentPlayerID 
-					&& ! longestConqueredPathFromRoot.contains(adjacentCountry)) 
+			if (this.gameData.gameMap.getCountry(adjacentCountry).getCountryConquerorID() == currentPlayerID
+					&& ! longestConqueredPathFromRoot.contains(adjacentCountry))
 			{
 				longestConqueredPathFromRoot.add(adjacentCountry);
 				traverseNeighbouringCountries(longestConqueredPathFromRoot, adjacentCountry);
 			}
 		}
 	}
-	
+
 
 	/**
 	 * Helper method to test if a given strin can be converted to a int.
-	 * 
+	 *
 	 * @param stringInput determines if the string typed by user is an integer
 	 * @return the evaluation of true if it is an integer or false otherwise
 	 */
@@ -509,3 +520,4 @@ public class Turn implements ReinforcementPhase, FortificationPhase {
 	}
 
 }
+
