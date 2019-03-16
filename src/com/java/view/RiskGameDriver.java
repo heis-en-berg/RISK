@@ -1,6 +1,5 @@
 package com.java.view;
 
-import com.java.controller.gameplay.Turn;
 import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
@@ -227,8 +226,6 @@ public class RiskGameDriver {
 	 * There will be another round if the number of players is greater than one.
 	 */
 	private void startTurn() {
-
-		Turn turn;
 		ArrayList<Player> playerList = this.gameData.getPlayers();
 		Player currentPlayer; // first player that will start the game
 
