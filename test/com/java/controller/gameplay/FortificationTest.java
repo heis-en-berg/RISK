@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 public class FortificationTest {
 
     private static GameData gameData;
-    private static Turn turn;
     private static Player playerOne,playerTwo;
     private static ArrayList<Player> players;
 
@@ -75,6 +74,9 @@ public class FortificationTest {
         gameData.gameMap.getCountry("C4").addArmy(1);
         gameData.gameMap.getCountry("C5").addArmy(7);
         gameData.gameMap.getCountry("C6").addArmy(9);
+        
+        playerOne.setGameData(gameData);
+        playerTwo.setGameData(gameData);
     }
 
     
@@ -86,8 +88,7 @@ public class FortificationTest {
         
         // Player owns all countries except C5 & C6
         // Player can fortify FROM C2, C3 only (as C1 and C4 only have 1 army on the ground)
-        turn = new Turn(playerOne,gameData);
-        HashMap<String, ArrayList<String>> actual_paths = turn.getPotentialFortificationScenarios();
+        HashMap<String, ArrayList<String>> actual_paths = playerOne.getPotentialFortificationScenarios();
         HashMap<String, ArrayList<String>> expected_paths = new HashMap<String, ArrayList<String>>();
         
 		for (String keySourceCountry : actual_paths.keySet()) {

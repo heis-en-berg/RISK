@@ -23,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 public class ReinforcementTest {
 
     private static GameData gameData;
-    private static Turn turn, turn2;
     private static Player playerOne,playerTwo;
     private static ArrayList<Player> players;
 
@@ -67,6 +66,9 @@ public class ReinforcementTest {
         gameData.gameMap.getCountry("C4").addArmy(1);
         gameData.gameMap.getCountry("C5").addArmy(5);
         gameData.gameMap.getCountry("C6").addArmy(6);
+        
+        playerOne.setGameData(gameData);
+        playerTwo.setGameData(gameData);
     }
 
     /**
@@ -75,8 +77,7 @@ public class ReinforcementTest {
     @Test
     public void testCalculateReinforcementArmyNoConqueredContinent() {
 
-        turn = new Turn(playerTwo, gameData);
-        int actual_value = turn.calculateReinforcementArmy();
+        int actual_value = playerTwo.calculateReinforcementArmy();
         int expected_value = 3;
         assertEquals(expected_value, actual_value);
     }
@@ -87,8 +88,7 @@ public class ReinforcementTest {
     @Test
     public void testCalculateReinforcementArmyWithConqueredContinent() {
 
-        turn2 = new Turn(playerOne,gameData);
-        int actual_value = turn2.calculateReinforcementArmy();
+        int actual_value = playerOne.calculateReinforcementArmy();
         int expected_value = 14;
         assertEquals(expected_value,actual_value);
     }

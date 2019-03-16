@@ -47,7 +47,7 @@ public class Player {
 
 	}
 
-	//-------------------TODO 1:  reinforcment actions: Starts here--------------------------------------
+	//------------------- reinforcment actions: Starts here--------------------------------------
 	public void startReinforcement() {
 
 		ArrayList<Card> playerExchangeCards;
@@ -55,7 +55,7 @@ public class Player {
 		Integer totalReinforcementArmyCount = calculateTotalReinforcement(playerExchangeCards);
 		placeArmy(totalReinforcementArmyCount);
 	}
-	//-------------------TODO 1:  reinforcment actions: Ends here--------------------
+	//------------------- reinforcment actions: Ends here--------------------
 
 
 	/**
