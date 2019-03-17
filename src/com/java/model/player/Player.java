@@ -30,6 +30,10 @@ public class Player {
 
 	private Scanner input;
 	private GameData gameData;
+	
+	public ArrayList<AttackPhaseState> attackPhaseState;
+	public ArrayList<ReinforcementPhaseState> reinforcementPhaseState;
+	public ArrayList<FortificationPhaseState> fortificationPhaseState;
 
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
@@ -44,7 +48,9 @@ public class Player {
 		this.playerID = playerID;
 		this.playerName = playerName;
 		this.cardList = new ArrayList<Card>();
-
+		attackPhaseState = new ArrayList<>();
+		reinforcementPhaseState = new ArrayList<>();
+		fortificationPhaseState = new ArrayList<>();
 	}
 
 	//------------------- reinforcment actions: Starts here--------------------------------------
