@@ -3,6 +3,8 @@ package com.java.model.player;
 import java.util.ArrayList;
 
 public class AttackPhaseState {
+	public String attackingPlayer = null;
+	public String defendingPlayer = null;
 	public String attackingCountry = null;
 	public String defendingCountry = null;
 	public Integer attackerDiceCount = null;
