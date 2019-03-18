@@ -70,9 +70,10 @@ public class Player {
 	public void startTurn() {
 		input = new Scanner(System.in);
 		startReinforcement();
-		// startAttack(); For build 2.
+		startAttack(); 
 		fortify();
 	}
+	
 
 	private ArrayList<Card> getValidCards(){
 		ArrayList<Card> playerCardList = getPlayerCardList();
@@ -320,6 +321,104 @@ public class Player {
 	}
 	
 	/**
+	 * The startAttack() method encompasses the attack phase logic and flow.
+	 */
+	
+	// TO-DO in next refactor round: create an "endAttack" method which displays the appropriate messages and handles notifications
+	public void startAttack() {
+		
+		System.out.println();
+		System.out.println("**** Attack Phase Begins for player "+ this.playerName +"..****\n");	
+		
+		// First get confirmation from the player that attack is desired.
+
+		boolean wantToAttack = false;
+		String playerDecision = "no";
+		System.out.println("Would you like to attack? (YES/NO)");
+		if (input.hasNextLine()) {
+			playerDecision = input.nextLine();
+		}
+
+		switch (playerDecision.toLowerCase()) {
+			case "yes":
+				wantToAttack = true;
+				break;
+			case "yeah":
+				wantToAttack = true;
+				break;
+			case "y":
+				wantToAttack = true;
+				break;
+			case "sure":
+				wantToAttack = true;
+				break;
+		}
+
+		if (!wantToAttack) {
+			System.out.println(this.playerName + "is peaceful and does not wish to attack anyone. Ending attack phase..");
+			System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
+			return;
+		} else {
+			System.out.println("\n" + "Fetching potential attack scenarios for " + this.playerName + "...\n");
+		}
+		
+		// Now fetch all possibilities for player 
+		HashMap<String,ArrayList<String>> attackScenarios = getPotentialAttackScenarios();
+		
+		if (attackScenarios == null) {
+			System.out.println("There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
+			System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
+			return;
+		}
+
+		if (attackScenarios.isEmpty()) {
+			System.out.println("There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
+			System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
+			return;
+		}
+		
+		// Print all the options out for the player to see and choose from
+		for (String keySourceCountry : attackScenarios.keySet()) {
+			int maxAttackArmyCount = this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount() - 1 ;
+			for (String correspondingDestinationCountry : attackScenarios.get(keySourceCountry)) {
+				int deffenderArmyCount = this.gameData.gameMap.getCountry(correspondingDestinationCountry).getCountryArmyCount();
+				System.out.println("\n" + keySourceCountry + "\t -> \t" + correspondingDestinationCountry
+						+ "\t **defended by " + deffenderArmyCount  + " armies**"
+						+ "\t (attack with up to " + maxAttackArmyCount + " armies)");
+			}
+		}
+
+	}
+	
+	public HashMap<String,ArrayList<String>> getPotentialAttackScenarios() {
+
+		HashMap<String,ArrayList<String>> allAttackScenarios = new HashMap<String,ArrayList<String>>();
+
+		// no need to recursively loop through the neighbors of the countries conquered by the player
+		// we merely require the immediate neighbors
+		HashSet<String> poolOfPotentialSourceCountries = new HashSet<String>();
+		poolOfPotentialSourceCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
+
+		for (String potentialSourceCountry : poolOfPotentialSourceCountries) {
+			// eliminate countries with only a single army count
+			if (this.gameData.gameMap.getCountry(potentialSourceCountry).getCountryArmyCount() < 2) {
+				continue;
+			}
+			HashSet<String> adjacentCountries = new HashSet<String>();
+			adjacentCountries = this.gameData.gameMap.getAdjacentCountries(potentialSourceCountry);
+			for (String adjacentCountry : adjacentCountries) {
+				// ensure adjacent country not owned by same player 
+				if (this.gameData.gameMap.getCountry(adjacentCountry).getCountryConquerorID() != playerID){
+					allAttackScenarios.putIfAbsent(potentialSourceCountry, new ArrayList<String>());
+					allAttackScenarios.get(potentialSourceCountry).add(adjacentCountry);		
+				}
+			}
+		}
+		return allAttackScenarios;
+	}
+	
+	
+	/**
 	 * Method to guide the player through various fortification options when applicable.
 	 */
 	public void fortify() {
@@ -338,6 +437,15 @@ public class Player {
 
 		switch (playerDecision.toLowerCase()) {
 		case "yes":
+			doFortify = true;
+			break;
+		case "yeah":
+			doFortify = true;
+			break;
+		case "y":
+			doFortify = true;
+			break;
+		case "sure":
 			doFortify = true;
 			break;
 		}
