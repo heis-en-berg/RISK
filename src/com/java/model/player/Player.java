@@ -1,6 +1,7 @@
 package com.java.model.player;
 
 
+import com.java.model.Observable;
 import com.java.model.cards.Card;
 import com.java.model.gamedata.GameData;
 
@@ -20,7 +21,7 @@ import java.util.Scanner;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  * */
-public class Player {
+public class Player extends Observable {
 
 	private Integer playerID;
 	private String playerName;
@@ -31,9 +32,9 @@ public class Player {
 	private Scanner input;
 	private GameData gameData;
 	
-	public ArrayList<AttackPhaseState> attackPhaseState;
-	public ArrayList<ReinforcementPhaseState> reinforcementPhaseState;
-	public ArrayList<FortificationPhaseState> fortificationPhaseState;
+	private ArrayList<AttackPhaseState> attackPhaseState;
+	private ArrayList<ReinforcementPhaseState> reinforcementPhaseState;
+	private ArrayList<FortificationPhaseState> fortificationPhaseState;
 
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
@@ -702,5 +703,19 @@ public class Player {
 		}
 		return false;
 	}
+
+
+	public ArrayList<AttackPhaseState> getAttackPhaseState() {
+		return attackPhaseState;
+	}
+
+	public ArrayList<ReinforcementPhaseState> getReinforcementPhaseState() {
+		return reinforcementPhaseState;
+	}
+
+	public ArrayList<FortificationPhaseState> getFortificationPhaseState() {
+		return fortificationPhaseState;
+	}
+
 
 }
