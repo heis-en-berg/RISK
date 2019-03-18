@@ -1,13 +1,29 @@
 package com.java.model.player;
 
+/**
+ * This class models the state of Reinforcement phase to be presented in phase View.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez 
+ * @version 1.0.0
+ * */
 public class ReinforcementPhaseState {
 	private String toCountry = null;
 	private Integer numberOfArmiesPlaced = 0;
 	private Integer numberOfArmiesRecived = 0;
-
+	
+	/**
+	 * Default constructor to instance ReinforcementPhaseState.
+	 * */
 	public ReinforcementPhaseState() {
 	}
 
+	/**
+	 * Gets the name of country 
+	 * */
 	public String getToCountry() {
 		return toCountry;
 	}
