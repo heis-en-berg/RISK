@@ -15,20 +15,24 @@ import java.util.ArrayList;
 public class AttackPhaseState {
 	private String attackingPlayer = null;
 	private String defendingPlayer = null;
+
 	private String attackingCountry = null;
 	private String defendingCountry = null;
-	private Integer attackerDiceCount = null;
-	private Integer defenderDiceCount = null;
+
+	private Integer attackerDiceCount = 0;
+	private Integer defenderDiceCount = 0;
 	private ArrayList<Integer> attackerDiceRollResults = null;
 	private ArrayList<Integer> defenderDiceRollResults = null;
-	private Integer attackerLostArmyCount = null;
-	private Integer defenderLostArmyCount = null;
-	private Boolean battleOutcomeFlag = null; // true if attacker conquers the territory else false;
+
+	private Integer attackerLostArmyCount = 0;
+	private Integer defenderLostArmyCount = 0;
+	private Boolean battleOutcomeFlag = false; // true if attacker conquers the territory else false;
 	
 	/**
 	 * Default constructor to instance AttackPhaseState.
 	 * */
 	public AttackPhaseState() {
+
 	}
 	
 	/**
