@@ -62,6 +62,20 @@ public class GameData {
 	public void setPlayers(ArrayList<Player> players) {
 		this.players = players;
 	}
+	
+	/**
+	 * Getter player.
+	 *
+	 * @return player.
+	 * */
+	public Player getPlayer(Integer playerId) {
+		for(Player player : this.players) {
+			if(player.getPlayerID().equals(playerId)) {
+				return player;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Remove one player of the main collection of players.
