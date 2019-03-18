@@ -13,7 +13,7 @@ package com.java.model.player;
 public class ReinforcementPhaseState {
 	private String toCountry = null;
 	private Integer numberOfArmiesPlaced = 0;
-	private Integer numberOfArmiesRecived = 0;
+	private Integer numberOfArmiesReceived = 0;
 	
 	/**
 	 * Default constructor to instance ReinforcementPhaseState.
@@ -40,12 +40,12 @@ public class ReinforcementPhaseState {
 		this.numberOfArmiesPlaced = numberOfArmiesPlaced;
 	}
 
-	public Integer getNumberOfArmiesRecived() {
-		return numberOfArmiesRecived;
+	public Integer getNumberOfArmiesReceived() {
+		return numberOfArmiesReceived;
 	}
 
-	public void setNumberOfArmiesRecived(Integer numberOfArmiesRecived) {
-		this.numberOfArmiesRecived = numberOfArmiesRecived;
+	public void setNumberOfArmiesReceived(Integer numberOfArmiesReceived) {
+		this.numberOfArmiesReceived = numberOfArmiesReceived;
 	}
 
 
