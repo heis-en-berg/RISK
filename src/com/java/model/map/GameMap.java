@@ -54,15 +54,11 @@ public class GameMap implements Cloneable{
 	 * Map author property from game map file
 	 * */
 	private String mapAuthor;
-
+	
 	/**
 	 * Warn property from game map file
 	 * */
 	public String warn;
-	/**
-	 * keep count of the army
-	 * */
-	private Integer armyCount =0;
 
 	/**
 	 * Creates a default map by created instances of every map.
@@ -503,48 +499,5 @@ public class GameMap implements Cloneable{
 	public HashMap<Integer, HashSet<String>> getConqueredContinentsPerPlayer() {
 		return conqueredContinentsPerPlayer;
 	}
-
-	/**
-	 * Gets the new value of army after adding new army.
-	 *
-	 * @param armyCount the army count.
-	 * @return the new value of army after adding army.
-	 * */
-	public Integer addArmy(Integer armyCount) {
-		this.armyCount += armyCount;
-		return this.armyCount;
-	}
-
-	/**
-	 * Gets the new value of army after subtracting new army.
-	 *
-	 * @param armyCount the army count.
-	 * @return the new value of army after subtracting army.
-	 * */
-	public Integer deductArmy(Integer armyCount) {
-		if(this.armyCount >= armyCount) {
-			this.armyCount -= armyCount;
-		}
-		return this.armyCount;
-	}
-
-	/**
-	 * Getter the number of countries placed on the country.
-	 *
-	 * @return the number of armies placed on the country.
-	 * */
-	public Integer getCountryArmyCount() {
-		return this.armyCount;
-	}
-
-	/**
-	 * Set the amount of army.
-	 *
-	 * @param armyCount the amount of army.
-	 * */
-	public void setArmyCount(Integer armyCount) {
-		this.armyCount = armyCount;
-	}
-
 
 }
