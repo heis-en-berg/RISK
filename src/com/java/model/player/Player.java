@@ -60,6 +60,10 @@ public class Player extends Observable {
 		ArrayList<Card> playerExchangeCards;
 		playerExchangeCards = getValidCards();
 		Integer totalReinforcementArmyCount = calculateTotalReinforcement(playerExchangeCards);
+		ReinforcementPhaseState reinforcementPhase = new ReinforcementPhaseState();
+		reinforcementPhase.setNumberOfArmiesReceived(totalReinforcementArmyCount);
+		reinforcementPhaseState.add(reinforcementPhase);
+		notifyView();
 		placeArmy(totalReinforcementArmyCount);
 	}
 	//------------------- reinforcment actions: Ends here--------------------
@@ -161,7 +165,7 @@ public class Player extends Observable {
 
 			System.out.println("\nEnter the country name to place armies: ");
 			String countryNameByUser = input.nextLine();
-
+			
 
 			/* Check for an invalid country name. */
 			if (this.gameData.gameMap.getCountry(countryNameByUser) == null) {
@@ -169,7 +173,7 @@ public class Player extends Observable {
 						+ "' is an invalid country name. Please verify the country name from the list.\n\n");
 				continue;
 			}
-
+			
 			/*
 			 * Check for a valid country name, but the country belonging to a different
 			 * player.
@@ -204,6 +208,12 @@ public class Player extends Observable {
 
 				this.gameData.gameMap.getCountry(countryNameByUser).addArmy(numberOfArmiesToBePlacedByUser);
 				reinforcementArmy -= numberOfArmiesToBePlacedByUser;
+				
+				ReinforcementPhaseState reinforcementPhase = new ReinforcementPhaseState();
+				reinforcementPhase.setToCountry(countryNameByUser);
+				reinforcementPhase.setNumberOfArmiesPlaced(numberOfArmiesToBePlacedByUser);
+				reinforcementPhaseState.add(reinforcementPhase);
+				notifyView();
 
 			} catch (NumberFormatException ex) {
 				System.out.println(ex.getMessage() + ", please enter numeric values only!\n\n");

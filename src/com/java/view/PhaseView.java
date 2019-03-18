@@ -16,13 +16,18 @@ public class PhaseView implements GameView {
     private FileWriter editView;
 
     public PhaseView(){
-        phaseFile = new File("./src/com/java/view/PhaseView.txt");
+       // phaseFile = new File("./src/com/java/view/PhaseView.txt");
+    	phaseFile = new File("./PhaseView.txt");
 
         if(phaseFile.exists()){
             phaseFile.delete();
         }
-
-        try{
+        
+        setUpFile();
+    }
+    
+    private void setUpFile() {
+    	try{
             phaseFile.createNewFile();
             editView = new FileWriter(phaseFile);
             editView.write(""); // to clear the view
@@ -36,8 +41,10 @@ public class PhaseView implements GameView {
 
     @Override
     public void update(Observable observable) {
-        if(observable instanceof Player){
 
+        
+        if(observable instanceof Player){
+            
             ArrayList<ReinforcementPhaseState> reinforcementList = ((Player) observable).getReinforcementPhaseState();
             ArrayList<AttackPhaseState> attackList = ((Player) observable).getAttackPhaseState();
             ArrayList<FortificationPhaseState> fortificationList = ((Player) observable).getFortificationPhaseState();
@@ -46,22 +53,34 @@ public class PhaseView implements GameView {
             if(!reinforcementList.isEmpty()) {
 
                 try {
-                    editView.write(""); // to clear the view
-
-                    editView.write("Current Phase: Reinforcement Phase");
+                	setUpFile();
+                    editView.write("\nCurrent Phase: Reinforcement Phase");
                     editView.write("\nCurrent Player: " + ((Player) observable).getPlayerName());
                     editView.write("\nActions:" );
 
                     editView.flush();
-
                     // iterate over reinforcementPhase and write to the file results
                     for (ReinforcementPhaseState eachReinforcement : reinforcementList) {
-                        editView.write("\n  To Country: " + eachReinforcement.getToCountry());
-                        editView.write("\n  Number of Armies Placed: " + eachReinforcement.getNumberOfArmiesPlaced());
-                        editView.write("\n  Number of Armies Received: " + eachReinforcement.getNumberOfArmiesReceived());
-
-                        editView.flush();
+                    	Integer numberOfArmies = eachReinforcement.getNumberOfArmiesReceived();
+                    	if(numberOfArmies > 0) {
+                    		editView.write("\n  Number of Armies Received: " + numberOfArmies);
+                            editView.flush();
+                    	}
                     }
+                    
+                    for (ReinforcementPhaseState eachReinforcement : reinforcementList) {
+                    	
+                    	String country = eachReinforcement.getToCountry();
+                    	Integer numberOfArmiesPlaced = eachReinforcement.getNumberOfArmiesPlaced();
+                    	
+                    	if(country != null) {
+                    		editView.write("\n  ***********");
+                            editView.write("\n  To Country: " + country);
+                            editView.write("\n  Number of Armies Placed: " + numberOfArmiesPlaced );
+                            editView.flush();
+                    	}
+                    }
+                    editView.close();
 
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -19,7 +19,7 @@ public class FortificationPhaseState {
 	private Integer numberOfArmiesLeft = 0;
 	
 	/**
-	 * Default constructor to instance AttackPhaseState.
+	 * Default constructor to instance FortificationPhaseState.
 	 * */
 	public FortificationPhaseState() {
 	}
