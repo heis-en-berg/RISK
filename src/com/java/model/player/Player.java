@@ -650,9 +650,7 @@ public class Player {
 	public Integer getOrderOfPlay() {
 		return orderOfPlay;
 	}
-
-
-
+	
 	/**
 	 * Setter of the order of play.
 	 * 
