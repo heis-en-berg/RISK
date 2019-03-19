@@ -7,12 +7,7 @@ import com.java.model.Observable;
 import com.java.model.cards.Card;
 import com.java.model.gamedata.GameData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * This class models the player, it holds the id, the name, and the order to play
@@ -88,12 +83,12 @@ public class Player extends Observable {
 	private ArrayList<Card> getValidCards(){
 		ArrayList<Card> playerCardList = getPlayerCardList();
 		ArrayList<Card> playerExchangeCards = new ArrayList<>();
-		boolean can_exchange = false;
+		ArrayList<Card> cumulatedPlayerExchangeCards = new ArrayList<>();
 
-		for (int i = 0; i < 5; i++) {
-			Card card = gameData.cardsDeck.getCard();
-			addToPlayerCardList(card);
-		}
+//		for (int i = 0; i < 10; i++) {
+//			Card card = gameData.cardsDeck.getCard();
+//			addToPlayerCardList(card);
+//		}
 
 		System.out.println("*** Cards in hand ***");
 		this.showCards();
@@ -106,12 +101,12 @@ public class Player extends Observable {
 			userInput = input.nextLine();
 		}
 
-		if ((userInput.equals("yes")) || (userInput.equals("no") && playerCardList.size() > 4)) {
+		while ((userInput.equals("yes")) || (userInput.equals("no") && playerCardList.size() > 4)) {
 			if(userInput.equals("no") && (playerCardList.size() > 4)){
-				System.out.println("You must exchange cards. You have 5 cards in your hand.");
+				System.out.println("You must exchange cards. You have more than 4 cards in your hand.");
 			}
+			boolean can_exchange = false;
 			this.showCards();
-			int count = 0;
 			Integer cardNumber;
 
 			while(!can_exchange) {
@@ -125,11 +120,23 @@ public class Player extends Observable {
 					}
 					playerExchangeCards.add(playerCardList.get(cardNumber));
 				}
-
 				can_exchange = isValidExchange(playerExchangeCards);
 			}
+			for (Card card:playerExchangeCards){
+				cumulatedPlayerExchangeCards.add(card);
+				playerCardList.remove(card);
+			}
+			System.out.println("*** Cards in hand ***");
+			this.showCards();
+
+			System.out.println("Do you wish to exchange cards ? (yes/no)");
+			userInput = input.nextLine();
+			while (!((userInput.toLowerCase().equals("yes")) || (userInput.toLowerCase().equals("no")))) {
+				System.out.println("Please input either yes or no.");
+				userInput = input.nextLine();
+			}
 		}
-		return playerExchangeCards;
+		return cumulatedPlayerExchangeCards;
 	}
 
 	/**
@@ -295,21 +302,29 @@ public class Player extends Observable {
 		return totalReinforcementArmyCount;
 	}
 
-	private int reinforcementArmyCountFromCards(ArrayList<Card> playerExchangeCards){
-
+	private int reinforcementArmyCountFromCards(ArrayList<Card> cumulatedPlayerExchangeCards){
+		ArrayList<Card> playerExchangeCards;
 		int countReinforcementFromCardExchange = 0;
-
-		boolean can_exchange = isValidExchange(playerExchangeCards);
-		boolean extraTerritoryMatchArmy = isExtraTerritoryMatchArmy(playerExchangeCards);
-
-		if(can_exchange == true){
-			if(extraTerritoryMatchArmy == true){
-				countReinforcementFromCardExchange += 2;
+		while(!(cumulatedPlayerExchangeCards.isEmpty())) {
+			playerExchangeCards = new ArrayList<>();
+			for(int i=0;i<3;i++){
+				playerExchangeCards.add(cumulatedPlayerExchangeCards.get(0));
+				cumulatedPlayerExchangeCards.remove(0);
 			}
-			countReinforcementFromCardExchange += Player.getCardExchangeArmyCount();
-			Player.setCardExchangeArmyCount();
-		}
+			boolean can_exchange = isValidExchange(playerExchangeCards);
+			boolean extraTerritoryMatchArmy = isExtraTerritoryMatchArmy(playerExchangeCards);
 
+			if (can_exchange == true) {
+				if (extraTerritoryMatchArmy == true) {
+					countReinforcementFromCardExchange += 2;
+				}
+				countReinforcementFromCardExchange += Player.getCardExchangeArmyCount();
+				Player.setCardExchangeArmyCount();
+			}
+			for (Card card : playerExchangeCards) {
+				removeFromPlayerCardList(card);
+			}
+		}
 		return countReinforcementFromCardExchange;
 	}
 
@@ -862,6 +877,9 @@ public class Player extends Observable {
 		this.cardList.add(card);
 	}
 
+	public void removeFromPlayerCardList(Card card){
+		this.cardList.remove(card);
+	}
 
 	// acts as previous turn constructor to allow acess to the gamedata's data
 	public void setGameData(GameData gamedata){
