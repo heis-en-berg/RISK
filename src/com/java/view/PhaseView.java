@@ -51,7 +51,6 @@ public class PhaseView implements GameView {
 
             // reinforcement PHase view
             if(!reinforcementList.isEmpty()) {
-
                 try {
                 	setUpFile();
                     editView.write("\nCurrent Phase: Reinforcement Phase");
@@ -85,11 +84,38 @@ public class PhaseView implements GameView {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else if (!fortificationList.isEmpty()) {
+            	 try {
+            		 setUpFile();
+                     editView.write("\nCurrent Phase: Fortification Phase");
+                     editView.write("\nCurrent Player: " + ((Player) observable).getPlayerName());
+                     editView.write("\nActions:" );
+
+                     editView.flush();
+                     
+                     // iterate over FortificationPhase and write to the file results
+                     for (FortificationPhaseState eachFortification : fortificationList) {
+                    	 
+                    	 String fromCountry = eachFortification.getFromCountry();
+                    	 String toCountry = eachFortification.getToCountry();
+                    	 Integer numberOfArmiesMoved = eachFortification.getNumberOfArmiesMoved();
+                    	 
+                    	 if(fromCountry != null || toCountry != null) {
+                    		 editView.write("\n  ***********");
+                             editView.write("\n  From Country: " + fromCountry);
+                             editView.write("\n  To Country: " + toCountry);
+                             editView.write("\n  Number of armies moved: " + numberOfArmiesMoved);
+                             editView.flush();
+                    	 }
+                     }
+                     
+                     editView.close();
+
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+            	
             }
-
-
         }
-
-
     }
 }

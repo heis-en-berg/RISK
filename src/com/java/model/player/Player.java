@@ -226,6 +226,7 @@ public class Player extends Observable {
 			System.out.println("Country owned by you: " + countries + " ,Army Count: "
 					+ this.gameData.gameMap.getCountry(countries).getCountryArmyCount());
 		}
+		reinforcementPhaseState.clear();
 		System.out.println("\n**** Reinforcement Phase Ends for player "+ this.playerName +"..****\n");
 	}
 	private void showCards(){
@@ -435,7 +436,11 @@ public class Player extends Observable {
 	public void fortify() {
 
 		System.out.println();
-		System.out.println("**** Fortification Phase Begins for player "+ this.playerName +"..****\n");		
+		System.out.println("**** Fortification Phase Begins for player "+ this.playerName +"..****\n");
+		
+		FortificationPhaseState  fortificationPhase = new FortificationPhaseState();
+		fortificationPhaseState.add(fortificationPhase);
+		notifyView();
 
 		// First get confirmation from the player that fortification is desired.
 
@@ -545,7 +550,17 @@ public class Player extends Observable {
 				+ this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
 		System.out.println("Army count for " + toCountry + " is now: "
 				+ this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
-
+		
+		fortificationPhase = new FortificationPhaseState();
+		fortificationPhase.setFromCountry(fromCountry);
+		fortificationPhase.setToCountry(toCountry);
+		fortificationPhase.setNumberOfArmiesMoved(Integer.parseInt(noOfArmiesToMove));
+		
+		fortificationPhaseState.add(fortificationPhase);
+		notifyView();
+		
+		fortificationPhaseState.clear();
+		
 		System.out.println("\n****Fortification Phase Ends for player "+ this.playerName +"..****\n");
 	}
 	

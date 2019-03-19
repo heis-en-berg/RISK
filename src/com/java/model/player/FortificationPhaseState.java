@@ -16,7 +16,6 @@ public class FortificationPhaseState {
 	private String fromCountry = null;
 	private String toCountry = null;
 	private Integer numberOfArmiesMoved = 0;
-	private Integer numberOfArmiesLeft = 0;
 	
 	/**
 	 * Default constructor to instance FortificationPhaseState.
@@ -76,23 +75,5 @@ public class FortificationPhaseState {
 	 * */
 	public void setNumberOfArmiesMoved(Integer numberOfArmiesMoved) {
 		this.numberOfArmiesMoved = numberOfArmiesMoved;
-	}
-	
-	/**
-	 * Gets the number of armies left to be moved.
-	 * 
-	 * @return the number of armies left to be moved.
-	 * */
-	public Integer getNumberOfArmiesLeft() {
-		return numberOfArmiesLeft;
-	}
-	
-	/**
-	 * Sets the number of armies left to be moved.
-	 * 
-	 * @param numberOfArmiesLeft the number of armies left to be moved.
-	 * */
-	public void setNumberOfArmiesLeft(Integer numberOfArmiesLeft) {
-		this.numberOfArmiesLeft = numberOfArmiesLeft;
 	}
 }
