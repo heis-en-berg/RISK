@@ -546,7 +546,7 @@ public class Player extends Observable {
 			}
 			Arrays.sort(defenderDiceRolls);
 			
-			for (int d=0; d < Integer.parseInt(selectedDefenderDiceCount) ; d++) {
+			for (int d = Integer.parseInt(selectedDefenderDiceCount) - 1; d >= 0 ; d--) {
 				if(defenderDiceRolls[d] >= attackerDiceRolls[d]) {
 					System.out.println("\n Attacker loses 1 army count\n");
 					this.gameData.gameMap.getCountry(selectedSourceCountry).deductArmy(1);
