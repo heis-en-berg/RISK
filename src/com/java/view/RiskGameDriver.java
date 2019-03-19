@@ -51,11 +51,18 @@ public class RiskGameDriver {
 		// Call the helpers here
 		initiateStartUpPhase();
 		initiateRoundRobin();
+		registerObservers();
 		ramdomAssignationOfCountries();
 		initialArmyPlacement();
 		startTurn();
 	}
-
+	
+	private void registerObservers() {
+		PhaseView phaseView = new PhaseView();
+		for(Player currentPlayer : gameData.getPlayers()) {
+			currentPlayer.addObserver(phaseView);
+		}
+	}
 	/**
      * The Start up phase intiates in this method by calling the helpers from StartUp phase. This method asks
      * for the names of the players and the number of players.

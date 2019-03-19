@@ -1,7 +1,9 @@
 package com.java.model.player;
 
 
+
 import com.java.controller.dice.Dice;
+import com.java.model.Observable;
 import com.java.model.cards.Card;
 import com.java.model.gamedata.GameData;
 
@@ -23,7 +25,7 @@ import java.util.Scanner;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  * */
-public class Player {
+public class Player extends Observable {
 
 	private Integer playerID;
 	private String playerName;
@@ -35,9 +37,9 @@ public class Player {
 	private GameData gameData;
 	private Dice playerDice = new Dice();
 	
-	public ArrayList<AttackPhaseState> attackPhaseState;
-	public ArrayList<ReinforcementPhaseState> reinforcementPhaseState;
-	public ArrayList<FortificationPhaseState> fortificationPhaseState;
+	private ArrayList<AttackPhaseState> attackPhaseState;
+	private ArrayList<ReinforcementPhaseState> reinforcementPhaseState;
+	private ArrayList<FortificationPhaseState> fortificationPhaseState;
 
 	private static final int MINIMUM_REINFORCEMENT_ARMY_NUMBER = 3;
 	private static final int REINFORCEMENT_DIVISION_FACTOR = 3;
@@ -63,6 +65,10 @@ public class Player {
 		ArrayList<Card> playerExchangeCards;
 		playerExchangeCards = getValidCards();
 		Integer totalReinforcementArmyCount = calculateTotalReinforcement(playerExchangeCards);
+		ReinforcementPhaseState reinforcementPhase = new ReinforcementPhaseState();
+		reinforcementPhase.setNumberOfArmiesReceived(totalReinforcementArmyCount);
+		reinforcementPhaseState.add(reinforcementPhase);
+		notifyView();
 		placeArmy(totalReinforcementArmyCount);
 	}
 	//------------------- reinforcment actions: Ends here--------------------
@@ -164,7 +170,7 @@ public class Player {
 
 			System.out.println("\nEnter the country name to place armies: ");
 			String countryNameByUser = input.nextLine();
-
+			
 
 			/* Check for an invalid country name. */
 			if (this.gameData.gameMap.getCountry(countryNameByUser) == null) {
@@ -172,7 +178,7 @@ public class Player {
 						+ "' is an invalid country name. Please verify the country name from the list.\n\n");
 				continue;
 			}
-
+			
 			/*
 			 * Check for a valid country name, but the country belonging to a different
 			 * player.
@@ -207,6 +213,12 @@ public class Player {
 
 				this.gameData.gameMap.getCountry(countryNameByUser).addArmy(numberOfArmiesToBePlacedByUser);
 				reinforcementArmy -= numberOfArmiesToBePlacedByUser;
+				
+				ReinforcementPhaseState reinforcementPhase = new ReinforcementPhaseState();
+				reinforcementPhase.setToCountry(countryNameByUser);
+				reinforcementPhase.setNumberOfArmiesPlaced(numberOfArmiesToBePlacedByUser);
+				reinforcementPhaseState.add(reinforcementPhase);
+				notifyView();
 
 			} catch (NumberFormatException ex) {
 				System.out.println(ex.getMessage() + ", please enter numeric values only!\n\n");
@@ -219,6 +231,7 @@ public class Player {
 			System.out.println("Country owned by you: " + countries + " ,Army Count: "
 					+ this.gameData.gameMap.getCountry(countries).getCountryArmyCount());
 		}
+		reinforcementPhaseState.clear();
 		System.out.println("\n**** Reinforcement Phase Ends for player "+ this.playerName +"..****\n");
 	}
 	private void showCards(){
@@ -561,7 +574,11 @@ public class Player {
 	public void fortify() {
 
 		System.out.println();
-		System.out.println("**** Fortification Phase Begins for player "+ this.playerName +"..****\n");		
+		System.out.println("**** Fortification Phase Begins for player "+ this.playerName +"..****\n");
+		
+		FortificationPhaseState  fortificationPhase = new FortificationPhaseState();
+		fortificationPhaseState.add(fortificationPhase);
+		notifyView();
 
 		// First get confirmation from the player that fortification is desired.
 
@@ -671,7 +688,17 @@ public class Player {
 				+ this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
 		System.out.println("Army count for " + toCountry + " is now: "
 				+ this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
-
+		
+		fortificationPhase = new FortificationPhaseState();
+		fortificationPhase.setFromCountry(fromCountry);
+		fortificationPhase.setToCountry(toCountry);
+		fortificationPhase.setNumberOfArmiesMoved(Integer.parseInt(noOfArmiesToMove));
+		
+		fortificationPhaseState.add(fortificationPhase);
+		notifyView();
+		
+		fortificationPhaseState.clear();
+		
 		System.out.println("\n****Fortification Phase Ends for player "+ this.playerName +"..****\n");
 	}
 	
@@ -788,9 +815,7 @@ public class Player {
 	public Integer getOrderOfPlay() {
 		return orderOfPlay;
 	}
-
-
-
+	
 	/**
 	 * Setter of the order of play.
 	 * 
@@ -840,5 +865,19 @@ public class Player {
 		}
 		return false;
 	}
+
+
+	public ArrayList<AttackPhaseState> getAttackPhaseState() {
+		return attackPhaseState;
+	}
+
+	public ArrayList<ReinforcementPhaseState> getReinforcementPhaseState() {
+		return reinforcementPhaseState;
+	}
+
+	public ArrayList<FortificationPhaseState> getFortificationPhaseState() {
+		return fortificationPhaseState;
+	}
+
 
 }
