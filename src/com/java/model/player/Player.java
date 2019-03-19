@@ -517,7 +517,8 @@ public class Player extends Observable {
 								+ gameData.getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()).getPlayerName()  
 								+ " YOU ARE UNDER ATTACK!");
 			
-			if(maxDefenseArmyCountPossiblePerDestCountry.get(selectedDestinationCountry) >= 2) {	
+			if(maxDefenseArmyCountPossiblePerDestCountry.get(selectedDestinationCountry) >= 2) {
+				maxAllowedDefenderDiceCount = maxDefenseArmyCountPossiblePerDestCountry.get(selectedDestinationCountry);
 				do {
 					System.out.println("How many dice would you like to roll to defend " + selectedDestinationCountry 
 							+ "\t (up to " + maxAllowedDefenderDiceCount + " dice)\n");
