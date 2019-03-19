@@ -1,7 +1,6 @@
 package com.java.model.player;
 
 
-
 import com.java.controller.dice.Dice;
 import com.java.model.Observable;
 import com.java.model.cards.Card;
@@ -85,17 +84,21 @@ public class Player extends Observable {
 		ArrayList<Card> playerExchangeCards = new ArrayList<>();
 		ArrayList<Card> cumulatedPlayerExchangeCards = new ArrayList<>();
 
-//		for (int i = 0; i < 10; i++) {
-//			Card card = gameData.cardsDeck.getCard();
-//			addToPlayerCardList(card);
-//		}
+		for (int i = 0; i < 10; i++) {
+			Card card = gameData.cardsDeck.getCard();
+			addToPlayerCardList(card);
+		}
 
 		System.out.println("*** Cards in hand ***");
 		this.showCards();
-
-		System.out.println("Do you wish to exchange cards ? (yes/no)");
-		String userInput = input.nextLine();
-
+		String userInput = "no";
+		if(playerCardList.size()>2) {
+			System.out.println("Do you wish to exchange cards ? (yes/no)");
+			userInput = input.nextLine();
+		}
+		else{
+			System.out.println(playerName + " does not have sufficient cards to trade.");
+		}
 		while (!((userInput.toLowerCase().equals("yes")) || (userInput.toLowerCase().equals("no")))) {
 			System.out.println("Please input either yes or no.");
 			userInput = input.nextLine();
@@ -135,6 +138,9 @@ public class Player extends Observable {
 				System.out.println("Please input either yes or no.");
 				userInput = input.nextLine();
 			}
+		}
+		if((userInput.equals("no")) && (playerCardList.size()>2) && (cumulatedPlayerExchangeCards.size() == 0)){
+			System.out.println(playerName+" does not wish to exchange cards.");
 		}
 		return cumulatedPlayerExchangeCards;
 	}
