@@ -84,10 +84,10 @@ public class Player extends Observable {
 		ArrayList<Card> playerExchangeCards = new ArrayList<>();
 		ArrayList<Card> cumulatedPlayerExchangeCards = new ArrayList<>();
 
-		for (int i = 0; i < 10; i++) {
-			Card card = gameData.cardsDeck.getCard();
-			addToPlayerCardList(card);
-		}
+//		for (int i = 0; i < 10; i++) {
+//			Card card = gameData.cardsDeck.getCard();
+//			addToPlayerCardList(card);
+//		}
 
 		System.out.println("*** Cards in hand ***");
 		this.showCards();
