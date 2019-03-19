@@ -42,7 +42,6 @@ public class PhaseView implements GameView {
     @Override
     public void update(Observable observable) {
 
-        
         if(observable instanceof Player){
             
             ArrayList<ReinforcementPhaseState> reinforcementList = ((Player) observable).getReinforcementPhaseState();
@@ -84,6 +83,50 @@ public class PhaseView implements GameView {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else if (!attackList.isEmpty()) {
+            	try {
+           		 setUpFile();
+                    editView.write("\nCurrent Phase: Attack Phase");
+                    editView.write("\nCurrent Player: " + ((Player) observable).getPlayerName());
+                    editView.write("\nActions:" );
+
+                    editView.flush();
+                    
+                    // iterate over AttackPhaseState and write to the file results
+                    for (AttackPhaseState eachAttack : attackList) {
+                    	
+                    	String attackingPlayer = ((Player) observable).getPlayerName();
+                    	String defendingPlayer = eachAttack.getDefendingPlayer();
+
+                    	String attackingCountry = eachAttack.getAttackingCountry();
+                    	String defendingCountry = eachAttack.getDefendingCountry();
+
+                    	Integer attackerDiceCount = eachAttack.getAttackerDiceCount();
+                    	Integer defenderDiceCount = eachAttack.getDefenderDiceCount();
+                    	ArrayList<Integer> attackerDiceRollResults = eachAttack.getAttackerDiceRollResults();
+                    	ArrayList<Integer> defenderDiceRollResults = eachAttack.getDefenderDiceRollResults();
+                    	
+                    	if(defendingPlayer != null) {
+                    		
+                    		editView.write("\n  ***********");
+                            editView.write("\n  Attacking player: " + attackingPlayer);
+                            editView.write("\n  Defending player: " + defendingPlayer);
+                            editView.write("\n  Attacking country: " + attackingCountry);
+                            editView.write("\n  Defending country: " + defendingCountry);
+                            editView.write("\n  Attacker dice count: " + attackerDiceCount);
+                            editView.write("\n  Defending dice count: " + defenderDiceCount);
+                            editView.write("\n  Attacker dice roll results: " + attackerDiceRollResults.toString());
+                            editView.write("\n  Defender dice roll results: " + defenderDiceRollResults.toString());
+                            editView.flush();
+                        }
+                    }
+                    
+                    editView.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }	
+            	
             } else if (!fortificationList.isEmpty()) {
             	 try {
             		 setUpFile();
@@ -113,8 +156,7 @@ public class PhaseView implements GameView {
 
                  } catch (IOException e) {
                      e.printStackTrace();
-                 }
-            	
+                 }	
             }
         }
     }
