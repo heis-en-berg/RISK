@@ -559,6 +559,7 @@ public class Player extends Observable {
 					this.gameData.gameMap.getCountry(selectedDestinationCountry).setConquerorID(playerID);
 					this.gameData.gameMap.getCountry(selectedDestinationCountry).setArmyCount(Integer.parseInt(selectedAttackerDiceCount));
 					System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + " !");
+					checkIfPlayerHasConqueredTheWorld();
 					break;
 				}
 			}
@@ -570,6 +571,20 @@ public class Player extends Observable {
 		}
 				
 		System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");		
+	}
+	
+	public void checkIfPlayerHasConqueredTheWorld() {
+		
+		HashSet<String> allConqueredCountries = new HashSet<String>();
+		allConqueredCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
+		
+		if(allConqueredCountries.size() == this.gameData.gameMap.getNumberOfCountries()) {
+			System.out.println("\n" + this.playerName + " HAS CONQUERED THE WORLD !");
+			System.out.println("\n GAME ENDS \n");
+			System.exit(0); 
+		}
+		
+		
 	}
 		
 	
