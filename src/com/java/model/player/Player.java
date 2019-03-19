@@ -480,7 +480,7 @@ public class Player extends Observable {
 					if (input.hasNextLine()) {
 						selectedSourceCountry = input.nextLine();
 						// validate the actual pair
-						if(!attackScenarios.get(selectedSourceCountry).contains(selectedDestinationCountry)) {
+						if(!attackScenarios.containsKey(selectedSourceCountry)) {
 							System.out.println("\n PLEASE ENTER A VALID COUNTRY FROM THE OPTIONS ABOVE!");
 							continue;
 						}
