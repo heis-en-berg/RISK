@@ -1,7 +1,13 @@
 package com.java.model.map;
 
+import com.java.model.Observable;
+import com.java.model.player.Player;
+
+import javax.swing.text.html.parser.Parser;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * This class models the game map
@@ -13,52 +19,23 @@ import java.util.HashSet;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  * */
-public class GameMap implements Cloneable{
-	
-	/**
-	 * Default number of countries from original risk game.
-	 * */
+public class GameMap extends Observable implements Cloneable {
+
 	public static final Integer DEFAULT_NUMBER_OF_COUNTRIES = 42;
-	
-	/**
-	 * Map of country objects.
-	 * */
 	private HashMap<String, Country> countryObjects;
-	
-	/**
-	 * Map of continent objects.
-	 * */
 	private HashMap<String, Continent> continentObjects;
-	
-	/**
-	 * Map of adjacent countries.
-	 * */
+
 	private HashMap<String, HashSet<String>> adjacentCountries;
-	
-	/**
-	 * Map of continent countries.
-	 * */
 	private HashMap<String, HashSet<String>> continentCountries;
-	
-	/**
-	 * Map of conquered countries per player.
-	 * */
+
 	private HashMap<Integer, HashSet<String>> conqueredCountriesPerPlayer;
-	
-	/**
-	 * Map of conquered continents per player.
-	 * */
 	private HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer;
-	
-	/**
-	 * Map author property from game map file
-	 * */
+
 	private String mapAuthor;
-	
-	/**
-	 * Warn property from game map file
-	 * */
-	public String warn;
+	public  String warn;
+
+	private HashMap<String,Integer> ownershipPercentage;
+	public static ArrayList<Player> playersInfo;
 
 	/**
 	 * Creates a default map by created instances of every map.
@@ -312,6 +289,7 @@ public class GameMap implements Cloneable{
 	 * @param playerId the player id.
 	 * */
 	public void setCountryConquerer(String countryName, Integer playerId) {
+
 		if(!this.conqueredCountriesPerPlayer.containsKey(playerId)) {
 			this.conqueredCountriesPerPlayer.put(playerId, new HashSet<>());
 		}
@@ -319,6 +297,9 @@ public class GameMap implements Cloneable{
 
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(playerId);
+
+		this.calculateOwnershipPercentage();
+
 	}
 	
 	/**
@@ -334,6 +315,7 @@ public class GameMap implements Cloneable{
 		this.conqueredContinentsPerPlayer.get(playerId).add(continentName);
 		Continent continent = this.getContinent(continentName);
 		continent.setContinentConquerorID(playerId);
+
 	}
 	
 	/**
@@ -377,6 +359,8 @@ public class GameMap implements Cloneable{
 
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(newConquererPlayerId);
+
+        this.calculateOwnershipPercentage();
 	}
 	
 	/**
@@ -414,7 +398,36 @@ public class GameMap implements Cloneable{
 			System.out.println(continentName + " :: " + getContinentCountries(continentName).toString());
 		}
 	}
-	
+
+    /**
+     *
+     */
+    public void calculateOwnershipPercentage(){
+        ownershipPercentage = new HashMap<String,Integer>();
+
+        Integer totalCountries = getNumberOfCountries();
+        Integer counteriesOwnedPlayer = 0;
+        Integer percentageOFOwnership =0;
+
+        for(Player eachPlayer : playersInfo){
+           HashSet<String> countiresOwned= conqueredCountriesPerPlayer.get(eachPlayer.getPlayerID());
+           counteriesOwnedPlayer = countiresOwned.size();
+
+           // now calculate the % of ownership
+            percentageOFOwnership = (Integer)(counteriesOwnedPlayer/totalCountries)*100;
+
+            //put in map
+            ownershipPercentage.put(eachPlayer.getPlayerID() + " " + eachPlayer.getPlayerName(), percentageOFOwnership);
+        }
+        System.out.println(ownershipPercentage);
+    }
+
+    public void setupPlayerNames(ArrayList<Player> players){
+        playersInfo = new ArrayList<Player>(players); // obtain players
+    }
+
+
+
 	/**
 	 * Getter of Conquered countries per player object
 	 * 

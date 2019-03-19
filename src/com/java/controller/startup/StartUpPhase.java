@@ -5,6 +5,7 @@ import com.java.controller.dice.Dice;
 import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
+import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 
 import java.util.ArrayList;
@@ -115,7 +116,8 @@ public class StartUpPhase {
 			}
 			indexKeeper += numberOfCountriesToBeAssignedToPlayer;
 		}
-		
+
+		gameData.gameMap.setupPlayerNames(players); // the get acess to the players
 	}
 	
 	/**
@@ -258,30 +260,5 @@ public class StartUpPhase {
 			}
 		}
 		return array;
-	}
-	
-
-	// TODO: Implement this method in the next built or erase it. 
-	public void placeArmies() {
-	}
-	
-	// TODO: Implement this method in the next built or erase it. 
-	public Integer getNumberOfArmiesToAllocate(Integer noOfPlayers) {
-		return null;
-	}
-	
-	// TODO: Implement this method in the next built or erase it. 
-	public GameData start() {
-		return null;
-	}
-	
-	// TODO: Implement this method in the next built or erase it. 
-	public Integer getNoOfPlayerFromUser() {
-		return null;
-	}
-	
-	// TODO: Implement this method in the next built or erase it. 
-	public ArrayList<String> getPlayersNamesFromUser() {
-		return null;
 	}
 }
