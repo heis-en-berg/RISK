@@ -3,7 +3,9 @@ package com.java.view;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 
 import com.java.model.Observable;
@@ -47,10 +49,32 @@ public class PlayersWorldDominationView implements GameView {
             	setUpFile();
             	
             	HashMap<String,Double> ownershipPercentage = ((GameMap) observable).getOwnershipPercentage();
+            	HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer = ((GameMap) observable).getConqueredContinentsPerPlayer();
+            	ArrayList<Player> playersInfo = ((GameMap) observable).getPlayersInfo();
+            	HashSet<String> continentsPerPlayer;
+            	
                 editView.write("\nPercentage of the map controlled by every player:\n");
                 
                 for(Entry<String, Double> entry : ownershipPercentage.entrySet()) {
+                	
                 	editView.write("\nPlayer: " + entry.getKey() + "\t\t\t" + String.format("%.2f", entry.getValue()) + "%");
+                	
+                }
+                
+                editView.write("\nContinents controlled by every player:\n");
+                
+                for(Player player : playersInfo) {
+                	
+                	editView.write("\nPlayer: " + player.getPlayerID() + " " + player.getPlayerName());
+                	continentsPerPlayer = conqueredContinentsPerPlayer.get(player.getPlayerID());
+                	
+                	if(continentsPerPlayer == null) {
+                		editView.write("\n\t\tnone");
+                	} else {
+                		for(String continent : continentsPerPlayer) {
+                    		editView.write("\n\t\t" + continent);
+                    	}
+                	}
                 }
                 
                 editView.close();

@@ -312,7 +312,7 @@ public class GameMap extends Observable implements Cloneable {
 		this.conqueredContinentsPerPlayer.get(playerId).add(continentName);
 		Continent continent = this.getContinent(continentName);
 		continent.setContinentConquerorID(playerId);
-
+		notifyView();
 	}
 	
 	/**
@@ -356,6 +356,7 @@ public class GameMap extends Observable implements Cloneable {
 
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(newConquererPlayerId);
+		calculateOwnershipPercentage();
 	}
 	
 	/**
@@ -421,8 +422,11 @@ public class GameMap extends Observable implements Cloneable {
     public void setupPlayerNames(ArrayList<Player> players){
         playersInfo = new ArrayList<Player>(players); // obtain players
     }
-
-
+    
+    public ArrayList<Player> getPlayersInfo(){
+    	return this.playersInfo;
+    }
+    
 
 	/**
 	 * Getter of Conquered countries per player object
