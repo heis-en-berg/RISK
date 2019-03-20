@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This class models the game map
@@ -409,6 +410,38 @@ public class GameMap extends Observable implements Cloneable {
 		notifyView();
 	}
 	
+	/**
+	 * 
+	 * */
+	public void calculateContinentOwnership() {
+		
+		HashSet<String> conqueredCountries;
+		HashSet<String> continent;
+		HashSet<String> intersection;
+		HashSet<String> continentsPerPlayer;
+		String continentName;
+		Integer playerId;
+		
+		for(Player player : playersInfo) {
+			continentsPerPlayer = new HashSet<String>();
+			playerId = player.getPlayerID();
+			conqueredCountries = this.getConqueredCountriesPerPlayer(playerId);
+			
+			for(Entry<String, HashSet<String>> entry : continentCountries.entrySet()) {
+				continent = entry.getValue();
+				continentName = entry.getKey();
+				intersection = new HashSet<String>(continent);
+				intersection.retainAll(conqueredCountries);
+				if(intersection.size() == continent.size()) {
+					//continentsPerPlayer.add(continentName);
+					setContinentConquerer(continentName, playerId);
+				}
+			}
+			
+			
+			//conqueredContinentsPerPlayer.put(playerId, continentsPerPlayer);
+		}
+	}
 	/**
     *
     */

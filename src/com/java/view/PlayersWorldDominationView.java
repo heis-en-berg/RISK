@@ -73,11 +73,12 @@ public class PlayersWorldDominationView implements GameView {
                 		editView.write("\n\t\t");
                 	} else {
                 		for(String continent : continentsPerPlayer) {
-                    		editView.write("\n\t\t" + continent);
+                    		editView.write("\n\t\t\t" + continent);
                     	}
                 	}
+                	editView.write("\n");
                 }
-                
+                editView.write("\n");
                 editView.write("\nNumber of armies per player:\n");
                 
                 if(numberOfArmiesPerPlayer != null ) {

@@ -122,6 +122,9 @@ public class StartUpPhase {
 				
 		// Calculates the % ownership
 		gameData.gameMap.calculateOwnershipPercentage();
+		
+		// Calculates continent Ownership
+		gameData.gameMap.calculateContinentOwnership();
 	}
 	
 	/**
