@@ -12,11 +12,25 @@ import com.java.model.Observable;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 
+/**
+ * This class displays the information regarding each player's control over country,
+ * continents controled by every player and the total number of armies owned by the player.
+ *
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 2.0.0
+ * */
 public class PlayersWorldDominationView implements GameView {
 	
 	private File playersWorldDominationFile;
     private FileWriter editView;
-    
+
+    /**
+     * Creates a file to store the actions regarding the different values.
+     */
     public PlayersWorldDominationView() {
     	
     	playersWorldDominationFile = new File("./PlayersWorldDominationView.txt");
@@ -27,7 +41,10 @@ public class PlayersWorldDominationView implements GameView {
         
         setUpFile();
     }
-    
+
+    /**
+     * allows to perform the setUpFile to clear the view and flush out the buffer stream
+     */
     private void setUpFile() {
     	try{
             playersWorldDominationFile.createNewFile();
@@ -40,7 +57,11 @@ public class PlayersWorldDominationView implements GameView {
         }
     	
     }
-    
+
+    /**
+     * Shows the owneship of each country , continents and how much army each player owns.
+     * @param observable
+     */
 	@Override
 	public void update(Observable observable) {
 		

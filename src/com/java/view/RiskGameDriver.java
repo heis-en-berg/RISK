@@ -59,6 +59,7 @@ public class RiskGameDriver {
 	
 	private void registerObservers() {
 		PhaseView phaseView = new PhaseView();
+
 		for(Player currentPlayer : gameData.getPlayers()) {
 			currentPlayer.addObserver(phaseView);
 		}

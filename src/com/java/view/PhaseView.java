@@ -11,13 +11,27 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is will view the actions taking place on the three different gameplay phase details
+ * by showing the current phase, player name and information regarding the actions taking place
+ * Attack phase, reinforcement phase and fortification phase results.
+ *
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 2.0.0
+ * */
 public class PhaseView implements GameView {
 	
     private File phaseFile;
     private FileWriter editView;
 
+    /**
+     *Creating the file that contains the information regarding each phase
+     */
     public PhaseView(){
-       // phaseFile = new File("./src/com/java/view/PhaseView.txt");
     	phaseFile = new File("./PhaseView.txt");
 
         if(phaseFile.exists()){
@@ -26,7 +40,10 @@ public class PhaseView implements GameView {
         
         setUpFile();
     }
-    
+
+    /**
+     *perform logic to write the file and clear the entire view
+     */
     private void setUpFile() {
     	try{
             phaseFile.createNewFile();
@@ -39,12 +56,17 @@ public class PhaseView implements GameView {
         }
     }
 
-
+    /**
+     * Do the update for Attack to write in file the different actions that took place
+     * reinforcement what each player recived for army and country moved to and country from.
+     * fortification used to show from country and to country moved armies, armies left and armies moved.
+     * @param observable
+     */
     @Override
     public void update(Observable observable) {
 
         if(observable instanceof Player){
-            
+
             ArrayList<ReinforcementPhaseState> reinforcementList = ((Player) observable).getReinforcementPhaseState();
             ArrayList<AttackPhaseState> attackList = ((Player) observable).getAttackPhaseState();
             ArrayList<FortificationPhaseState> fortificationList = ((Player) observable).getFortificationPhaseState();
@@ -66,12 +88,12 @@ public class PhaseView implements GameView {
                             editView.flush();
                     	}
                     }
-                    
+
                     for (ReinforcementPhaseState eachReinforcement : reinforcementList) {
-                    	
+
                     	String country = eachReinforcement.getToCountry();
                     	Integer numberOfArmiesPlaced = eachReinforcement.getNumberOfArmiesPlaced();
-                    	
+
                     	if(country != null) {
                     		editView.write("\n  ***********");
                             editView.write("\n  To Country: " + country);
