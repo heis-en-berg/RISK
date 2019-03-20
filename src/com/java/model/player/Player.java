@@ -17,7 +17,7 @@ import java.util.*;
  * @author Ghalia Elkerdi
  * @author Sahil Singh Sodhi
  * @author Cristian Rodriguez 
- * @version 1.0.0
+ * @version 2.0.0
  * */
 public class Player extends Observable {
 
@@ -53,7 +53,9 @@ public class Player extends Observable {
 		fortificationPhaseState = new ArrayList<>();
 	}
 
-	//------------------- reinforcment actions: Starts here--------------------------------------
+	/**
+	 * Starts the reinforcement phase by getting valid cards and calculating the number of armies.
+	 */
 	public void startReinforcement() {
 
 		ArrayList<Card> playerExchangeCards;
@@ -65,8 +67,6 @@ public class Player extends Observable {
 		notifyView();
 		placeArmy(totalReinforcementArmyCount);
 	}
-	//------------------- reinforcment actions: Ends here--------------------
-
 
 	/**
 	 * The startTurn() method organizes the flow of the game by ordering phase-execution.
@@ -78,7 +78,11 @@ public class Player extends Observable {
 		fortify();
 	}
 	
-
+	/**
+	 * Gets valid cards to trade.
+	 * 
+	 * @return array of valid cards.
+	 */
 	private ArrayList<Card> getValidCards(){
 		ArrayList<Card> playerCardList = getPlayerCardList();
 		ArrayList<Card> playerExchangeCards = new ArrayList<>();
@@ -146,7 +150,8 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * placeArmy method allows the player to position the armies in the player's owned countries.
+	 * PlaceArmy method allows the player to position the armies in the player's owned countries.
+	 * 
 	 * @param reinforcementArmy total reinforcement army count to be placed by the current player.
 	 */
 	private void placeArmy(Integer reinforcementArmy) {
@@ -248,6 +253,10 @@ public class Player extends Observable {
 		reinforcementPhaseState.clear();
 		System.out.println("\n**** Reinforcement Phase Ends for player "+ this.playerName +"..****\n");
 	}
+	
+	/**
+	 * Displays the cards.
+	 */
 	private void showCards(){
 
 		ArrayList<Card> playerCardList = getPlayerCardList();
@@ -261,8 +270,13 @@ public class Player extends Observable {
 			cardsCount++;
 		}
 	}
-
-
+	
+	/**
+	 * Calculates the total number of armies to be given during reinforcement.
+	 * 
+	 * @param playerExchangeCards the cards that the player exchanged
+	 * @return
+	 */
 	private int calculateTotalReinforcement(ArrayList<Card> playerExchangeCards){
 		int totalReinforcementArmyCount = 0;
 		totalReinforcementArmyCount += (reinforcementArmyCountFromCards(playerExchangeCards) + calculateReinforcementArmy());
@@ -308,7 +322,14 @@ public class Player extends Observable {
 				: MINIMUM_REINFORCEMENT_ARMY_NUMBER;
 		return totalReinforcementArmyCount;
 	}
-
+	
+	/**
+	 * Calculates the reinforcement army from card exchange.
+	 * 
+	 * @param cumulatedPlayerExchangeCards the cards that the player holds.
+	 * @return the number of reinforcement army from card exchange.
+	 * 
+	 */
 	private int reinforcementArmyCountFromCards(ArrayList<Card> cumulatedPlayerExchangeCards){
 		ArrayList<Card> playerExchangeCards;
 		int countReinforcementFromCardExchange = 0;
@@ -334,8 +355,13 @@ public class Player extends Observable {
 		}
 		return countReinforcementFromCardExchange;
 	}
-
-
+	
+	/**
+	 * If a player has card with a country that he owns he will receive more armies.
+	 * 
+	 * @param playerExchangeCards cards to be exchanged
+	 * @return true if the player deserves more armies.
+	 */
 	private boolean isExtraTerritoryMatchArmy(ArrayList<Card> playerExchangeCards){
 		boolean extraTerritoryMatchArmy = false;
 
@@ -348,8 +374,11 @@ public class Player extends Observable {
 		return extraTerritoryMatchArmy;
 	}
 
-
-	// Helper to check the cards exchange
+	/***
+	 * Helper method to check if it is valid card exchange.
+	 * @param playerExchangeCards cards to exchange.
+	 * @return true if the exchange is valid.
+	 */
 	private boolean isValidExchange(ArrayList<Card> playerExchangeCards){
 		boolean condition_same = ((playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(1).getArmyType())) &&
 				playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(2).getArmyType()));
@@ -359,11 +388,10 @@ public class Player extends Observable {
 		return (condition_same || condition_different);
 	}
 	
+	// TO-DO in next refactor round: create an "endAttack" method which displays the appropriate messages and handles notifications
 	/**
 	 * The startAttack() method encompasses the attack phase logic and flow.
-	 */
-	
-	// TO-DO in next refactor round: create an "endAttack" method which displays the appropriate messages and handles notifications
+	 */	
 	public void startAttack() {
 		
 		System.out.println();
@@ -596,6 +624,9 @@ public class Player extends Observable {
 		System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");		
 	}
 	
+	/**
+	 * Helper method to check if the player coquered the whole world.
+	 */
 	public void checkIfPlayerHasConqueredTheWorld() {
 		
 		HashSet<String> allConqueredCountries = new HashSet<String>();
@@ -606,8 +637,6 @@ public class Player extends Observable {
 			System.out.println("\n GAME ENDS \n");
 			System.exit(0); 
 		}
-		
-	
 	}
 		
 	
@@ -868,29 +897,54 @@ public class Player extends Observable {
 	public void setOrderOfPlay(Integer orderOfPlay) {
 		this.orderOfPlay = orderOfPlay;
 	}
-
+	
+	/**
+	 * Setter for card exchange army count.
+	 */
 	public static void setCardExchangeArmyCount() {
 		Player.cardExchangeArmyCount += 5;
 	}
-
+	
+	/**
+	 * Getter for cardExchangeArmyCount which holds the card exchange army count.
+	 * 
+	 * @return the card exchange army count.
+	 */
 	public static int getCardExchangeArmyCount() {
 		return cardExchangeArmyCount;
 	}
-
-
+	
+	/**
+	 * Getter for cardList.
+	 * 
+	 * @return the card list
+	 */
 	public ArrayList<Card> getPlayerCardList() {
 		return cardList;
 	}
-
+	
+	/**
+	 * Adds a player to a card list.
+	 * 
+	 * @param card to be added.
+	 */
 	public void addToPlayerCardList(Card card) {
 		this.cardList.add(card);
 	}
-
+	
+	/**
+	 * Removes the player from the card list.
+	 * 
+	 * @param card to be removed.
+	 */
 	public void removeFromPlayerCardList(Card card){
 		this.cardList.remove(card);
 	}
 
-	// acts as previous turn constructor to allow acess to the gamedata's data
+	/**
+	 * Acts as previous turn constructor to allow acess to the gamedata's data
+	 * @param gamedata gamedata objecto to set.
+	 */
 	public void setGameData(GameData gamedata){
 		this.gameData = gamedata;
 	}
@@ -912,16 +966,30 @@ public class Player extends Observable {
 		}
 		return false;
 	}
-
-
+	
+	/**
+	 * Getter for Attack Phase State to show in the phase view.
+	 * 
+	 * @return the attack phase states to be showed in phase view.
+	 */
 	public ArrayList<AttackPhaseState> getAttackPhaseState() {
 		return attackPhaseState;
 	}
-
+	
+	/**
+	 * Getter for Reinforcement Phase State to show in the phase view.
+	 * 
+	 * @return the reinforcement phase states to be showed in phase view.
+	 */
 	public ArrayList<ReinforcementPhaseState> getReinforcementPhaseState() {
 		return reinforcementPhaseState;
 	}
-
+	
+	/**
+	 * Getter for Fortification Phase State to show in the phase view.
+	 * 
+	 * @return the Fortification phase states to be showed in phase view.
+	 */
 	public ArrayList<FortificationPhaseState> getFortificationPhaseState() {
 		return fortificationPhaseState;
 	}
