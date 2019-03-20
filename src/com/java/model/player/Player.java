@@ -223,8 +223,9 @@ public class Player extends Observable {
 
 				System.out.println("Successful...Country chosen " + countryNameByUser + " ,Number of armies placed: "
 						+ numberOfArmiesToBePlacedByUser + "\n\n");
-
-				this.gameData.gameMap.getCountry(countryNameByUser).addArmy(numberOfArmiesToBePlacedByUser);
+				
+				this.gameData.gameMap.addArmyToCountry(countryNameByUser, numberOfArmiesToBePlacedByUser);
+				//this.gameData.gameMap.getCountry(countryNameByUser).addArmy(numberOfArmiesToBePlacedByUser);
 				reinforcementArmy -= numberOfArmiesToBePlacedByUser;
 				
 				ReinforcementPhaseState reinforcementPhase = new ReinforcementPhaseState();
@@ -570,7 +571,8 @@ public class Player extends Observable {
 			for (int d = Integer.parseInt(selectedDefenderDiceCount) - 1; d >= 0 ; d--) {
 				if(defenderDiceRolls[d] >= attackerDiceRolls[d]) {
 					System.out.println("\n Attacker loses 1 army count\n");
-					this.gameData.gameMap.getCountry(selectedSourceCountry).deductArmy(1);
+					this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, 1);
+					//this.gameData.gameMap.getCountry(selectedSourceCountry).deductArmy(1);
 				} else {
 					this.gameData.gameMap.getCountry(selectedDestinationCountry).deductArmy(1);
 					System.out.println("\n Defender loses 1 army count\n");
@@ -721,7 +723,8 @@ public class Player extends Observable {
 		// At this stage all that's left to do really is adjust the army counts in the
 		// respective countries to reflect they player's fortification move
 		this.gameData.gameMap.getCountry(fromCountry).deductArmy(Integer.parseInt(noOfArmiesToMove));
-		this.gameData.gameMap.getCountry(toCountry).addArmy(Integer.parseInt(noOfArmiesToMove));
+		this.gameData.gameMap.addArmyToCountry(toCountry, Integer.parseInt(noOfArmiesToMove));
+		//this.gameData.gameMap.getCountry(toCountry).addArmy(Integer.parseInt(noOfArmiesToMove));
 
 		System.out.println("\nFortification Successful for "+ this.playerName +". Here is a summary of the new status-quo:\n");
 
