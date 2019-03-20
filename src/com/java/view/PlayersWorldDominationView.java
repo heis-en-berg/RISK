@@ -12,11 +12,25 @@ import com.java.model.Observable;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 
+/**
+ * This class models player world domination view, it shows information about percentaje of country ownership,
+ * conquered countries per player and number of armies per player.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez 
+ * @version 2.0.0
+ * */
 public class PlayersWorldDominationView implements GameView {
 	
 	private File playersWorldDominationFile;
     private FileWriter editView;
     
+    /**
+     * Constructor which sets the path to store the text file to show the view.
+     */
     public PlayersWorldDominationView() {
     	
     	playersWorldDominationFile = new File("./PlayersWorldDominationView.txt");
@@ -28,6 +42,9 @@ public class PlayersWorldDominationView implements GameView {
         setUpFile();
     }
     
+    /**
+     * Sets up the file in order to write on it multiple times.
+     */
     private void setUpFile() {
     	try{
             playersWorldDominationFile.createNewFile();
@@ -41,6 +58,11 @@ public class PlayersWorldDominationView implements GameView {
     	
     }
     
+    /**
+     * Updates this view getting the object from the observable object.
+     * 
+     * @param observable the object passed from the notify method.
+     */
 	@Override
 	public void update(Observable observable) {
 		
