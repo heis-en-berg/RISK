@@ -605,7 +605,7 @@ public class Player extends Observable {
 			System.exit(0); 
 		}
 		
-		
+	
 	}
 		
 	

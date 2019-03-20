@@ -34,7 +34,7 @@ public class GameMap extends Observable implements Cloneable {
 	private String mapAuthor;
 	public  String warn;
 
-	private HashMap<String,Integer> ownershipPercentage;
+	private HashMap<String,Double> ownershipPercentage;
 	public static ArrayList<Player> playersInfo;
 
 	/**
@@ -297,9 +297,6 @@ public class GameMap extends Observable implements Cloneable {
 
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(playerId);
-
-		this.calculateOwnershipPercentage();
-
 	}
 	
 	/**
@@ -359,8 +356,6 @@ public class GameMap extends Observable implements Cloneable {
 
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(newConquererPlayerId);
-
-        this.calculateOwnershipPercentage();
 	}
 	
 	/**
@@ -403,23 +398,23 @@ public class GameMap extends Observable implements Cloneable {
      *
      */
     public void calculateOwnershipPercentage(){
-        ownershipPercentage = new HashMap<String,Integer>();
+        ownershipPercentage = new HashMap<String,Double>();
 
-        Integer totalCountries = getNumberOfCountries();
+        Integer totalNumberOfCountries = getNumberOfCountries();
         Integer counteriesOwnedPlayer = 0;
-        Integer percentageOFOwnership =0;
+        Double percentageOfOwnership = 0.0;
 
         for(Player eachPlayer : playersInfo){
            HashSet<String> countiresOwned= conqueredCountriesPerPlayer.get(eachPlayer.getPlayerID());
            counteriesOwnedPlayer = countiresOwned.size();
 
            // now calculate the % of ownership
-            percentageOFOwnership = (Integer)(counteriesOwnedPlayer/totalCountries)*100;
+            percentageOfOwnership =  ((double)counteriesOwnedPlayer/totalNumberOfCountries) * 100.0;
 
             //put in map
-            ownershipPercentage.put(eachPlayer.getPlayerID() + " " + eachPlayer.getPlayerName(), percentageOFOwnership);
+            ownershipPercentage.put(eachPlayer.getPlayerID() + " " + eachPlayer.getPlayerName(), percentageOfOwnership);
         }
-        System.out.println(ownershipPercentage);
+
     }
 
     public void setupPlayerNames(ArrayList<Player> players){

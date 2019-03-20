@@ -116,8 +116,12 @@ public class StartUpPhase {
 			}
 			indexKeeper += numberOfCountriesToBeAssignedToPlayer;
 		}
-
-		gameData.gameMap.setupPlayerNames(players); // the get acess to the players
+		
+		// Sets the player list in order of play.
+		gameData.gameMap.setupPlayerNames(players);
+				
+		// Calculates the % ownership
+		gameData.gameMap.calculateOwnershipPercentage();
 	}
 	
 	/**
