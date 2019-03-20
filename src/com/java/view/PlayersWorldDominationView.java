@@ -61,7 +61,7 @@ public class PlayersWorldDominationView implements GameView {
                 	
                 }
                 
-                editView.write("\nContinents controlled by every player:\n");
+                editView.write("\n\nContinents controlled by every player:\n");
                 
                 for(Player player : playersInfo) {
                 	
