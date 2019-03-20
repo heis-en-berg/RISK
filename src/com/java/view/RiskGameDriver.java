@@ -151,7 +151,8 @@ public class RiskGameDriver {
 					String countryName = countriesPerPlayerArray[i];
 
 					if (firstTime) {
-						countryObjects.get(countryName).addArmy(1);
+						//countryObjects.get(countryName).addArmy(1);
+						gameData.gameMap.addArmyToCountry(countryName, 1);
 						numberOfArmiesAvailablePerPlayer--;
 					}
 
@@ -189,8 +190,9 @@ public class RiskGameDriver {
 				} while(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0
 						|| Integer.parseInt(numberOfArmiesByUser) > numberOfArmiesAvailablePerPlayer);
 
-				Country selectedCountry = countryObjects.get(countryName);
-				selectedCountry.addArmy(Integer.parseInt(numberOfArmiesByUser));
+				//Country selectedCountry = countryObjects.get(countryName);
+				gameData.gameMap.addArmyToCountry(countryName, Integer.parseInt(numberOfArmiesByUser));
+				//selectedCountry.addArmy(Integer.parseInt(numberOfArmiesByUser));
 				numberOfArmiesAvailablePerPlayer -= Integer.parseInt(numberOfArmiesByUser);
 			}
 		}

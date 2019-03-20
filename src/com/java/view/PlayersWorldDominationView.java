@@ -50,6 +50,7 @@ public class PlayersWorldDominationView implements GameView {
             	
             	HashMap<String,Double> ownershipPercentage = ((GameMap) observable).getOwnershipPercentage();
             	HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer = ((GameMap) observable).getConqueredContinentsPerPlayer();
+            	HashMap<String,Integer> numberOfArmiesPerPlayer = ((GameMap) observable).getNumberOfArmiesPerPlayer();
             	ArrayList<Player> playersInfo = ((GameMap) observable).getPlayersInfo();
             	HashSet<String> continentsPerPlayer;
             	
@@ -69,12 +70,20 @@ public class PlayersWorldDominationView implements GameView {
                 	continentsPerPlayer = conqueredContinentsPerPlayer.get(player.getPlayerID());
                 	
                 	if(continentsPerPlayer == null) {
-                		editView.write("\n\t\tnone");
+                		editView.write("\n\t\t");
                 	} else {
                 		for(String continent : continentsPerPlayer) {
                     		editView.write("\n\t\t" + continent);
                     	}
                 	}
+                }
+                
+                editView.write("\nNumber of armies per player:\n");
+                
+                if(numberOfArmiesPerPlayer != null ) {
+                	for(Player player : playersInfo) {
+                    	editView.write("\nPlayer " + player.getPlayerID() + " " + player.getPlayerName()+ " has " + numberOfArmiesPerPlayer.get(player.getPlayerID().toString()) + " armies.");
+                    }
                 }
                 
                 editView.close();

@@ -35,6 +35,7 @@ public class GameMap extends Observable implements Cloneable {
 	public  String warn;
 
 	private HashMap<String,Double> ownershipPercentage;
+	private HashMap<String,Integer> numberOfArmiesPerPlayer;
 	private ArrayList<Player> playersInfo;
 
 	/**
@@ -403,6 +404,9 @@ public class GameMap extends Observable implements Cloneable {
 		Country countryObject = countryObjects.get(country);
 		countryObject.addArmy(armyCount);
 		countryObjects.put(country, countryObject);
+		
+		calculateNumberOfArmiesPerPlayer();
+		notifyView();
 	}
 	
 	/**
@@ -414,6 +418,40 @@ public class GameMap extends Observable implements Cloneable {
 		countryObject.deductArmy(armyCount);
 		countryObjects.put(country, countryObject);
 		
+		calculateNumberOfArmiesPerPlayer();
+		notifyView();
+	}
+	
+	/**
+    *
+    */
+	private void calculateNumberOfArmiesPerPlayer() {
+		
+		HashMap<String, Country> countries = getAllCountries();
+		HashSet<String> countriesPerPlayer;
+		numberOfArmiesPerPlayer = new HashMap<String,Integer>();
+		Integer numberOfArmies;
+		Integer armyCount;
+		String key;
+		Integer value;
+		
+		for(Player player : playersInfo) {
+			
+			numberOfArmies = 0;
+			countriesPerPlayer = getConqueredCountriesPerPlayer(player.getPlayerID());
+			
+			for(String countryName : countriesPerPlayer) {
+				
+				armyCount = countries.get(countryName).getCountryArmyCount();
+				numberOfArmies += armyCount;
+				
+			}
+			
+			key = player.getPlayerID().toString();
+			value = numberOfArmies;
+			
+			numberOfArmiesPerPlayer.put(key, value);
+		}			
 	}
 
     /**
@@ -434,7 +472,7 @@ public class GameMap extends Observable implements Cloneable {
             percentageOfOwnership =  ((double)counteriesOwnedPlayer/totalNumberOfCountries) * 100.0;
 
             //put in map
-            getOwnershipPercentage().put(eachPlayer.getPlayerID() + " " + eachPlayer.getPlayerName(), percentageOfOwnership);
+            getOwnershipPercentage().put(eachPlayer.getPlayerID().toString(), percentageOfOwnership);
         }
         
         notifyView();
@@ -531,10 +569,14 @@ public class GameMap extends Observable implements Cloneable {
 	 * @return map of the conquered continents per player. 
 	 * */
 	public HashMap<Integer, HashSet<String>> getConqueredContinentsPerPlayer() {
-		return conqueredContinentsPerPlayer;
+		return this.conqueredContinentsPerPlayer;
 	}
 
 	public HashMap<String,Double> getOwnershipPercentage() {
-		return ownershipPercentage;
+		return this.ownershipPercentage;
+	}
+	
+	public HashMap<String,Integer> getNumberOfArmiesPerPlayer(){
+		return this.numberOfArmiesPerPlayer;
 	}
 }

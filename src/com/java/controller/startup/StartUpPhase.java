@@ -67,6 +67,9 @@ public class StartUpPhase {
 		// Set the player collection with the new one.
 		gameData.setPlayers(newPlayers);
 		
+		// Sets the player list in order of play.
+		gameData.gameMap.setupPlayerNames(newPlayers);
+		
 		return newPlayers;
 	}
 
@@ -116,9 +119,6 @@ public class StartUpPhase {
 			}
 			indexKeeper += numberOfCountriesToBeAssignedToPlayer;
 		}
-		
-		// Sets the player list in order of play.
-		gameData.gameMap.setupPlayerNames(players);
 				
 		// Calculates the % ownership
 		gameData.gameMap.calculateOwnershipPercentage();
