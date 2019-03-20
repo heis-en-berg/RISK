@@ -394,6 +394,27 @@ public class GameMap extends Observable implements Cloneable {
 			System.out.println(continentName + " :: " + getContinentCountries(continentName).toString());
 		}
 	}
+	
+	/**
+    *
+    */
+	public void addArmyToCountry(String country, Integer armyCount) {
+		
+		Country countryObject = countryObjects.get(country);
+		countryObject.addArmy(armyCount);
+		countryObjects.put(country, countryObject);
+	}
+	
+	/**
+    *
+    */
+	public void deductArmyToCountry(String country, Integer armyCount) {
+		
+		Country countryObject = countryObjects.get(country);
+		countryObject.deductArmy(armyCount);
+		countryObjects.put(country, countryObject);
+		
+	}
 
     /**
      *
