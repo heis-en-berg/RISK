@@ -62,6 +62,9 @@ public class RiskGameDriver {
 		for(Player currentPlayer : gameData.getPlayers()) {
 			currentPlayer.addObserver(phaseView);
 		}
+		
+		PlayersWorldDominationView playersWorldDominationView = new PlayersWorldDominationView();
+		gameData.gameMap.addObserver(playersWorldDominationView);
 	}
 	/**
      * The Start up phase intiates in this method by calling the helpers from StartUp phase. This method asks

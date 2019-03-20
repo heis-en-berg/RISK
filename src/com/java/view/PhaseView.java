@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class PhaseView implements GameView {
+	
     private File phaseFile;
     private FileWriter editView;
 

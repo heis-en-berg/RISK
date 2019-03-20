@@ -35,7 +35,7 @@ public class GameMap extends Observable implements Cloneable {
 	public  String warn;
 
 	private HashMap<String,Double> ownershipPercentage;
-	public static ArrayList<Player> playersInfo;
+	private ArrayList<Player> playersInfo;
 
 	/**
 	 * Creates a default map by created instances of every map.
@@ -398,7 +398,7 @@ public class GameMap extends Observable implements Cloneable {
      *
      */
     public void calculateOwnershipPercentage(){
-        ownershipPercentage = new HashMap<String,Double>();
+    	ownershipPercentage = new HashMap<String,Double>();
 
         Integer totalNumberOfCountries = getNumberOfCountries();
         Integer counteriesOwnedPlayer = 0;
@@ -412,9 +412,10 @@ public class GameMap extends Observable implements Cloneable {
             percentageOfOwnership =  ((double)counteriesOwnedPlayer/totalNumberOfCountries) * 100.0;
 
             //put in map
-            ownershipPercentage.put(eachPlayer.getPlayerID() + " " + eachPlayer.getPlayerName(), percentageOfOwnership);
+            getOwnershipPercentage().put(eachPlayer.getPlayerID() + " " + eachPlayer.getPlayerName(), percentageOfOwnership);
         }
-
+        
+        notifyView();
     }
 
     public void setupPlayerNames(ArrayList<Player> players){
@@ -508,4 +509,7 @@ public class GameMap extends Observable implements Cloneable {
 		return conqueredContinentsPerPlayer;
 	}
 
+	public HashMap<String,Double> getOwnershipPercentage() {
+		return ownershipPercentage;
+	}
 }
