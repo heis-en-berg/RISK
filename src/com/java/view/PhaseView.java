@@ -138,8 +138,18 @@ public class PhaseView implements GameView {
                             editView.write("\n  Defending country: " + defendingCountry);
                             editView.write("\n  Attacker dice count: " + attackerDiceCount);
                             editView.write("\n  Defending dice count: " + defenderDiceCount);
-                            editView.write("\n  Attacker dice roll results: " + attackerDiceRollResults.toString());
-                            editView.write("\n  Defender dice roll results: " + defenderDiceRollResults.toString());
+                            editView.write("\n  Attacker dice roll results: ");
+                            
+                            for(int diceRollResult : attackerDiceRollResults) {
+                            	editView.write("(" + diceRollResult + ") ");
+                            }
+                            
+                            editView.write("\n  Defender dice roll results: ");
+                            
+                            for(int diceRollResult : defenderDiceRollResults) {
+                            	editView.write("(" + diceRollResult + ") ");
+                            }
+                            editView.write("\n");
                             editView.flush();
                         }
                     }

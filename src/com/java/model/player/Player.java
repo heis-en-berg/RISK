@@ -400,11 +400,14 @@ public class Player extends Observable {
 	/**
 	 * The startAttack() method encompasses the attack phase logic and flow.
 	 */	
-	
 	public void startAttack() {
 		
 		System.out.println();
-		System.out.println("**** Attack Phase Begins for player "+ this.playerName +"..****\n");	
+		System.out.println("**** Attack Phase Begins for player "+ this.playerName +"..****\n");
+		
+		AttackPhaseState attackPhase = new AttackPhaseState();
+		attackPhaseState.add(attackPhase);
+		notifyView();
 		
 		boolean gameOn =  true;
 		
@@ -615,7 +618,7 @@ public class Player extends Observable {
 			}
 			
 			
-			AttackPhaseState attackPhase = new AttackPhaseState();
+			attackPhase = new AttackPhaseState();
 			attackPhase.setAttackingPlayer(this.playerName);
 			attackPhase.setDefendingPlayer(defendingPlayer);
 			attackPhase.setAttackingCountry(selectedSourceCountry);
@@ -685,14 +688,13 @@ public class Player extends Observable {
 			attackPhaseState.add(attackPhase);
 			notifyView();
 			
-			attackPhaseState.clear();
-			
 			System.out.println("Army count for " + selectedSourceCountry + " is now: "
 					+ this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount());
 			System.out.println("Army count for " + selectedDestinationCountry + " is now: "
 					+ this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount());
 		}
-				
+		
+		attackPhaseState.clear();
 		System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");		
 	}
 	
