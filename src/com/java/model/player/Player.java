@@ -412,35 +412,60 @@ public class Player extends Observable {
 			
 			// First get confirmation from the player that attack is desired.
 			boolean wantToAttack = false;
+			boolean allOutMode   = false;
 			String playerDecision = "no";
-			System.out.println("\n Would you like to attack? (YES/NO)");
-			if (input.hasNextLine()) {
-				playerDecision = input.nextLine();
+			
+			if(!allOutMode) {
+			
+				System.out.println("\n Would you like to attack? (YES/NO)");
+				if (input.hasNextLine()) {
+					playerDecision = input.nextLine();
+				}
+		
+				switch (playerDecision.toLowerCase()) {
+					case "yes":
+						wantToAttack = true;
+						break;
+					case "yeah":
+						wantToAttack = true;
+						break;
+					case "y":
+						wantToAttack = true;
+						break;
+					case "sure":
+						wantToAttack = true;
+						break;
+				}
+				if (wantToAttack) {	
+					System.out.println("\n Would you like to go ALL OUT? (YES/NO)");
+					if (input.hasNextLine()) {
+						playerDecision = input.nextLine();
+					}
+			
+					switch (playerDecision.toLowerCase()) {
+						case "yes":
+							allOutMode = true;
+							break;
+						case "yeah":
+							allOutMode = true;
+							break;
+						case "y":
+							allOutMode = true;
+							break;
+						case "sure":
+							allOutMode = true;
+							break;
+					}
+			    } else {
+					gameOn = false;
+					System.out.println("\n" + this.playerName + "is peaceful and does not wish to attack anyone. Ending attack phase..");
+					System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
+					return;
+			    }
 			}
-	
-			switch (playerDecision.toLowerCase()) {
-				case "yes":
-					wantToAttack = true;
-					break;
-				case "yeah":
-					wantToAttack = true;
-					break;
-				case "y":
-					wantToAttack = true;
-					break;
-				case "sure":
-					wantToAttack = true;
-					break;
-			}
-	
-			if (!wantToAttack) {
-				gameOn = false;
-				System.out.println("\n" + this.playerName + "is peaceful and does not wish to attack anyone. Ending attack phase..");
-				System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
-				return;
-			} else {
-				System.out.println("\n" + "Fetching potential attack scenarios for " + this.playerName + "...\n");
-			}
+
+			System.out.println("\n" + "Fetching potential attack scenarios for " + this.playerName + "...\n");
+
 			
 			// no need to recursively loop through the neighbors of the countries conquered by the player
 			// we merely require the immediate neighbors
