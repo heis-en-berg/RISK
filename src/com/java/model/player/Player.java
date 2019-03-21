@@ -57,6 +57,17 @@ public class Player extends Observable {
 		fortificationPhaseState = new ArrayList<>();
 	}
 
+
+	/**
+	 * The startTurn() method organizes the flow of the game by ordering phase-execution.
+	 */
+	public void startTurn() {
+		input = new Scanner(System.in);
+		startReinforcement();
+		startAttack(); 
+		fortify();
+	}
+	
 	/**
 	 * Starts the reinforcement phase by getting valid cards and calculating the number of armies.
 	 */
@@ -72,15 +83,6 @@ public class Player extends Observable {
 		placeArmy(totalReinforcementArmyCount);
 	}
 
-	/**
-	 * The startTurn() method organizes the flow of the game by ordering phase-execution.
-	 */
-	public void startTurn() {
-		input = new Scanner(System.in);
-		startReinforcement();
-		startAttack(); 
-		fortify();
-	}
 	
 	/**
 	 * Gets valid cards to trade.
@@ -394,10 +396,11 @@ public class Player extends Observable {
 		return (condition_same || condition_different);
 	}
 	
-	// TO-DO in next refactor round: create an "endAttack" method which displays the appropriate messages and handles notifications
+
 	/**
 	 * The startAttack() method encompasses the attack phase logic and flow.
 	 */	
+	
 	public void startAttack() {
 		
 		System.out.println();
@@ -569,8 +572,9 @@ public class Player extends Observable {
 			}
 			
 			// Now notify the defender and get their input on defense head-count
+			String defendingPlayer = gameData.getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()).getPlayerName();
 			System.out.println("\n HEADS-UP " 
-								+ gameData.getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()).getPlayerName()  
+								+  defendingPlayer
 								+ " YOU ARE UNDER ATTACK!");
 			
 			if(maxDefenseArmyCountPossiblePerDestCountry.get(selectedDestinationCountry) >= 2) {
@@ -585,6 +589,16 @@ public class Player extends Observable {
 						.parseInt(selectedDefenderDiceCount) > maxAllowedDefenderDiceCount );
 			}
 			
+			
+			AttackPhaseState attackPhase = new AttackPhaseState();
+			attackPhase.setAttackingPlayer(this.playerName);
+			attackPhase.setDefendingPlayer(defendingPlayer);
+			attackPhase.setAttackingCountry(selectedSourceCountry);
+			attackPhase.setDefendingCountry(selectedDestinationCountry);
+			attackPhase.setAttackerDiceCount(Integer.parseInt(selectedAttackerDiceCount));
+			attackPhase.setDefenderDiceCount(Integer.parseInt(selectedDefenderDiceCount));
+			
+			
 			System.out.println("\n ROLLING DICE \n");
 			
 			int[] attackerDiceRolls = new int[Integer.parseInt(selectedAttackerDiceCount)];
@@ -595,31 +609,58 @@ public class Player extends Observable {
 				System.out.println("\n Attacker rolls: " + attackerDiceRolls[a] + "\n");
 			}
 			Arrays.sort(attackerDiceRolls);
+			attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
 			
 			for (int d=0; d < Integer.parseInt(selectedDefenderDiceCount) ; d++) {
 				defenderDiceRolls[d]= playerDice.rollDice();
 				System.out.println("\n Defender rolls: " + defenderDiceRolls[d] + "\n");
 			}
 			Arrays.sort(defenderDiceRolls);
+			attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
+			
+			Integer attackerLostArmyCount = 0;
+			Integer defenderLostArmyCount = 0;
+			boolean battleOutcomeFlag = false; 
 			
 			for (int d = Integer.parseInt(selectedDefenderDiceCount) - 1; d >= 0 ; d--) {
 				if(defenderDiceRolls[d] >= attackerDiceRolls[d]) {
 					System.out.println("\n Attacker loses 1 army count\n");
+					attackerLostArmyCount++;
 					this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, 1);
 					//this.gameData.gameMap.getCountry(selectedSourceCountry).deductArmy(1);
 				} else {
 					this.gameData.gameMap.getCountry(selectedDestinationCountry).deductArmy(1);
+					defenderLostArmyCount++;
 					System.out.println("\n Defender loses 1 army count\n");
 				}
 				if(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount() == 0) {
 					// declare new winner 
-					this.gameData.gameMap.getCountry(selectedDestinationCountry).setConquerorID(playerID);
+					battleOutcomeFlag = true; 
+					this.gameData.gameMap.getCountry(selectedDestinationCountry).setConquerorID(this.playerID);
+					this.gameData.gameMap.setCountryConquerer(selectedDestinationCountry, this.playerID);
 					this.gameData.gameMap.getCountry(selectedDestinationCountry).setArmyCount(Integer.parseInt(selectedAttackerDiceCount));
 					System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + " !");
-					checkIfPlayerHasConqueredTheWorld();
-					break;
+					boolean gameOver = checkIfPlayerHasConqueredTheWorld();
+					if (gameOver) {
+						attackPhase.setAttackerLostArmyCount(attackerLostArmyCount);
+						attackPhase.setDefenderLostArmyCount(defenderLostArmyCount);
+						attackPhase.setBattleOutcomeFlag(battleOutcomeFlag);
+						attackPhaseState.add(attackPhase);
+						notifyView();
+						System.exit(0); 	
+					}
 				}
 			}
+			
+			attackPhase.setAttackerLostArmyCount(attackerLostArmyCount);
+			attackPhase.setDefenderLostArmyCount(defenderLostArmyCount);
+			attackPhase.setBattleOutcomeFlag(battleOutcomeFlag);
+			
+			
+			attackPhaseState.add(attackPhase);
+			notifyView();
+			
+			attackPhaseState.clear();
 			
 			System.out.println("Army count for " + selectedSourceCountry + " is now: "
 					+ this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount());
@@ -633,16 +674,20 @@ public class Player extends Observable {
 	/**
 	 * Helper method to check if the player coquered the whole world.
 	 */
-	public void checkIfPlayerHasConqueredTheWorld() {
+	public boolean checkIfPlayerHasConqueredTheWorld() {
 		
+		boolean gameOver = false;
 		HashSet<String> allConqueredCountries = new HashSet<String>();
-		allConqueredCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
-		
+		allConqueredCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(this.playerID);
+
 		if(allConqueredCountries.size() == this.gameData.gameMap.getNumberOfCountries()) {
-			System.out.println("\n" + this.playerName + " HAS CONQUERED THE WORLD !");
-			System.out.println("\n GAME ENDS \n");
-			System.exit(0); 
+			System.out.println("\n ****" + this.playerName + " HAS CONQUERED THE WORLD !****");
+			System.out.println("\n ******************************* \n");
+			System.out.println("\n ********** GAME OVER ********** \n");
+			System.out.println("\n ******************************* \n");
+			gameOver = true;
 		}
+		return gameOver;
 	}
 		
 	
