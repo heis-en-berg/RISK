@@ -49,8 +49,6 @@ public class StartUpPhaseTest {
     @BeforeClass
     public static void beforeEverything() {
         gameData = new GameData();
-
-        startUp = new StartUpPhase(gameData);
         gameData.setNoOfPlayers(6);
         gameData.gameMap = new GameMap();
         
@@ -75,12 +73,16 @@ public class StartUpPhaseTest {
         //results = startUp.generateRoundRobin();
 
         // Add test data
-        gameData.gameMap.addCountry("C1","Continent1");
-        gameData.gameMap.addCountry("C2", "Continent1");
-        gameData.gameMap.addCountry("C3", "Continent1");
-        gameData.gameMap.addCountry("C4", "Continent2");
-        gameData.gameMap.addCountry("C5", "Continent2");
-        gameData.gameMap.addCountry("C6", "Continent2");
+        for(int i = 0 ; i < 42; i++) {
+        	gameData.gameMap.addCountry("C" + i,"Continent1");
+        }
+        
+        startUp = new StartUpPhase(gameData);
+        //gameData.gameMap.addCountry("C2", "Continent1");
+        //gameData.gameMap.addCountry("C3", "Continent1");
+        //gameData.gameMap.addCountry("C4", "Continent2");
+        //gameData.gameMap.addCountry("C5", "Continent2");
+        //gameData.gameMap.addCountry("C6", "Continent2");
         
     }
     
@@ -107,8 +109,9 @@ public class StartUpPhaseTest {
     @Test
     public void assignCountriesToPlayers() {
     	
-        startUp.assignCountriesToPlayers();
-        ArrayList<Player> players = gameData.getPlayers();
+    	ArrayList<Player> players = gameData.getPlayers();
+    	gameData.gameMap.setupPlayerNames(players);
+    	startUp.assignCountriesToPlayers();
 
         // if one player id's country matches any of the other players meaning countries are assigned wrongly
         HashSet<String> countriesOwnedByPlayer0 =  gameData.gameMap.getConqueredCountriesPerPlayer(1);
@@ -135,7 +138,7 @@ public class StartUpPhaseTest {
     	
     	Integer[] expectedValues = {40, 35, 30, 25, 20};
     	Integer[] data = {2, 3, 4, 5, 6};
-    	Double factor = (double) (gameData.gameMap.getNumberOfCountries()/42);
+    	Double factor =  ((double)gameData.gameMap.getNumberOfCountries()/42);
     	Integer result;
     	Integer expected;
     	
