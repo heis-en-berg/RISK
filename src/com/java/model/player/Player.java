@@ -6,7 +6,11 @@ import com.java.model.Observable;
 import com.java.model.cards.Card;
 import com.java.model.gamedata.GameData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Scanner;
 
 /**
  * This class models the player, it holds the id, the name, and the order to play
@@ -338,6 +342,7 @@ public class Player extends Observable {
 			for(int i=0;i<3;i++){
 				playerExchangeCards.add(cumulatedPlayerExchangeCards.get(0));
 				cumulatedPlayerExchangeCards.remove(0);
+
 			}
 			boolean can_exchange = isValidExchange(playerExchangeCards);
 			boolean extraTerritoryMatchArmy = isExtraTerritoryMatchArmy(playerExchangeCards);
@@ -351,6 +356,7 @@ public class Player extends Observable {
 			}
 			for (Card card : playerExchangeCards) {
 				removeFromPlayerCardList(card);
+				this.gameData.cardsDeck.setCard(card);
 			}
 		}
 		return countReinforcementFromCardExchange;
