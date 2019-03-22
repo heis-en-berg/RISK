@@ -113,11 +113,6 @@ public class Player extends Observable {
 		ArrayList<Card> playerExchangeCards = new ArrayList<>();
 		ArrayList<Card> cumulatedPlayerExchangeCards = new ArrayList<>();
 
-//		for (int i = 0; i < 10; i++) {
-//			Card card = gameData.cardsDeck.getCard();
-//			addToPlayerCardList(card);
-//		}
-
 		System.out.println("*** Cards in hand ***");
 		this.showCards();
 		String userInput = "no";
@@ -255,7 +250,6 @@ public class Player extends Observable {
 						+ numberOfArmiesToBePlacedByUser + "\n\n");
 				
 				this.gameData.gameMap.addArmyToCountry(countryNameByUser, numberOfArmiesToBePlacedByUser);
-				//this.gameData.gameMap.getCountry(countryNameByUser).addArmy(numberOfArmiesToBePlacedByUser);
 				reinforcementArmy -= numberOfArmiesToBePlacedByUser;
 				
 				ReinforcementPhaseState reinforcementPhase = new ReinforcementPhaseState();
@@ -295,20 +289,19 @@ public class Player extends Observable {
 			cardsCount++;
 		}
 	}
-	
+
 	/**
 	 * Calculates the total number of armies to be given during reinforcement.
 	 * 
 	 * @param playerExchangeCards the cards that the player exchanged
-	 * @return
+	 * @return The total number of reinforcement army for the player(integer value).
 	 */
-	private int calculateTotalReinforcement(ArrayList<Card> playerExchangeCards){
+	public int calculateTotalReinforcement(ArrayList<Card> playerExchangeCards){
 		int totalReinforcementArmyCount = 0;
 		totalReinforcementArmyCount += (reinforcementArmyCountFromCards(playerExchangeCards) + calculateReinforcementArmy());
 
 		return totalReinforcementArmyCount;
 	}
-
 
 	/**
 	 * Function to count the reinforcement army based on the number of territories and continents owned.
@@ -406,7 +399,7 @@ public class Player extends Observable {
 	 * @param playerExchangeCards cards to exchange.
 	 * @return true if the exchange is valid.
 	 */
-	private boolean isValidExchange(ArrayList<Card> playerExchangeCards){
+	public boolean isValidExchange(ArrayList<Card> playerExchangeCards){
 		boolean condition_same = ((playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(1).getArmyType())) &&
 				playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(2).getArmyType()));
 		boolean condition_different = (!(playerExchangeCards.get(0).getArmyType().equals(playerExchangeCards.get(1).getArmyType()))) &&

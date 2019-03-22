@@ -1,6 +1,9 @@
 package com.java.controller.gameplay;
 
+import com.java.model.cards.Card;
+import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
+import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
 import org.junit.BeforeClass;
@@ -9,16 +12,17 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
- * ReinforcementTest class tests the total reinforcement count for two scenarios. 
- * 
+ * ReinforcementTest class tests the total reinforcement count for four scenarios.
+ *
  * @author Arnav Bhardwaj
  * @author Karan Dhingra
  * @author Ghalia Elkerdi
  * @author Sahil Singh Sodhi
- * @author Cristian Rodriguez 
- * @version 1.0.0
+ * @author Cristian Rodriguez
+ * @version 2.0.0
  */
 public class ReinforcementTest {
 
@@ -66,7 +70,7 @@ public class ReinforcementTest {
         gameData.gameMap.getCountry("C4").addArmy(1);
         gameData.gameMap.getCountry("C5").addArmy(5);
         gameData.gameMap.getCountry("C6").addArmy(6);
-        
+
         playerOne.setGameData(gameData);
         playerTwo.setGameData(gameData);
     }
@@ -92,5 +96,50 @@ public class ReinforcementTest {
         int expected_value = 14;
         assertEquals(expected_value,actual_value);
     }
-       
+
+    /**
+     * Check if the combination of cards for reinforcement army is correct before trade .
+     * The three cards traded must be of the same or different types.
+     */
+    @Test
+    public void testCardsValidityForTrade() {
+
+        ArrayList<Country> countryList = new ArrayList<Country>();
+        countryList.add(gameData.gameMap.getCountry("C1"));
+        countryList.add(gameData.gameMap.getCountry("C2"));
+        countryList.add(gameData.gameMap.getCountry("C3"));
+
+        gameData.cardsDeck = new CardsDeck(countryList);
+
+        for (int cardCount = 0; cardCount < 3; cardCount++) {
+            Card card = gameData.cardsDeck.getCard();
+            playerTwo.addToPlayerCardList(card);
+        }
+        boolean actual_value = playerTwo.isValidExchange(playerTwo.getPlayerCardList());
+        assertTrue(actual_value);
+    }
+
+    /**
+     * Calculate total reinforcement army for a player with conquered continents having control values
+     * and three cards in hand.
+     */
+    @Test
+    public void testCalculateReinforcementArmyWithConqueredContinentAndTradeCards() {
+
+        ArrayList<Country> countryList = new ArrayList<Country>();
+        countryList.add(gameData.gameMap.getCountry("C1"));
+        countryList.add(gameData.gameMap.getCountry("C2"));
+        countryList.add(gameData.gameMap.getCountry("C3"));
+
+        gameData.cardsDeck = new CardsDeck(countryList);
+
+        for (int cardCount = 0; cardCount < 3; cardCount++) {
+            Card card = gameData.cardsDeck.getCard();
+            playerOne.addToPlayerCardList(card);
+        }
+        /*calculateTotalReinforcement internally verifies for the validity of the card exchange.*/
+        int actual_value = playerOne.calculateTotalReinforcement(playerOne.getPlayerCardList());
+        int expected_value = 21;
+        assertEquals(expected_value,actual_value);
+    }
 }
