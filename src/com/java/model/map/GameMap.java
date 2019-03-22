@@ -299,10 +299,16 @@ public class GameMap extends Observable implements Cloneable {
 
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(playerId);
+		
+		// continent domiancy check
+		String countryContinent = country.getCountryContinentName();
+		if (this.conqueredCountriesPerPlayer.get(playerId).containsAll(this.continentCountries.get(countryContinent))) {
+			this.setContinentConquerer(countryContinent, playerId);
+		}
 	}
 	
 	/**
-	 * Sets the continent conqueror.
+	 * Sets the continent conqueror. Only to be used in Start-up Phase.
 	 * 
 	 * @param continentName the continent name.
 	 * @param playerId the player id.
@@ -310,6 +316,13 @@ public class GameMap extends Observable implements Cloneable {
 	public void setContinentConquerer(String continentName, Integer playerId) {
 		if(!this.conqueredContinentsPerPlayer.containsKey(playerId)) {
 			this.conqueredContinentsPerPlayer.put(playerId, new HashSet<>());
+		}
+		
+		for (Integer player : this.conqueredContinentsPerPlayer.keySet()) {
+			if (this.conqueredContinentsPerPlayer.get(player).contains(continentName)) {
+				this.conqueredContinentsPerPlayer.get(player).remove(continentName);
+				break;
+			}
 		}
 		this.conqueredContinentsPerPlayer.get(playerId).add(continentName);
 		Continent continent = this.getContinent(continentName);
@@ -358,6 +371,12 @@ public class GameMap extends Observable implements Cloneable {
 
 		Country country= this.getCountry(countryName);
 		country.setConquerorID(newConquererPlayerId);
+		
+		//continent domiancy check
+		String countryContinent = country.getCountryContinentName();
+		if(this.conqueredCountriesPerPlayer.get(newConquererPlayerId).containsAll(this.continentCountries.get(countryContinent))) {
+			this.setContinentConquerer(countryContinent, newConquererPlayerId);
+		}
 		calculateOwnershipPercentage();
 	}
 	
