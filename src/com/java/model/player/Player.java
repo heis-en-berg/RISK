@@ -30,10 +30,11 @@ public class Player extends Observable {
 	private Integer orderOfPlay;
 	private ArrayList<Card> cardList;
 	private static int cardExchangeArmyCount = 5;
+	public Boolean isActive = true;
 
 	private Scanner input;
 	private GameData gameData;
-	private Dice playerDice = new Dice();
+	private Dice playerDice;
 	
 	private ArrayList<AttackPhaseState> attackPhaseState;
 	private ArrayList<ReinforcementPhaseState> reinforcementPhaseState;
@@ -55,6 +56,7 @@ public class Player extends Observable {
 		attackPhaseState = new ArrayList<>();
 		reinforcementPhaseState = new ArrayList<>();
 		fortificationPhaseState = new ArrayList<>();
+		this.playerDice = new Dice();
 	}
 
 

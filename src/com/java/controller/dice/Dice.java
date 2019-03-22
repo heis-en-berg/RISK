@@ -25,5 +25,24 @@ public class Dice {
 		Random rand1 = new Random();
 		return 	rand1.nextInt(6 - 1 +1) + 1;
 	}
+	
+	/**
+	 * When called will generate numbers ranging from 1 to 6
+	 * @param numberOfDiceToRoll Number of dice to roll
+	 * @return array list of Integers representing outcomes of rolling n dice 
+	 */
+	public ArrayList<Integer> rollDice(Integer numberOfDiceToRoll){
+		
+		ArrayList<Integer> result = new ArrayList<>();
+		
+		for(int i = 0; i < numberOfDiceToRoll; i++) {
+			Random rand1 = new Random();
+			result.add(rand1.nextInt(6 - 1 +1) + 1);
+		}
+		
+		java.util.Collections.sort(result, java.util.Collections.reverseOrder());
+		
+		return result;
+	}
 
 }

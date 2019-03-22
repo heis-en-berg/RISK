@@ -103,5 +103,23 @@ public class GameData {
 	public void setNoOfPlayers(Integer noOfPlayers) {
 		this.noOfPlayers = noOfPlayers;
 	}
+	
+	/**
+	 * Get player's status
+	 * @param player
+	 * @return true if player is active else false
+	 */
+	public Boolean getPlayerStatus(Player player) {
+		return player.isActive;
+	}
+	
+	/**
+	 * Set player's status
+	 * @param player
+	 * @param isActive set player status
+	 */
+	public void setPlayerStatus(Player player, Boolean isActive) {
+		player.isActive = isActive;
+	}
 
 }
