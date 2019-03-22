@@ -31,6 +31,7 @@ public class Player extends Observable {
 	private ArrayList<Card> cardList;
 	private static int cardExchangeArmyCount = 5;
 	public Boolean isActive = true;
+	private Boolean isWinner = false;
 
 	private Scanner input;
 	private GameData gameData;
@@ -57,6 +58,22 @@ public class Player extends Observable {
 		reinforcementPhaseState = new ArrayList<>();
 		fortificationPhaseState = new ArrayList<>();
 		this.playerDice = new Dice();
+	}
+	/**
+	 * get player's win status
+	 * @return true if player is a winner else false
+	 */
+	public Boolean getIsWinner() {
+		return isWinner;
+	}
+
+
+	/**
+	 * set true if player won the game
+	 * @param isWinner
+	 */
+	public void setIsWinner(Boolean isWinner) {
+		this.isWinner = isWinner;
 	}
 
 
