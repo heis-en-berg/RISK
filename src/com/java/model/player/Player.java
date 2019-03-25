@@ -875,7 +875,8 @@ public class Player extends Observable {
 			playerDecision = input.nextLine();
 		}
 		String fromCountry = playerDecision;
-
+		fortificationPhase.setFromCountry(fromCountry);
+		notifyView();
 		// while number of armies to be moved is not coherent, prompt user
 		// 0 is a valid selection
 		String noOfArmiesToMove = "-1";
@@ -884,7 +885,10 @@ public class Player extends Observable {
 			noOfArmiesToMove = input.nextLine();
 		} while (isNaN(noOfArmiesToMove) || Integer.parseInt(noOfArmiesToMove) < 0 || Integer
 				.parseInt(noOfArmiesToMove) >= armiesPerPotentialFortificationSourceCountry.get(fromCountry));
-
+		
+		fortificationPhase.setNumberOfArmiesMoved(Integer.parseInt(noOfArmiesToMove));
+		notifyView();
+		
 		playerDecision = "";
 
 		// check that the {from - to} combination specifically makes sense as a valid
@@ -895,7 +899,11 @@ public class Player extends Observable {
 							+ fromCountry + "): ");
 			playerDecision = input.nextLine();
 		}
+		
 		String toCountry = playerDecision;
+		
+		fortificationPhase.setToCountry(toCountry);
+		notifyView();
 		
 		// At this stage all that's left to do really is adjust the army counts in the
 		// respective countries to reflect they player's fortification move
@@ -910,14 +918,9 @@ public class Player extends Observable {
 		System.out.println("Army count for " + toCountry + " is now: "
 				+ this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
 		
-		fortificationPhase = new FortificationPhaseState();
-		fortificationPhase.setFromCountry(fromCountry);
-		fortificationPhase.setToCountry(toCountry);
-		fortificationPhase.setNumberOfArmiesMoved(Integer.parseInt(noOfArmiesToMove));
-		
-		fortificationPhaseState.add(fortificationPhase);
-		notifyView();
+		//fortificationPhase = new FortificationPhaseState();
 		fortificationPhaseState.clear();
+		
 		System.out.println("\n****Fortification Phase Ends for player "+ this.playerName +"..****\n");
 	}
 	
