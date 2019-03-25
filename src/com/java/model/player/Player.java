@@ -564,7 +564,10 @@ public class Player extends Observable {
 		Integer defenderLostArmyCount = 0;
 		Boolean battleOutcomeFlag = false;
 		
-		for (int d = 0; d < selectedDefenderDiceCount; d++) {
+		// take the lowest dice count among the two
+		int benchDiceRoll = java.lang.Math.min(selectedDefenderDiceCount, selectedAttackerDiceCount);
+		
+		for (int d = 0; d < benchDiceRoll; d++) {
 			if(defenderDiceRolls.get(d) >= attackerDiceRolls.get(d)) {
 				System.out.println("\n Attacker loses 1 army count\n");
 				attackerLostArmyCount++;
