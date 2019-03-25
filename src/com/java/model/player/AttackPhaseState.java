@@ -22,8 +22,8 @@ public class AttackPhaseState {
 
 	private Integer attackerDiceCount = 0;
 	private Integer defenderDiceCount = 0;
-	private int[] attackerDiceRollResults = null;
-	private int[] defenderDiceRollResults = null;
+	private ArrayList<Integer> attackerDiceRollResults = null;
+	private ArrayList<Integer> defenderDiceRollResults = null;
 
 	private Integer attackerLostArmyCount = 0;
 	private Integer defenderLostArmyCount = 0;
@@ -160,18 +160,18 @@ public class AttackPhaseState {
 	 * @return the attacker dice roll results.
 	 * 
 	 * */
-	public int[] getAttackerDiceRollResults() {
+	public ArrayList<Integer> getAttackerDiceRollResults() {
 		return attackerDiceRollResults;
 	}
 	
 	/**
 	 * Sets the attacker dice roll results.
 	 * 
-	 * @param attackerDiceRollResults list of attacker dice roll results.
+	 * @param attackerDiceRolls list of attacker dice roll results.
 	 * 
 	 * */
-	public void setAttackerDiceRollResults(int[] attackerDiceRollResults) {
-		this.attackerDiceRollResults = attackerDiceRollResults;
+	public void setAttackerDiceRollResults(ArrayList<Integer> attackerDiceRolls) {
+		this.attackerDiceRollResults = attackerDiceRolls;
 	}
 
 	/**
@@ -179,17 +179,17 @@ public class AttackPhaseState {
 	 * 
 	 * @return the list of defender dice roll results.
 	 * */
-	public int[] getDefenderDiceRollResults() {
+	public ArrayList<Integer> getDefenderDiceRollResults() {
 		return defenderDiceRollResults;
 	}
 
 	/**
 	 * Sets the list of defender dice roll results
 	 * 
-	 * @param defenderDiceRollResults list of defender dice roll results.
+	 * @param defenderDiceRolls list of defender dice roll results.
 	 * */
-	public void setDefenderDiceRollResults(int[] defenderDiceRollResults) {
-		this.defenderDiceRollResults = defenderDiceRollResults;
+	public void setDefenderDiceRollResults(ArrayList<Integer> defenderDiceRolls) {
+		this.defenderDiceRollResults = defenderDiceRolls;
 	}
 	
 	/**

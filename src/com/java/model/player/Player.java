@@ -505,7 +505,7 @@ public class Player extends Observable {
 			}
 		} while (!attackScenarios.get(selectedSourceCountry).contains(selectedDestinationCountry));
 		
-	    return selectedSourceCountry;    
+	    return selectedDestinationCountry;    
 	}
 	
 	public Integer getDiceCount (String player, String country, String action, Integer maxDiceCountAllowedForAction) {
@@ -535,53 +535,33 @@ public class Player extends Observable {
 	}
 	
 
-	public void fight(AttackPhaseState attackPhase) {
+	public void fight(AttackPhaseState attackPhase, String selectedSourceCountry, String selectedDestinationCountry) {
 			
-		String selectedSourceCountry = attackPhase.getAttackingCountry();
-		String selectedDestinationCountry = attackPhase.getDefendingCountry();
-		String defendingPlayer = attackPhase.getDefendingPlayer();
-		String attackingPlayer = attackPhase.getAttackingPlayer();
+		String defendingPlayer = gameData.getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()).getPlayerName();
 		
 		System.out.println("\n HEADS-UP " +  defendingPlayer + " YOU ARE UNDER ATTACK!");
 		
-		Integer selectedAttackerDiceCount = getDiceCount(attackingPlayer, selectedSourceCountry, "attack", 3);
+		Integer selectedAttackerDiceCount = getDiceCount(this.playerName, selectedSourceCountry, "attack", 3);
 		attackPhase.setAttackerDiceCount(selectedAttackerDiceCount);
 		
 		Integer selectedDefenderDiceCount = getDiceCount(defendingPlayer, selectedDestinationCountry, "defend", 2);
 		attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
 		
-		System.out.println("Army count for " + selectedSourceCountry + " is now: "
-				+ this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount());
-		System.out.println("Army count for " + selectedDestinationCountry + " is now: "
-				+ this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount());
-		
 		System.out.println("\n ROLLING DICE \n");
-
 		
-		int[] attackerDiceRolls = new int[selectedAttackerDiceCount];
-		int[] defenderDiceRolls = new int[selectedDefenderDiceCount];
-
-
-		for (int a=0; a < selectedAttackerDiceCount  ; a++) {
-			attackerDiceRolls[a]= playerDice.rollDice();
-			System.out.println("\n Attacker rolls: " + attackerDiceRolls[a] + "\n");
-		}
-		Arrays.sort(attackerDiceRolls);
+		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
+		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);;
+		
 		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
-		
-		for (int d=0; d < selectedDefenderDiceCount ; d++) {
-			defenderDiceRolls[d]= playerDice.rollDice();
-			System.out.println("\n Defender rolls: " + defenderDiceRolls[d] + "\n");
-		}
-		Arrays.sort(defenderDiceRolls);
 		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
 		
 		Integer attackerLostArmyCount = 0;
 		Integer defenderLostArmyCount = 0;
 		boolean battleOutcomeFlag = false; 
+		int stepThrough = 0;
 		
 		for (int d = selectedDefenderDiceCount - 1; d >= 0 ; d--) {
-			if(defenderDiceRolls[d] >= attackerDiceRolls[d]) {
+			if(defenderDiceRolls.get(d) >= attackerDiceRolls.get(selectedAttackerDiceCount - 1 - stepThrough)) {
 				System.out.println("\n Attacker loses 1 army count\n");
 				attackerLostArmyCount++;
 				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, 1);
@@ -591,6 +571,7 @@ public class Player extends Observable {
 				defenderLostArmyCount++;
 				System.out.println("\n Defender loses 1 army count\n");
 			}
+			stepThrough++;
 			if(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount() == 0) {
 				// declare new winner 
 				battleOutcomeFlag = true; 
@@ -609,6 +590,11 @@ public class Player extends Observable {
 				}
 			}
 		}
+		
+		System.out.println("Army count for " + selectedSourceCountry + " is now: "
+				+ this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount());
+		System.out.println("Army count for " + selectedDestinationCountry + " is now: "
+				+ this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount());
 		
 		attackPhase.setAttackerLostArmyCount(attackerLostArmyCount);
 		attackPhase.setDefenderLostArmyCount(defenderLostArmyCount);
@@ -728,12 +714,14 @@ public class Player extends Observable {
 			}
 			
 			// attack once
-			fight(attackPhase);
+			fight(attackPhase, selectedSourceCountry, selectedDestinationCountry);
 			
 			// or keep attacking if all-out mode & player still can & player still hasn't conquered target
 			while(allOut && !attackPhase.getBattleOutcomeFlag()) {
 				if(this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount() > 1) {
-					fight(attackPhase); 
+					fight(attackPhase, selectedSourceCountry, selectedDestinationCountry); 
+				} else {
+					endAttack();
 				}
 			}
 			

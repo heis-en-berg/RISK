@@ -126,8 +126,8 @@ public class PhaseView implements GameView {
 
                     	Integer attackerDiceCount = eachAttack.getAttackerDiceCount();
                     	Integer defenderDiceCount = eachAttack.getDefenderDiceCount();
-                    	int[] attackerDiceRollResults = eachAttack.getAttackerDiceRollResults();
-                    	int[] defenderDiceRollResults = eachAttack.getDefenderDiceRollResults();
+                    	ArrayList<Integer> attackerDiceRollResults = eachAttack.getAttackerDiceRollResults();
+                    	ArrayList<Integer> defenderDiceRollResults = eachAttack.getDefenderDiceRollResults();
                     	
                     	if(defendingPlayer != null) {
                     		
