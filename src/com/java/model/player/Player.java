@@ -514,19 +514,20 @@ public class Player extends Observable {
 	    return selectedDestinationCountry;    
 	}
 	
-	public Integer getDiceCount (String player, String country, String action, Integer maxDiceCountAllowedForAction) {
+	public Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
 
 		String selectedDiceCount = "1";
-		int countryArmyCount = this.gameData.gameMap.getCountry(country).getCountryArmyCount();
 		
-		// attacker must have at least 1 army on the ground at all times
+		// max # of dice a defender can roll is 2
+		int defaultMaxDiceCountAllowedForAction = 2;
+		
+		// max # of dice an attacker can roll is 3
 		if(action.equals("attack")) {
-			countryArmyCount--;
+			defaultMaxDiceCountAllowedForAction = 3;
 		}
-		
-		if(countryArmyCount == 1 || countryArmyCount == 2) {
-			maxDiceCountAllowedForAction = countryArmyCount;
-		}
+
+		// but as countries are attacked, army counts changes and we need to dynamically update thresholds
+		int maxDiceCountAllowedForAction = getActualMaxAllowedDiceCountForAction(action,country,defaultMaxDiceCountAllowedForAction);
 		
 		do {
 			System.out.println("How many dice would " + player + " like to roll to " + action + "?" 
@@ -538,30 +539,26 @@ public class Player extends Observable {
 				.parseInt(selectedDiceCount) > maxDiceCountAllowedForAction );
 		
 		return Integer.parseInt(selectedDiceCount);
+	}	
+
+	private int getActualMaxAllowedDiceCountForAction(String action, String countryInScopeForAction, int maxDiceCountAllowedForAction) {
+
+		int countryArmyCount = this.gameData.gameMap.getCountry(countryInScopeForAction).getCountryArmyCount();
+		
+		// attacker must have at least 1 army on the ground at all times
+		if(action.equals("attack")) {
+			countryArmyCount--;
+		}
+
+		if(countryArmyCount == 1 || countryArmyCount == 2) {
+			maxDiceCountAllowedForAction  = countryArmyCount;
+		}
+		
+		return maxDiceCountAllowedForAction;
 	}
 	
-	/* new roll dice sub
-	
-	System.out.println("\n ROLLING DICE \n");
-
-	
-	Integer selectedAttackerDiceCount = getDiceCount(this.playerName, selectedSourceCountry, "attack", 3);
-	attackPhase.setAttackerDiceCount(selectedAttackerDiceCount);
-	
-	Integer selectedDefenderDiceCount = getDiceCount(defendingPlayer, selectedDestinationCountry, "defend", 2);
-	attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
-	
-	ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
-	ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
-	
-	attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
-	attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
-	*/
-	
-
 	public Boolean fight(AttackPhaseState attackPhase) {
 			
-		
 		String selectedSourceCountry = attackPhase.getAttackingCountry();
 		String selectedDestinationCountry = attackPhase.getDefendingCountry();
 		
@@ -574,8 +571,13 @@ public class Player extends Observable {
 		Integer selectedDefenderDiceCount = attackPhase.getDefenderDiceCount();
 		Integer selectedAttackerDiceCount = attackPhase.getAttackerDiceCount();
 		
-		ArrayList<Integer> defenderDiceRolls = attackPhase.getDefenderDiceRollResults();
-		ArrayList<Integer> attackerDiceRolls = attackPhase.getAttackerDiceRollResults();
+		System.out.println("\n ROLLING DICE \n");
+
+		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
+		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
+		
+		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
+		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
 		
 		// take the lowest dice count among the two
 		int benchDiceRoll = java.lang.Math.min(selectedDefenderDiceCount, selectedAttackerDiceCount);
@@ -721,12 +723,29 @@ public class Player extends Observable {
 				}
 			}
 			
-			// attack once
-			fight(attackPhase);
+			// Based on what mode the attack is set to happen in, these will be determined differently
+			Integer selectedAttackerDiceCount = 1;
+			Integer selectedDefenderDiceCount = 1;
 			
-			// or keep attacking if all-out mode & player still can & player still hasn't conquered target
+			// attack once
+			if (!allOut) {
+				// prompt attacker and defender for dice count preferences 
+				selectedAttackerDiceCount = getDesiredDiceCountFromPlayer(this.playerName, selectedSourceCountry, "attack");
+				attackPhase.setAttackerDiceCount(selectedAttackerDiceCount);
+				selectedDefenderDiceCount = getDesiredDiceCountFromPlayer(defendingPlayer, selectedDestinationCountry, "defend");
+				attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
+				
+				fight(attackPhase);
+			}
+			
+			// or keep attacking if all-out mode & player still can attack & player still hasn't conquered target
 			while(allOut && !attackPhase.getBattleOutcomeFlag()) {
 				if(this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount() > 1) {
+					// dont prompt players for input, proceed with max allowed dice count for both players
+					selectedAttackerDiceCount = getActualMaxAllowedDiceCountForAction("attack",selectedSourceCountry,3);
+					attackPhase.setAttackerDiceCount(selectedAttackerDiceCount);
+					selectedDefenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",selectedDestinationCountry,2);
+					attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
 					fight(attackPhase); 
 				} else {
 					endAttack();
