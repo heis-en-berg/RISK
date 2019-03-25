@@ -129,10 +129,10 @@ public class PhaseView implements GameView {
                     	ArrayList<Integer> attackerDiceRollResults = eachAttack.getAttackerDiceRollResults();
                     	ArrayList<Integer> defenderDiceRollResults = eachAttack.getDefenderDiceRollResults();
                     	
-                    	if(defendingPlayer != null) {
-                    		
-                    		editView.write("\n  ***********");
-                            editView.write("\n  Attacking player: " + attackingPlayer);
+                    	editView.write("\n  ***********");
+                        editView.write("\n  Attacking player: " + attackingPlayer);
+                    	
+                    	//if(defendingPlayer != null) {
                             editView.write("\n  Defending player: " + defendingPlayer);
                             editView.write("\n  Attacking country: " + attackingCountry);
                             editView.write("\n  Defending country: " + defendingCountry);
@@ -140,18 +140,22 @@ public class PhaseView implements GameView {
                             editView.write("\n  Defending dice count: " + defenderDiceCount);
                             editView.write("\n  Attacker dice roll results: ");
                             
-                            for(int diceRollResult : attackerDiceRollResults) {
-                            	editView.write("(" + diceRollResult + ") ");
+                            if(attackerDiceRollResults != null) {
+                            	for(int diceRollResult : attackerDiceRollResults) {
+                                	editView.write("(" + diceRollResult + ") ");
+                                }
                             }
                             
                             editView.write("\n  Defender dice roll results: ");
                             
-                            for(int diceRollResult : defenderDiceRollResults) {
-                            	editView.write("(" + diceRollResult + ") ");
+                            if(defenderDiceRollResults != null) {
+                            	for(int diceRollResult : defenderDiceRollResults) {
+                                	editView.write("(" + diceRollResult + ") ");
+                                }
                             }
                             editView.write("\n");
                             editView.flush();
-                        }
+                        //}
                     }
                     
                     editView.close();

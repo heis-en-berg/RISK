@@ -704,12 +704,15 @@ public class Player extends Observable {
 			showAllAttackScenarios(attackScenarios, maxAttackArmyCountPossiblePerSrcCountry, maxDefenseArmyCountPossiblePerDestCountry);
 			String selectedSourceCountry = getCountryToAttackFrom(attackScenarios);
 			attackPhase.setAttackingCountry(selectedSourceCountry);
+			notifyView();
 			
 			String selectedDestinationCountry = getEnemyCountryToAttack(selectedSourceCountry, attackScenarios);
 			attackPhase.setDefendingCountry(selectedDestinationCountry);
+			notifyView();
 			
 			String defendingPlayer = gameData.getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()).getPlayerName();
 			attackPhase.setDefendingPlayer(defendingPlayer);
+			notifyView();
 
 			// Check if attacking player wants to "go all out"
 			if (!allOut) {
@@ -743,8 +746,11 @@ public class Player extends Observable {
 				// prompt attacker and defender for dice count preferences 
 				selectedAttackerDiceCount = getDesiredDiceCountFromPlayer(this.playerName, selectedSourceCountry, "attack");
 				attackPhase.setAttackerDiceCount(selectedAttackerDiceCount);
+				notifyView();
+				
 				selectedDefenderDiceCount = getDesiredDiceCountFromPlayer(defendingPlayer, selectedDestinationCountry, "defend");
 				attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
+				notifyView();
 				
 				fight(attackPhase);
 			}

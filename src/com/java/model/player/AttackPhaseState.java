@@ -14,11 +14,11 @@ import java.util.ArrayList;
  * */
 public class AttackPhaseState {
 
-	private String attackingPlayer = null;
-	private String defendingPlayer = null;
+	private String attackingPlayer = " ";
+	private String defendingPlayer = " ";
 
-	private String attackingCountry = null;
-	private String defendingCountry = null;
+	private String attackingCountry = " ";
+	private String defendingCountry = " ";
 
 	private Integer attackerDiceCount = 0;
 	private Integer defenderDiceCount = 0;
