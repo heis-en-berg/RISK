@@ -305,6 +305,8 @@ public class GameMap extends Observable implements Cloneable {
 		if (this.conqueredCountriesPerPlayer.get(playerId).containsAll(this.continentCountries.get(countryContinent))) {
 			this.setContinentConquerer(countryContinent, playerId);
 		}
+		
+		calculateOwnershipPercentage();
 	}
 	
 	/**
@@ -524,7 +526,12 @@ public class GameMap extends Observable implements Cloneable {
 
         for(Player eachPlayer : playersInfo){
            HashSet<String> countiresOwned= conqueredCountriesPerPlayer.get(eachPlayer.getPlayerID());
-           counteriesOwnedPlayer = countiresOwned.size();
+           
+           if(countiresOwned == null) {
+        	   counteriesOwnedPlayer = 0;
+           } else {
+        	   counteriesOwnedPlayer = countiresOwned.size();
+           }
 
            // now calculate the % of ownership
             percentageOfOwnership =  ((double)counteriesOwnedPlayer/totalNumberOfCountries) * 100.0;
