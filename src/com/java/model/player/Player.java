@@ -612,10 +612,11 @@ public class Player extends Observable {
 			}
 		}
 		
+		 
 	    attackPhase.setBattleOutcomeFlag(battleOutcomeFlag);
 	    attackPhase.setAttackerLostArmyCount(attackerLostArmyCount);
 		attackPhase.setDefenderLostArmyCount(defenderLostArmyCount);
-		attackPhaseState.add(attackPhase);
+		//attackPhaseState.add(attackPhase);
 		notifyView(); 	
 		
 		System.out.println("Army count for " + selectedSourceCountry + " is now: "
@@ -632,9 +633,8 @@ public class Player extends Observable {
 	
 		gameOn = false; 
 		System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
-		notifyView();
-		attackPhaseState.clear();
-		
+		//attackPhaseState.clear();
+		//notifyView();
 	}
 	
 	public void startAttack() {
@@ -680,6 +680,8 @@ public class Player extends Observable {
 			
 			if(!wantToAttack) {
 					System.out.println("\n" + this.playerName + "does not wish to attack..");
+					attackPhaseState.clear();
+					notifyView();
 					endAttack();
 					return;
 			}
@@ -763,8 +765,8 @@ public class Player extends Observable {
 			}
 			
 			checkIfPlayerHasConqueredTheWorld();
-			attackPhaseState.clear();
-			notifyView();
+			//attackPhaseState.clear();
+			//notifyView();
 		}
 		endAttack();
 	}
@@ -915,9 +917,7 @@ public class Player extends Observable {
 		
 		fortificationPhaseState.add(fortificationPhase);
 		notifyView();
-		
 		fortificationPhaseState.clear();
-		
 		System.out.println("\n****Fortification Phase Ends for player "+ this.playerName +"..****\n");
 	}
 	
