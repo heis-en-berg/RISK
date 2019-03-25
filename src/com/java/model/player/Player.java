@@ -772,10 +772,9 @@ public class Player extends Observable {
 					selectedDefenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",selectedDestinationCountry,2);
 					attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
 					hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry; 
-				} /*else {
-					endAttack();
-					return;
-				}*/
+				} else {
+					break;
+				}
 			}
 			
 			checkIfPlayerHasConqueredTheWorld();
