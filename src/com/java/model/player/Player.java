@@ -612,6 +612,7 @@ public class Player extends Observable {
 				battleOutcomeFlag = true;
 				this.gameData.gameMap.getCountry(selectedDestinationCountry).setConquerorID(this.playerID);
 				this.gameData.gameMap.updateCountryConquerer(selectedDestinationCountry, this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID(), this.playerID);
+				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, selectedAttackerDiceCount);
 				this.gameData.gameMap.getCountry(selectedDestinationCountry).setArmyCount(selectedAttackerDiceCount);
 				System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + " !");
 				// give him card
