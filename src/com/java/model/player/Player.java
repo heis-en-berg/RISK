@@ -474,7 +474,8 @@ public class Player extends Observable {
 		
 		// Print all the options out for the player to see and choose from
 		for (String keySourceCountry : attackScenarios.keySet()) {
-			int maxAttackArmyCount = this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount() - 1 ;	
+			int actualArmyCount = this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount();
+			int maxAttackArmyCount = actualArmyCount  - 1 ;	
 			if(maxAttackArmyCount >= 3) {
 				maxAttackArmyCountPossiblePerSrcCountry.put(keySourceCountry, 3);
 			} else if(maxAttackArmyCount >= 2) {
@@ -489,7 +490,7 @@ public class Player extends Observable {
 					defenderMaxDiceCount = 2;
 				}
 				maxDefenseArmyCountPossiblePerDestCountry.putIfAbsent(correspondingDestinationCountry, defenderMaxDiceCount);
-				System.out.println("\n" + keySourceCountry + "\t -> \t" + correspondingDestinationCountry
+				System.out.println("\n" + keySourceCountry + " (occupied by " + actualArmyCount + " of your armies)" + "\t -> \t" + correspondingDestinationCountry
 						+ "\t **defended by " + defenderArmyCount  + " of " 
 						+ gameData.getPlayer(this.gameData.gameMap.getCountry(correspondingDestinationCountry).getCountryConquerorID()).getPlayerName() + "'s armies**"
 						+ "\t (attack with up to " + maxAttackArmyCountPossiblePerSrcCountry.get(keySourceCountry) + " armies)");
@@ -589,6 +590,9 @@ public class Player extends Observable {
 		
 		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
 		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
+		
+		System.out.println("\nAttacker rolled: " + attackerDiceRolls.toString());
+		System.out.println("\nDefender rolled: " + defenderDiceRolls.toString());
 		
 		// take the lowest dice count among the two
 		int benchDiceRoll = java.lang.Math.min(selectedDefenderDiceCount, selectedAttackerDiceCount);
