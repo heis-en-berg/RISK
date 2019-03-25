@@ -254,7 +254,6 @@ public class RiskGameDriver {
 				
 				// before actually 
 				if(getIsActive(player)) { 
-					
 					System.out.println("\n***** Turn Begins for player "+currentPlayer.getPlayerName() +" *****\n");
 					currentPlayer.setGameData(this.gameData);
 					currentPlayer.startTurn();

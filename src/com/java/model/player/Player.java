@@ -762,6 +762,7 @@ public class Player extends Observable {
 				}
 			}
 			
+			checkIfPlayerHasConqueredTheWorld();
 			attackPhaseState.clear();
 			notifyView();
 		}
@@ -779,6 +780,7 @@ public class Player extends Observable {
 
 		if(allConqueredCountries.size() == this.gameData.gameMap.getNumberOfCountries()) {
 			isWinner = true;
+			gameOn = false; 
 		}
 		return isWinner;
 	}
