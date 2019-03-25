@@ -547,7 +547,7 @@ public class Player extends Observable {
 			if (input.hasNextLine()) {
 				selectedDiceCount = input.nextLine();
 			}	
-		} while (isNaN(selectedDiceCount) || Integer.parseInt(selectedDiceCount) < 0 || Integer
+		} while (isNaN(selectedDiceCount) || Integer.parseInt(selectedDiceCount) < 1 || Integer
 				.parseInt(selectedDiceCount) > maxDiceCountAllowedForAction );
 		
 		return Integer.parseInt(selectedDiceCount);
@@ -776,6 +776,7 @@ public class Player extends Observable {
 					break;
 				}
 			}
+			allOut = false;
 			
 			checkIfPlayerHasConqueredTheWorld();
 			//attackPhaseState.clear();
