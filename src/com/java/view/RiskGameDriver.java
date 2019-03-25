@@ -238,45 +238,33 @@ public class RiskGameDriver {
 	/**
 	 * There will be another round if the number of players is greater than one.
 	 */
+	/**
+	 * Loop through player list circularly until one of the player wins
+	 */
 	private void startTurn() {
 		ArrayList<Player> playerList = this.gameData.getPlayers();
 		Player currentPlayer; // first player that will start the game
-
-		int reset_turn = 0;
-		int playerCount;
+		Boolean doWeHaveAWinner = false;
 
 		//There will be another round if the number of players is greater than one.
-		while(playerList.size() != 1) {
+		while(!doWeHaveAWinner) {
 
-			for (playerCount = reset_turn; playerCount < playerList.size(); ) {
-				currentPlayer = playerList.get(playerCount);
+			for (Player player : playerList) {
+				currentPlayer = player;
 
-				// Exclude turn for the player with no countries. The player has been defeated.
-				if (this.gameData.gameMap.getConqueredCountriesPerPlayer(playerCount) != null) {
-
+				if(currentPlayer.getIsActive() && currentPlayer.getIsWinner()) { // player wins the game; break the turn loop
+					doWeHaveAWinner = true;
+					System.out.println("Congratulations! "+playerList.get(0).getPlayerName() + " wins the game.");
+					break;
+				} else if(currentPlayer.getIsActive()) { // continue if player is active
 					System.out.println("\n***** Turn Begins for player "+currentPlayer.getPlayerName() +" *****\n");
 
-					//turn = new Turn(currentPlayer, this.gameData);
-					//turn.startTurn();
-
-					// -----------NEW CODE REFCRATORED---------
 					currentPlayer.setGameData(this.gameData);
 					currentPlayer.startTurn();
 
 					System.out.println("\n***** Turn Ends for player "+currentPlayer.getPlayerName() +" *****\n");
-					playerCount++;
-
-				} else {
-					this.gameData.removePlayers(currentPlayer);
-					playerList = this.gameData.getPlayers();
 				}
-
 			}
-			// Reset turn for player one.
-			playerCount = reset_turn;
 		}
-
-		//The one player left in the playerList has conquered the whole map.
-		System.out.println("Congratulations! "+playerList.get(0).getPlayerName() + " wins the game.");
 	}
 }

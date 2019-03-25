@@ -67,6 +67,15 @@ public class Player extends Observable {
 	public Boolean getIsWinner() {
 		return isWinner;
 	}
+	
+	/**
+	 * get player's active status
+	 * @return true if player is still in the game 
+	 * else false
+	 */
+	public boolean getIsActive() {
+		return isActive;
+	}
 
 
 	/**
