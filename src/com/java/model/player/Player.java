@@ -85,7 +85,12 @@ public class Player extends Observable {
 		input = new Scanner(System.in);
 		startReinforcement();
 		startAttack(); 
-		fortify();
+		// attack phase changes state so before going to fortify logic, check
+		if(!isWinner) {
+			fortify();
+		} else {
+			return;
+		}
 	}
 	
 	/**
@@ -550,31 +555,28 @@ public class Player extends Observable {
 		System.out.println("\n ROLLING DICE \n");
 		
 		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
-		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);;
+		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
 		
 		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
 		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
 		
 		Integer attackerLostArmyCount = 0;
 		Integer defenderLostArmyCount = 0;
-		boolean battleOutcomeFlag = false; 
-		int stepThrough = 0;
+		Boolean battleOutcomeFlag = false;
 		
-		for (int d = selectedDefenderDiceCount - 1; d >= 0 ; d--) {
-			if(defenderDiceRolls.get(d) >= attackerDiceRolls.get(selectedAttackerDiceCount - 1 - stepThrough)) {
+		for (int d = 0; d < selectedDefenderDiceCount; d++) {
+			if(defenderDiceRolls.get(d) >= attackerDiceRolls.get(d)) {
 				System.out.println("\n Attacker loses 1 army count\n");
 				attackerLostArmyCount++;
 				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, 1);
-				//this.gameData.gameMap.getCountry(selectedSourceCountry).deductArmy(1);
 			} else {
 				this.gameData.gameMap.getCountry(selectedDestinationCountry).deductArmy(1);
 				defenderLostArmyCount++;
 				System.out.println("\n Defender loses 1 army count\n");
 			}
-			stepThrough++;
 			if(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount() == 0) {
 				// declare new winner 
-				battleOutcomeFlag = true; 
+				battleOutcomeFlag = true;
 				this.gameData.gameMap.getCountry(selectedDestinationCountry).setConquerorID(this.playerID);
 				this.gameData.gameMap.setCountryConquerer(selectedDestinationCountry, this.playerID);
 				this.gameData.gameMap.getCountry(selectedDestinationCountry).setArmyCount(selectedAttackerDiceCount);
@@ -585,8 +587,7 @@ public class Player extends Observable {
 					attackPhase.setDefenderLostArmyCount(defenderLostArmyCount);
 					attackPhase.setBattleOutcomeFlag(battleOutcomeFlag);
 					attackPhaseState.add(attackPhase);
-					notifyView();
-					System.exit(0); 	
+					notifyView(); 	
 				}
 			}
 		}
@@ -612,7 +613,6 @@ public class Player extends Observable {
 		System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
 		attackPhaseState.clear();
 		notifyView();
-		return;
 		
 	}
 	
@@ -722,6 +722,7 @@ public class Player extends Observable {
 					fight(attackPhase, selectedSourceCountry, selectedDestinationCountry); 
 				} else {
 					endAttack();
+					return;
 				}
 			}
 			
@@ -736,18 +737,17 @@ public class Player extends Observable {
 	 */
 	public boolean checkIfPlayerHasConqueredTheWorld() {
 		
-		boolean gameOver = false;
 		HashSet<String> allConqueredCountries = new HashSet<String>();
 		allConqueredCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(this.playerID);
 
 		if(allConqueredCountries.size() == this.gameData.gameMap.getNumberOfCountries()) {
+			isWinner = true;
 			System.out.println("\n ****" + this.playerName + " HAS CONQUERED THE WORLD !****");
 			System.out.println("\n ******************************* \n");
 			System.out.println("\n ********** GAME OVER ********** \n");
 			System.out.println("\n ******************************* \n");
-			gameOver = true;
 		}
-		return gameOver;
+		return isWinner;
 	}
 		
 	
