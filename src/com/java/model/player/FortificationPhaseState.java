@@ -13,8 +13,8 @@ package com.java.model.player;
 
 public class FortificationPhaseState {
 
-	private String fromCountry = null;
-	private String toCountry = null;
+	private String fromCountry = " ";
+	private String toCountry = " ";
 	private Integer numberOfArmiesMoved = 0;
 	
 	/**

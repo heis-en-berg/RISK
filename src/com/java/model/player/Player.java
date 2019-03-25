@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class models the player, it holds the id, the name, and the order to play
@@ -926,7 +927,12 @@ public class Player extends Observable {
 		
 		//fortificationPhase = new FortificationPhaseState();
 		fortificationPhaseState.clear();
-		
+		try {
+			TimeUnit.SECONDS.sleep(5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("\n****Fortification Phase Ends for player "+ this.playerName +"..****\n");
 	}
 	
