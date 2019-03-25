@@ -109,6 +109,7 @@ public class Player extends Observable {
 	 */
 	public void startReinforcement() {
 
+		notifyView();
 		ArrayList<Card> playerExchangeCards;
 		playerExchangeCards = getValidCards();
 		Integer totalReinforcementArmyCount = calculateTotalReinforcement(playerExchangeCards);
@@ -645,6 +646,7 @@ public class Player extends Observable {
 
 		// implement an all-out mode
 		boolean allOut = false;
+		Boolean hasConnqueredAtleastOneCountry = false;
 		
 		while (gameOn) {
 			
@@ -753,7 +755,7 @@ public class Player extends Observable {
 				attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
 				notifyView();
 				
-				fight(attackPhase);
+				hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry;
 			}
 			
 			// or keep attacking if all-out mode & player still can attack & player still hasn't conquered target
@@ -764,7 +766,7 @@ public class Player extends Observable {
 					attackPhase.setAttackerDiceCount(selectedAttackerDiceCount);
 					selectedDefenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",selectedDestinationCountry,2);
 					attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
-					fight(attackPhase); 
+					hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry; 
 				} else {
 					endAttack();
 					return;
@@ -774,6 +776,12 @@ public class Player extends Observable {
 			checkIfPlayerHasConqueredTheWorld();
 			//attackPhaseState.clear();
 			//notifyView();
+			
+			if(hasConnqueredAtleastOneCountry) {
+				Card card = gameData.cardsDeck.getCard();
+				this.cardList.add(card);
+			}
+			
 		}
 		endAttack();
 	}

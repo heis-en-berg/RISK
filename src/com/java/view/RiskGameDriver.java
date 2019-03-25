@@ -58,10 +58,12 @@ public class RiskGameDriver {
 	}
 	
 	private void registerObservers() {
+		CardsExchangeView cardsExchangeView = new CardsExchangeView();
 		PhaseView phaseView = new PhaseView();
 
 		for(Player currentPlayer : gameData.getPlayers()) {
 			currentPlayer.addObserver(phaseView);
+			currentPlayer.addObserver(cardsExchangeView);
 		}
 		
 		PlayersWorldDominationView playersWorldDominationView = new PlayersWorldDominationView();
