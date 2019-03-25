@@ -779,10 +779,6 @@ public class Player extends Observable {
 
 		if(allConqueredCountries.size() == this.gameData.gameMap.getNumberOfCountries()) {
 			isWinner = true;
-			System.out.println("\n ****" + this.playerName + " HAS CONQUERED THE WORLD !****");
-			System.out.println("\n ******************************* \n");
-			System.out.println("\n ********** GAME OVER ********** \n");
-			System.out.println("\n ******************************* \n");
 		}
 		return isWinner;
 	}

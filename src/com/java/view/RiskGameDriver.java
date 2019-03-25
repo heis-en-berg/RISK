@@ -251,20 +251,53 @@ public class RiskGameDriver {
 
 			for (Player player : playerList) {
 				currentPlayer = player;
-
-				if(currentPlayer.getIsActive() && currentPlayer.getIsWinner()) { // player wins the game; break the turn loop
+				
+				// before actually 
+				if(getIsActive(player)) { 
+					
+					System.out.println("\n***** Turn Begins for player "+currentPlayer.getPlayerName() +" *****\n");
+					currentPlayer.setGameData(this.gameData);
+					currentPlayer.startTurn();
+					System.out.println("\n***** Turn Ends for player "+currentPlayer.getPlayerName() +" *****\n");
+				}
+				
+				// if player has won the game; break the turn loop
+				if(getIsWinner(player)) {
 					doWeHaveAWinner = true;
 					System.out.println("Congratulations! "+playerList.get(0).getPlayerName() + " wins the game.");
 					break;
-				} else if(currentPlayer.getIsActive()) { // continue if player is active
-					System.out.println("\n***** Turn Begins for player "+currentPlayer.getPlayerName() +" *****\n");
-
-					currentPlayer.setGameData(this.gameData);
-					currentPlayer.startTurn();
-
-					System.out.println("\n***** Turn Ends for player "+currentPlayer.getPlayerName() +" *****\n");
 				}
 			}
 		}
+	}
+
+	private boolean getIsWinner(Player player) {
+		
+		boolean isWinner = false;
+		HashSet<String> allConqueredCountries = new HashSet<String>();
+		allConqueredCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(player.getPlayerID());
+
+		if(allConqueredCountries.size() == this.gameData.gameMap.getNumberOfCountries()) {
+			isWinner = true;
+			System.out.println("\n ****" + player.getPlayerName() + " HAS CONQUERED THE WORLD !****");
+			System.out.println("\n ******************************* \n");
+			System.out.println("\n ********** GAME OVER ********** \n");
+			System.out.println("\n ******************************* \n");
+		}
+		return isWinner;
+		
+	}
+
+	private boolean getIsActive(Player player) {
+		
+		boolean isActive = true;
+		HashSet<String> allConqueredCountries = new HashSet<String>();
+		allConqueredCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(player.getPlayerID());
+
+		if(allConqueredCountries.size() == 0) {
+			isActive = false;
+		}
+		
+		return isActive;
 	}
 }
