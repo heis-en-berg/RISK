@@ -148,7 +148,7 @@ public class StartUpPhaseTest {
      * The initial number of army is given by a factor based on the number of countries. 
      * */
     @Test
-    public void initialArmyCalculationForMoreThan42Countries() {
+    public void initialArmyCalculationForMoreThan84Countries() {
     	
     	GameData localGameMap = new GameData();
     	
@@ -178,6 +178,63 @@ public class StartUpPhaseTest {
 
         // Add test data
         for(int i = 0 ; i < 84; i++) {
+        	localGameMap.gameMap.addCountry("C" + i,"Continent1");
+        }
+        
+        StartUpPhase startUpLocal = new StartUpPhase(localGameMap);
+    	
+    	
+    	Integer[] expectedValues = {40, 35, 30, 25, 20};
+    	
+    	Integer[] data = {2, 3, 4, 5, 6};
+    	
+    	Double factor =  ((double)localGameMap.gameMap.getNumberOfCountries()/42);
+    	
+    	Integer result;
+    	Integer expected;
+    	
+    	for(int i = 0; i < expectedValues.length; i++) {
+    		result = startUpLocal.initialArmyCalculation(data[i]);
+    		expected = (int) (expectedValues[i] * factor);
+    		assertEquals(expected, result);
+    	}
+    	
+    }
+    
+    /**
+     * The initial number of army is given by a factor based on the number of countries. 
+     * */
+    @Test
+    public void initialArmyCalculationForMoreThan126Countries() {
+    	
+    	GameData localGameMap = new GameData();
+    	
+        localGameMap.setNoOfPlayers(6);
+        
+        localGameMap.gameMap = new GameMap();
+        
+        // create players
+        results = new ArrayList<Player>();
+        expectedPlayer = new ArrayList<Player>();
+        expectedPlayer.add(new Player(1, "Karan"));
+        expectedPlayer.add(new Player(2, "Arnav"));
+        expectedPlayer.add(new Player(3, "Sahil"));
+        expectedPlayer.add(new Player(4, "Cristian"));
+        expectedPlayer.add(new Player(5, "Ghalia"));
+        expectedPlayer.add(new Player(6, "Professor"));
+
+        ArrayList<String> names = new ArrayList<String>();
+
+        for (int i = 0; i<localGameMap.getNoOfPlayers(); i++){
+            names.add(expectedPlayer.get(i).getPlayerName());
+        }
+        
+        localGameMap.setPlayers(expectedPlayer);
+
+        //results = startUp.generateRoundRobin();
+
+        // Add test data
+        for(int i = 0 ; i < 126; i++) {
         	localGameMap.gameMap.addCountry("C" + i,"Continent1");
         }
         
