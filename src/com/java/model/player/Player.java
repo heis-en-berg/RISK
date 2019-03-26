@@ -609,7 +609,7 @@ public class Player extends Observable {
 	 * @return the comprehensive list with all source and target countries. 
 	 */
 
-	private HashMap<String,ArrayList<String>> getPotentialAttackScenarios(){
+	public HashMap<String,ArrayList<String>> getPotentialAttackScenarios(){
 		
 		HashMap<String,ArrayList<String>> attackScenarios = new HashMap<String,ArrayList<String>>();
 		// source countries which Player could attack FROM
@@ -767,7 +767,7 @@ public class Player extends Observable {
 	 * @return selectedDiceCount: a valid number of dice to roll based on action and army counts.
 	 * 
 	 */
-	private int getActualMaxAllowedDiceCountForAction(String action, String countryInScopeForAction, int maxDiceCountAllowedForAction) {
+	public int getActualMaxAllowedDiceCountForAction(String action, String countryInScopeForAction, int maxDiceCountAllowedForAction) {
 
 		int countryArmyCount = this.gameData.gameMap.getCountry(countryInScopeForAction).getCountryArmyCount();
 		
@@ -790,13 +790,12 @@ public class Player extends Observable {
 	 * @return true if attacker conquers the target country
 	 */
 	
-	private Boolean fight(AttackPhaseState attackPhase) {
+	public Boolean fight(AttackPhaseState attackPhase) {
 			
 		String selectedSourceCountry = attackPhase.getAttackingCountry();
 		String selectedDestinationCountry = attackPhase.getDefendingCountry();
 		
-		String defendingPlayer = gameData.getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()).getPlayerName();
-		System.out.println("\n HEADS-UP " +  defendingPlayer + " YOU ARE UNDER ATTACK!");
+		System.out.println("\n HEADS-UP " + attackPhase.getDefendingPlayer()  + " YOU ARE UNDER ATTACK!");
 		
 		Integer attackerLostArmyCount = 0;
 		Integer defenderLostArmyCount = 0; 
@@ -887,11 +886,11 @@ public class Player extends Observable {
 
 	/**
 	 * Helper method to check if the player conquered the whole world.
-	 * @return true if they conqured the entire world
+	 * @return true if they conquered the entire world
 	 */
 	public boolean checkIfPlayerHasConqueredTheWorld() {
 		
-		boolean isWinner = false;
+		//boolean isWinner = false;
 		HashSet<String> allConqueredCountries = new HashSet<String>();
 		allConqueredCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(this.playerID);
 
