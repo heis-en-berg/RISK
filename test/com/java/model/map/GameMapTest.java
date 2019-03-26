@@ -9,14 +9,21 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * GameMapTest class tests the important aspects of game map, for
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez 
+ * @version 2.0.0
+ */
 public class GameMapTest {
-
-
-    @BeforeClass
-    public static void beforeEverything() {
-
-    }
-
+	
+	/**
+	 * Tests the country ownership percentage per player
+	 */
     @Test
     public void calculateOwnershipPercentage() {
         GameMap gameMap = new GameMap();
@@ -60,6 +67,9 @@ public class GameMapTest {
         assertEquals(expectedPercentagePlayer2,percentagePlayer2,0);
     }
     
+    /**
+	 * Tests the number of armies per player.
+	 */
     @Test
     public void numberOfArmiesPerPlayer() {
     	 GameMap gameMap = new GameMap();
