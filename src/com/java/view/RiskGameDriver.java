@@ -56,7 +56,10 @@ public class RiskGameDriver {
 		initialArmyPlacement();
 		startTurn();
 	}
-	
+
+	/**
+	 * Able to attach the views Phase View, CardsExchange View to the observer Player
+	 */
 	private void registerObservers() {
 		CardsExchangeView cardsExchangeView = new CardsExchangeView();
 		PhaseView phaseView = new PhaseView();
@@ -272,6 +275,11 @@ public class RiskGameDriver {
 		}
 	}
 
+	/**
+	 * finds if the player is a winner
+	 * @param player check based on the player passed in if they hav won the game
+	 * @return true if the player has won the game
+	 */
 	private boolean getIsWinner(Player player) {
 		
 		boolean isWinner = false;
@@ -289,6 +297,11 @@ public class RiskGameDriver {
 		
 	}
 
+	/**
+	 * to keep track of the fact they are still in the game
+	 * @param player pass the value of the player that is in game
+	 * @return true if the player is active
+	 */
 	private boolean getIsActive(Player player) {
 		
 		boolean isActive = true;

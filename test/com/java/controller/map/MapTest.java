@@ -25,6 +25,7 @@ public class MapTest {
 	static Method mapLoaderMethod;
 	static String invalidMapFilePath1;
 	static String invalidMapFilePath2;
+	static String validMapFilePath;
 
 	@BeforeClass
 	public static void beforeEverything() {
@@ -32,6 +33,7 @@ public class MapTest {
 		mapValidator = new MapValidator();
 		invalidMapFilePath1 = "./map/invalid1_continent_missing.map";
 		invalidMapFilePath2 = "./map/invalid2_disconnected_map.map";
+		validMapFilePath = "./map/Manhattan.map";
 
 		try {
 			mapLoaderMethod = MapLoader.class.getDeclaredMethod("loadMapFromFile", String.class);
@@ -58,9 +60,21 @@ public class MapTest {
 	 * Tests the map text file validator, using file with the disconnected map.
 	 */
 	@Test
-	public void testReadInavlidDisconnectedMapFile() {
+	public void testReadInavalidDisconnectedMapFile() {
 		try {
 			assertFalse(Boolean.parseBoolean(mapLoaderMethod.invoke(new MapLoader(), invalidMapFilePath2).toString()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tests the map text file validator, using file with a valid map.
+	 */
+	@Test
+	public void testReadValidMapFile() {
+		try {
+			assertTrue(Boolean.parseBoolean(mapLoaderMethod.invoke(new MapLoader(), validMapFilePath).toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
