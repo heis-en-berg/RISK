@@ -160,7 +160,7 @@ public class Player extends Observable {
 						.println("Please enter three card numbers from the list of the same or different army types.");
 				for (int i = 0; i < 3; i++) {
 					cardNumber = input.nextInt();
-					while (cardNumber > playerCardList.size()) {
+					while (cardNumber >= playerCardList.size()) {
 						System.out.println("Please input correct number from list");
 						cardNumber = input.nextInt();
 					}
