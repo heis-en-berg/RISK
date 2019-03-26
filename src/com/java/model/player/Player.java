@@ -782,23 +782,7 @@ public class Player extends Observable {
 		
 		return maxDiceCountAllowedForAction;
 	}
-	
-	/*
-	 * 
 		
-		System.out.println("\n ROLLING DICE \n");
-
-		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
-		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
-		
-		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
-		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
-		
-		System.out.println("\nAttacker rolled: " + attackerDiceRolls.toString());
-		System.out.println("\nDefender rolled: " + defenderDiceRolls.toString());
-	 */
-	
-	
 	/**
 	 * Main fight method which encompasses the dynamic interactions of rolling & comparing dice
 	 * This handles the army count updates as well as conqueror id's if need be.
