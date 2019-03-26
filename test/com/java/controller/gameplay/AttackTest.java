@@ -55,6 +55,7 @@ public class AttackTest {
         players.add(playerTwo);
         players.add(playerThree);
 
+        gameData.setPlayers(players);
         gameData.gameMap.setupPlayerNames(players);
         gameData.gameMap.addContinent("Continent1", 5);
 
