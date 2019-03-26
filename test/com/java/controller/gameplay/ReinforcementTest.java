@@ -44,6 +44,7 @@ public class ReinforcementTest {
         players.add(playerOne);
         players.add(playerTwo);
 
+        gameData.gameMap.setupPlayerNames(players);
         gameData.gameMap.addContinent("Continent1", 5);
         gameData.gameMap.addContinent("Continent2", 6);
 

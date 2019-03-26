@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * FortificationTest class tests the fortification paths retrieval for a given scenario. 
@@ -42,7 +41,7 @@ public class FortificationTest {
         playerTwo = new Player(2, "P2");
         players.add(playerOne);
         players.add(playerTwo);
-
+        gameData.gameMap.setupPlayerNames(players);
         gameData.gameMap.addContinent("Continent1", 5);
         gameData.gameMap.addContinent("Continent2", 6);
 
@@ -120,7 +119,5 @@ public class FortificationTest {
         Collections.sort(expected_dest_for_C3);
         Collections.sort(actual_paths.get("C3"));
         assertEquals(actual_paths.get("C3"),expected_dest_for_C3);
-        
-        
     }
 }

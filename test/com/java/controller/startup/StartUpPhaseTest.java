@@ -6,12 +6,11 @@ import com.java.model.player.Player;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 
 /**
  * StartUpPhaseTest class tests the important aspects of start up phase, for
@@ -78,11 +77,6 @@ public class StartUpPhaseTest {
         }
         
         startUp = new StartUpPhase(gameData);
-        //gameData.gameMap.addCountry("C2", "Continent1");
-        //gameData.gameMap.addCountry("C3", "Continent1");
-        //gameData.gameMap.addCountry("C4", "Continent2");
-        //gameData.gameMap.addCountry("C5", "Continent2");
-        //gameData.gameMap.addCountry("C6", "Continent2");
         
     }
     
