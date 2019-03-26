@@ -11,6 +11,7 @@ package com.java.model.player;
  * @version 1.0.0
  * */
 public class ReinforcementPhaseState {
+	
 	private String toCountry = null;
 	private Integer numberOfArmiesPlaced = 0;
 	private Integer numberOfArmiesReceived = 0;
@@ -27,23 +28,47 @@ public class ReinforcementPhaseState {
 	public String getToCountry() {
 		return toCountry;
 	}
-
+	
+	/**
+	 * Sets the country to be attacked
+	 * @param toCountry
+	 */
 	public void setToCountry(String toCountry) {
 		this.toCountry = toCountry;
 	}
-
+	
+	/**
+	 * Gets the number of armies placed
+	 * 
+	 * @return the number of armies placed
+	 */
 	public Integer getNumberOfArmiesPlaced() {
 		return numberOfArmiesPlaced;
 	}
-
+	
+	/**
+	 * Sets the number of armies to be placed
+	 * 
+	 * @param numberOfArmiesPlaced the number of armies placed
+	 */
 	public void setNumberOfArmiesPlaced(Integer numberOfArmiesPlaced) {
 		this.numberOfArmiesPlaced = numberOfArmiesPlaced;
 	}
-
+	
+	/**
+	 * Gets the number of armies received
+	 * 
+	 * @return the number of armies received
+	 */
 	public Integer getNumberOfArmiesReceived() {
 		return numberOfArmiesReceived;
 	}
-
+	
+	/**
+	 * Sets the number of armies received
+	 * 
+	 * @param numberOfArmiesReceived the number of armies received
+	 */
 	public void setNumberOfArmiesReceived(Integer numberOfArmiesReceived) {
 		this.numberOfArmiesReceived = numberOfArmiesReceived;
 	}
