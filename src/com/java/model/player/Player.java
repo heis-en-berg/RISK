@@ -428,223 +428,12 @@ public class Player extends Observable {
 	
 
 	/**
-	 * The startAttack() method encompasses the attack phase logic and flow.
+	 * The startAttack() method encompasses the overall attack phase logic and flow
+	 * including both single and all-out mode.
+	 * Attack phase ends when player either no longer wants to attack, or cannot attack. 
 	 */	
 	
-	public HashMap<String,ArrayList<String>> getPotentialAttackScenarios(){
-		
-		HashMap<String,ArrayList<String>> attackScenarios = new HashMap<String,ArrayList<String>>();
-		// source countries which Player could attack FROM
-		HashSet<String> poolOfPotentialSourceCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
-		
-		//for build 3 strategies
-		// HashSet<String> poolOfPotentialDestinationCountries = new HashSet<String>(); 
-		// HashSet<String> destinationCountriesWithMultiSharedBorders = new HashSet<String>(); 
-		
-		for (String potentialSourceCountry : poolOfPotentialSourceCountries) {
-			// eliminate countries with only a single army count
-			if (this.gameData.gameMap.getCountry(potentialSourceCountry).getCountryArmyCount() < 2) {
-				continue;
-			}
-			HashSet<String> adjacentCountries = new HashSet<String>();
-			adjacentCountries = this.gameData.gameMap.getAdjacentCountries(potentialSourceCountry);
-			for (String adjacentCountry : adjacentCountries) {
-				// ensure adjacent country not owned by same player 
-				if (this.gameData.gameMap.getCountry(adjacentCountry).getCountryConquerorID() != playerID){
-					/*if(poolOfPotentialDestinationCountries.contains(adjacentCountry)) {
-						// this enemy country can be attacked from multiple fronts
-						if(!destinationCountriesWithMultiSharedBorders.contains(adjacentCountry)) {
-							destinationCountriesWithMultiSharedBorders.add(adjacentCountry);
-						} 
-					} else {
-						poolOfPotentialDestinationCountries.add(adjacentCountry);
-					}*/ // for build 3
-					attackScenarios.putIfAbsent(potentialSourceCountry, new ArrayList<String>());
-					attackScenarios.get(potentialSourceCountry).add(adjacentCountry);		
-				}
-			}
-		}
-		
-		return attackScenarios;
-	}
-	
-	public void showAllAttackScenarios(HashMap<String,ArrayList<String>> attackScenarios, 
-			                           HashMap<String,Integer> maxAttackArmyCountPossiblePerSrcCountry, 
-			                           HashMap<String,Integer> maxDefenseArmyCountPossiblePerDestCountry) {
-		
-		// Print all the options out for the player to see and choose from
-		for (String keySourceCountry : attackScenarios.keySet()) {
-			int actualArmyCount = this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount();
-			int maxAttackArmyCount = actualArmyCount  - 1 ;	
-			if(maxAttackArmyCount >= 3) {
-				maxAttackArmyCountPossiblePerSrcCountry.put(keySourceCountry, 3);
-			} else if(maxAttackArmyCount >= 2) {
-				maxAttackArmyCountPossiblePerSrcCountry.put(keySourceCountry, 2);
-			} else {
-				maxAttackArmyCountPossiblePerSrcCountry.put(keySourceCountry, 1);
-			}		
-			for (String correspondingDestinationCountry : attackScenarios.get(keySourceCountry)) {
-				int defenderArmyCount = this.gameData.gameMap.getCountry(correspondingDestinationCountry).getCountryArmyCount();
-				int defenderMaxDiceCount = 1;
-				if(defenderArmyCount  >= 2) {
-					defenderMaxDiceCount = 2;
-				}
-				maxDefenseArmyCountPossiblePerDestCountry.putIfAbsent(correspondingDestinationCountry, defenderMaxDiceCount);
-				System.out.println("\n" + keySourceCountry + " (occupied by " + actualArmyCount + " of your armies)" + "\t -> \t" + correspondingDestinationCountry
-						+ "\t **defended by " + defenderArmyCount  + " of " 
-						+ gameData.getPlayer(this.gameData.gameMap.getCountry(correspondingDestinationCountry).getCountryConquerorID()).getPlayerName() + "'s armies**"
-						+ "\t (attack with up to " + maxAttackArmyCountPossiblePerSrcCountry.get(keySourceCountry) + " armies)");
-			}
-		}
-	}
-	
-	public String getCountryToAttackFrom(HashMap<String,ArrayList<String>> attackScenarios) {
-		
-		String selectedSourceCountry = " "; 
-		
-	    do {
-	    	System.out.println("Which one of your countries would you like to attack FROM?");
-			if (input.hasNextLine()) {
-				selectedSourceCountry = input.nextLine();
-			} 	
-	    } while (!attackScenarios.containsKey(selectedSourceCountry));
-	 
-	    return selectedSourceCountry;    
-	}
-	
-	public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String,ArrayList<String>> attackScenarios) {
-			
-		String selectedDestinationCountry = " "; 
-		
-		do {
-			System.out.println("\n Which enemy country would you like to attack from " + selectedSourceCountry + "?");
-			if (input.hasNextLine()) {
-				selectedDestinationCountry = input.nextLine();
-			}
-		} while (!attackScenarios.get(selectedSourceCountry).contains(selectedDestinationCountry));
-		
-	    return selectedDestinationCountry;    
-	}
-	
-	public Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
-
-		String selectedDiceCount = "1";
-		
-		// max # of dice a defender can roll is 2
-		int defaultMaxDiceCountAllowedForAction = 2;
-		
-		// max # of dice an attacker can roll is 3
-		if(action.equals("attack")) {
-			defaultMaxDiceCountAllowedForAction = 3;
-		}
-
-		// but as countries are attacked, army counts changes and we need to dynamically update thresholds
-		int maxDiceCountAllowedForAction = getActualMaxAllowedDiceCountForAction(action,country,defaultMaxDiceCountAllowedForAction);
-		
-		do {
-			System.out.println("How many dice would " + player + " like to roll to " + action + "?" 
-					+ "\t (up to " + maxDiceCountAllowedForAction + " dice)\n");
-			if (input.hasNextLine()) {
-				selectedDiceCount = input.nextLine();
-			}	
-		} while (isNaN(selectedDiceCount) || Integer.parseInt(selectedDiceCount) < 1 || Integer
-				.parseInt(selectedDiceCount) > maxDiceCountAllowedForAction );
-		
-		return Integer.parseInt(selectedDiceCount);
-	}	
-
-	private int getActualMaxAllowedDiceCountForAction(String action, String countryInScopeForAction, int maxDiceCountAllowedForAction) {
-
-		int countryArmyCount = this.gameData.gameMap.getCountry(countryInScopeForAction).getCountryArmyCount();
-		
-		// attacker must have at least 1 army on the ground at all times
-		if(action.equals("attack")) {
-			countryArmyCount--;
-		}
-
-		if(countryArmyCount == 1 || countryArmyCount == 2) {
-			maxDiceCountAllowedForAction  = countryArmyCount;
-		}
-		
-		return maxDiceCountAllowedForAction;
-	}
-	
-	public Boolean fight(AttackPhaseState attackPhase) {
-			
-		String selectedSourceCountry = attackPhase.getAttackingCountry();
-		String selectedDestinationCountry = attackPhase.getDefendingCountry();
-		
-		String defendingPlayer = gameData.getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()).getPlayerName();
-		System.out.println("\n HEADS-UP " +  defendingPlayer + " YOU ARE UNDER ATTACK!");
-		
-		Integer attackerLostArmyCount = 0;
-		Integer defenderLostArmyCount = 0; 
-		Boolean battleOutcomeFlag = false;
-		Integer selectedDefenderDiceCount = attackPhase.getDefenderDiceCount();
-		Integer selectedAttackerDiceCount = attackPhase.getAttackerDiceCount();
-		
-		System.out.println("\n ROLLING DICE \n");
-
-		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
-		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
-		
-		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
-		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
-		
-		System.out.println("\nAttacker rolled: " + attackerDiceRolls.toString());
-		System.out.println("\nDefender rolled: " + defenderDiceRolls.toString());
-		
-		// take the lowest dice count among the two
-		int benchDiceRoll = java.lang.Math.min(selectedDefenderDiceCount, selectedAttackerDiceCount);
-		
-		for (int d = 0; d < benchDiceRoll; d++) {
-			if(defenderDiceRolls.get(d) >= attackerDiceRolls.get(d)) {
-				System.out.println("\n Attacker loses 1 army count\n");
-				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, 1);
-				attackerLostArmyCount++;
-			} else {
-				System.out.println("\n Defender loses 1 army count\n");
-				this.gameData.gameMap.deductArmyToCountry(selectedDestinationCountry, 1);
-				defenderLostArmyCount++;
-			}
-			if(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount() == 0) {
-				// declare new winner 
-				battleOutcomeFlag = true;
-				this.gameData.gameMap.getCountry(selectedDestinationCountry).setConquerorID(this.playerID);
-				this.gameData.gameMap.updateCountryConquerer(selectedDestinationCountry, this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID(), this.playerID);
-				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, selectedAttackerDiceCount);
-				this.gameData.gameMap.getCountry(selectedDestinationCountry).setArmyCount(selectedAttackerDiceCount);
-				System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + " !");
-				// give him card
-			}
-		}
-		
-		 
-	    attackPhase.setBattleOutcomeFlag(battleOutcomeFlag);
-	    attackPhase.setAttackerLostArmyCount(attackerLostArmyCount);
-		attackPhase.setDefenderLostArmyCount(defenderLostArmyCount);
-		//attackPhaseState.add(attackPhase);
-		notifyView(); 	
-		
-		System.out.println("Army count for " + selectedSourceCountry + " is now: "
-				+ this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount());
-		System.out.println("Army count for " + selectedDestinationCountry + " is now: "
-				+ this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount());
-		
-		return battleOutcomeFlag;
-	}
-	
-	
-	
-	public void endAttack() {
-	
-		gameOn = false; 
-		System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
-		//attackPhaseState.clear();
-		//notifyView();
-	}
-	
-	public void startAttack() {
+	private void startAttack() {
 		
 		System.out.println();
 		System.out.println("**** Attack Phase Begins for player "+ this.playerName +"..****\n");
@@ -704,12 +493,9 @@ public class Player extends Observable {
 				endAttack();
 				return;
 			}
-				
-			HashMap<String,Integer> maxAttackArmyCountPossiblePerSrcCountry   = new HashMap<String,Integer>();
-			HashMap<String,Integer> maxDefenseArmyCountPossiblePerDestCountry = new HashMap<String,Integer>();
-			
+						
 			// show Player all the options they have
-			showAllAttackScenarios(attackScenarios, maxAttackArmyCountPossiblePerSrcCountry, maxDefenseArmyCountPossiblePerDestCountry);
+			showAllAttackScenarios(attackScenarios);
 			String selectedSourceCountry = getCountryToAttackFrom(attackScenarios);
 			attackPhase.setAttackingCountry(selectedSourceCountry);
 			notifyView();
@@ -790,6 +576,270 @@ public class Player extends Observable {
 		}
 		endAttack();
 	}
+	
+	/**
+	 * All of the potential attack scenarios for current player.
+	 * @return the comprehensive list with all source and target countries. 
+	 */
+
+	private HashMap<String,ArrayList<String>> getPotentialAttackScenarios(){
+		
+		HashMap<String,ArrayList<String>> attackScenarios = new HashMap<String,ArrayList<String>>();
+		// source countries which Player could attack FROM
+		HashSet<String> poolOfPotentialSourceCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
+		
+		//for build 3 strategies
+		// HashSet<String> poolOfPotentialDestinationCountries = new HashSet<String>(); 
+		// HashSet<String> destinationCountriesWithMultiSharedBorders = new HashSet<String>(); 
+		
+		for (String potentialSourceCountry : poolOfPotentialSourceCountries) {
+			// eliminate countries with only a single army count
+			if (this.gameData.gameMap.getCountry(potentialSourceCountry).getCountryArmyCount() < 2) {
+				continue;
+			}
+			HashSet<String> adjacentCountries = new HashSet<String>();
+			adjacentCountries = this.gameData.gameMap.getAdjacentCountries(potentialSourceCountry);
+			for (String adjacentCountry : adjacentCountries) {
+				// ensure adjacent country not owned by same player 
+				if (this.gameData.gameMap.getCountry(adjacentCountry).getCountryConquerorID() != playerID){
+					/*if(poolOfPotentialDestinationCountries.contains(adjacentCountry)) {
+						// this enemy country can be attacked from multiple fronts
+						if(!destinationCountriesWithMultiSharedBorders.contains(adjacentCountry)) {
+							destinationCountriesWithMultiSharedBorders.add(adjacentCountry);
+						} 
+					} else {
+						poolOfPotentialDestinationCountries.add(adjacentCountry);
+					}*/ // for build 3
+					attackScenarios.putIfAbsent(potentialSourceCountry, new ArrayList<String>());
+					attackScenarios.get(potentialSourceCountry).add(adjacentCountry);		
+				}
+			}
+		}
+		
+		return attackScenarios;
+	}
+	
+	/**
+	 * Helper method to print out all of the potential attack scenarios for current player.
+	 * @param attackScenarios: the comprehensive list with all source and target countries. 
+	 * 
+	 */
+	private void showAllAttackScenarios(HashMap<String,ArrayList<String>> attackScenarios) {
+
+		HashMap<String,Integer> maxAttackArmyCountPossiblePerSrcCountry   = new HashMap<String,Integer>();
+		HashMap<String,Integer> maxDefenseArmyCountPossiblePerDestCountry = new HashMap<String,Integer>();
+		
+		// Print all the options out for the player to see and choose from
+		for (String keySourceCountry : attackScenarios.keySet()) {
+			int actualArmyCount = this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount();
+			int maxAttackArmyCount = actualArmyCount  - 1 ;	
+			if(maxAttackArmyCount >= 3) {
+				maxAttackArmyCountPossiblePerSrcCountry.put(keySourceCountry, 3);
+			} else if(maxAttackArmyCount >= 2) {
+				maxAttackArmyCountPossiblePerSrcCountry.put(keySourceCountry, 2);
+			} else {
+				maxAttackArmyCountPossiblePerSrcCountry.put(keySourceCountry, 1);
+			}		
+			for (String correspondingDestinationCountry : attackScenarios.get(keySourceCountry)) {
+				int defenderArmyCount = this.gameData.gameMap.getCountry(correspondingDestinationCountry).getCountryArmyCount();
+				int defenderMaxDiceCount = 1;
+				if(defenderArmyCount  >= 2) {
+					defenderMaxDiceCount = 2;
+				}
+				maxDefenseArmyCountPossiblePerDestCountry.putIfAbsent(correspondingDestinationCountry, defenderMaxDiceCount);
+				System.out.println("\n" + keySourceCountry + " (occupied by " + actualArmyCount + " of your armies)" + "\t -> \t" + correspondingDestinationCountry
+						+ "\t **defended by " + defenderArmyCount  + " of " 
+						+ gameData.getPlayer(this.gameData.gameMap.getCountry(correspondingDestinationCountry).getCountryConquerorID()).getPlayerName() + "'s armies**"
+						+ "\t (attack with up to " + maxAttackArmyCountPossiblePerSrcCountry.get(keySourceCountry) + " armies)");
+			}
+		}
+	}
+	
+	/**
+	 * Helper method to get and also validate the source country player wishes to attack from.
+	 * @param attackScenarios: the comprehensive list with all source and target countries. 
+	 * @return sourceCountry: a validated country option to attack from.
+	 * 
+	 */
+	private String getCountryToAttackFrom(HashMap<String,ArrayList<String>> attackScenarios) {
+		
+		String selectedSourceCountry = " "; 
+		
+	    do {
+	    	System.out.println("Which one of your countries would you like to attack FROM?");
+			if (input.hasNextLine()) {
+				selectedSourceCountry = input.nextLine();
+			} 	
+	    } while (!attackScenarios.containsKey(selectedSourceCountry));
+	 
+	    return selectedSourceCountry;    
+	}
+	
+	/**
+	 * Helper method to get and also validate the target country to be attacked.
+	 * @param attackScenarios: the comprehensive list with all source and target countries. 
+	 * @param sourceCountry: a validated country option to attack from.
+	 * @return destinationCountry: a validated target country based on the source.
+	 * 
+	 */
+	private String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String,ArrayList<String>> attackScenarios) {
+			
+		String selectedDestinationCountry = " "; 
+		
+		do {
+			System.out.println("\n Which enemy country would you like to attack from " + selectedSourceCountry + "?");
+			if (input.hasNextLine()) {
+				selectedDestinationCountry = input.nextLine();
+			}
+		} while (!attackScenarios.get(selectedSourceCountry).contains(selectedDestinationCountry));
+		
+	    return selectedDestinationCountry;    
+	}
+	
+	/**
+	 * Helper method to get and also validate the attacker and defender's dice selections.
+	 * This is meant to be a generic functionality which tailors to both actions.
+	 * @param player: the player rolling the dice. 
+	 * @param country: either the source country to attack from / the target country to be attacked
+	 * @param action: either attack/defense.
+	 * @return selectedDiceCount: a valid number of dice player can roll.
+	 * 
+	 */
+	private Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
+
+		String selectedDiceCount = "1";
+		
+		// max # of dice a defender can roll is 2
+		int defaultMaxDiceCountAllowedForAction = 2;
+		
+		// max # of dice an attacker can roll is 3
+		if(action.equals("attack")) {
+			defaultMaxDiceCountAllowedForAction = 3;
+		}
+
+		// but as countries are attacked, army counts changes and we need to dynamically update thresholds
+		int maxDiceCountAllowedForAction = getActualMaxAllowedDiceCountForAction(action,country,defaultMaxDiceCountAllowedForAction);
+		
+		do {
+			System.out.println("How many dice would " + player + " like to roll to " + action + "?" 
+					+ "\t (up to " + maxDiceCountAllowedForAction + " dice)\n");
+			if (input.hasNextLine()) {
+				selectedDiceCount = input.nextLine();
+			}	
+		} while (isNaN(selectedDiceCount) || Integer.parseInt(selectedDiceCount) < 1 || Integer
+				.parseInt(selectedDiceCount) > maxDiceCountAllowedForAction );
+		
+		return Integer.parseInt(selectedDiceCount);
+	}	
+
+	/**
+	 * Helper method to get max allowable dice count given specific context: action and country army count.
+	 * @param action: either attack/defense.
+	 * @param countryInScopeForAction: either the source country to attack from / the target country to be attacked.
+	 * @param maxDiceCountAllowedForAction: a default max based on Risk game rules.
+	 * @return selectedDiceCount: a valid number of dice to roll based on action and army counts.
+	 * 
+	 */
+	private int getActualMaxAllowedDiceCountForAction(String action, String countryInScopeForAction, int maxDiceCountAllowedForAction) {
+
+		int countryArmyCount = this.gameData.gameMap.getCountry(countryInScopeForAction).getCountryArmyCount();
+		
+		// attacker must have at least 1 army on the ground at all times
+		if(action.equals("attack")) {
+			countryArmyCount--;
+		}
+
+		if(countryArmyCount == 1 || countryArmyCount == 2) {
+			maxDiceCountAllowedForAction  = countryArmyCount;
+		}
+		
+		return maxDiceCountAllowedForAction;
+	}
+	
+	/**
+	 * Main fight method which encompasses the dynamic interactions of rolling & comparing dice
+	 * This handles the army count updates as well as conqueror id's if need be.
+	 * @param attackPhase
+	 * @return true if attacker conquers the target country
+	 */
+	
+	private Boolean fight(AttackPhaseState attackPhase) {
+			
+		String selectedSourceCountry = attackPhase.getAttackingCountry();
+		String selectedDestinationCountry = attackPhase.getDefendingCountry();
+		
+		String defendingPlayer = gameData.getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()).getPlayerName();
+		System.out.println("\n HEADS-UP " +  defendingPlayer + " YOU ARE UNDER ATTACK!");
+		
+		Integer attackerLostArmyCount = 0;
+		Integer defenderLostArmyCount = 0; 
+		Boolean battleOutcomeFlag = false;
+		Integer selectedDefenderDiceCount = attackPhase.getDefenderDiceCount();
+		Integer selectedAttackerDiceCount = attackPhase.getAttackerDiceCount();
+		
+		System.out.println("\n ROLLING DICE \n");
+
+		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
+		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
+		
+		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
+		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
+		
+		System.out.println("\nAttacker rolled: " + attackerDiceRolls.toString());
+		System.out.println("\nDefender rolled: " + defenderDiceRolls.toString());
+		
+		// take the lowest dice count among the two
+		int benchDiceRoll = java.lang.Math.min(selectedDefenderDiceCount, selectedAttackerDiceCount);
+		
+		for (int d = 0; d < benchDiceRoll; d++) {
+			if(defenderDiceRolls.get(d) >= attackerDiceRolls.get(d)) {
+				System.out.println("\n Attacker loses 1 army count\n");
+				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, 1);
+				attackerLostArmyCount++;
+			} else {
+				System.out.println("\n Defender loses 1 army count\n");
+				this.gameData.gameMap.deductArmyToCountry(selectedDestinationCountry, 1);
+				defenderLostArmyCount++;
+			}
+			if(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount() == 0) {
+				// declare new winner 
+				battleOutcomeFlag = true;
+				this.gameData.gameMap.updateCountryConquerer(selectedDestinationCountry, this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID(), this.playerID);
+				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, selectedAttackerDiceCount);
+				this.gameData.gameMap.getCountry(selectedDestinationCountry).setArmyCount(selectedAttackerDiceCount);
+				System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + " !");
+				// give him card
+			}
+		}
+		
+		 
+	    attackPhase.setBattleOutcomeFlag(battleOutcomeFlag);
+	    attackPhase.setAttackerLostArmyCount(attackerLostArmyCount);
+		attackPhase.setDefenderLostArmyCount(defenderLostArmyCount);
+		//attackPhaseState.add(attackPhase);
+		notifyView(); 	
+		
+		System.out.println("Army count for " + selectedSourceCountry + " is now: "
+				+ this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount());
+		System.out.println("Army count for " + selectedDestinationCountry + " is now: "
+				+ this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount());
+		
+		return battleOutcomeFlag;
+	}
+	
+	/**
+	 * Helper method called upon when player cannot attack anymore 
+	 * or when player does not wish to attack anymore.
+	 */
+	
+	private void endAttack() {
+	
+		gameOn = false; 
+		System.out.println("\n****Attack Phase Ends for player "+ this.playerName +"..****\n");
+		//attackPhaseState.clear();
+		//notifyView();
+	}
+	
 	
 	/**
 	 * Helper method to check if the player conquered the whole world.
