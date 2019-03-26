@@ -847,9 +847,11 @@ public class Player extends Observable {
 
 		Integer selectedDefenderDiceCount = attackPhase.getDefenderDiceCount();
 		Integer selectedAttackerDiceCount = attackPhase.getAttackerDiceCount();
+		notifyView();
 
 		ArrayList<Integer> attackerDiceRolls = attackPhase.getAttackerDiceRollResults();
 		ArrayList<Integer> defenderDiceRolls = attackPhase.getDefenderDiceRollResults();
+		notifyView();
 
 		// take the lowest dice count among the two
 		int benchDiceRoll = java.lang.Math.min(selectedDefenderDiceCount, selectedAttackerDiceCount);
