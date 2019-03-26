@@ -546,6 +546,8 @@ public class Player extends Observable {
 				attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
 				notifyView();
 				
+				rollDiceBattle(attackPhase);
+				
 				hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry;
 			}
 			
@@ -557,6 +559,7 @@ public class Player extends Observable {
 					attackPhase.setAttackerDiceCount(selectedAttackerDiceCount);
 					selectedDefenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",selectedDestinationCountry,2);
 					attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
+					rollDiceBattle(attackPhase);
 					hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry; 
 				} else {
 					break;
@@ -575,6 +578,30 @@ public class Player extends Observable {
 			
 		}
 		endAttack();
+	}
+	
+	/**
+	 * rollDiceBattle resorts to the core rollDice method in Dice
+	 * but contains additional logic to set attackPhase logic
+	 * @param attackPhase has all the dice count info for attacker and defender
+	 */
+	
+	private void rollDiceBattle(AttackPhaseState attackPhase) {
+		
+		System.out.println("\n ROLLING DICE \n");
+
+		Integer selectedDefenderDiceCount = attackPhase.getDefenderDiceCount();
+		Integer selectedAttackerDiceCount = attackPhase.getAttackerDiceCount();
+		
+		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
+		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
+		
+		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
+		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
+		
+		System.out.println("\nAttacker rolled: " + attackerDiceRolls.toString());
+		System.out.println("\nDefender rolled: " + defenderDiceRolls.toString());
+		
 	}
 	
 	/**
@@ -756,6 +783,22 @@ public class Player extends Observable {
 		return maxDiceCountAllowedForAction;
 	}
 	
+	/*
+	 * 
+		
+		System.out.println("\n ROLLING DICE \n");
+
+		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
+		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
+		
+		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
+		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
+		
+		System.out.println("\nAttacker rolled: " + attackerDiceRolls.toString());
+		System.out.println("\nDefender rolled: " + defenderDiceRolls.toString());
+	 */
+	
+	
 	/**
 	 * Main fight method which encompasses the dynamic interactions of rolling & comparing dice
 	 * This handles the army count updates as well as conqueror id's if need be.
@@ -774,19 +817,13 @@ public class Player extends Observable {
 		Integer attackerLostArmyCount = 0;
 		Integer defenderLostArmyCount = 0; 
 		Boolean battleOutcomeFlag = false;
+		
 		Integer selectedDefenderDiceCount = attackPhase.getDefenderDiceCount();
 		Integer selectedAttackerDiceCount = attackPhase.getAttackerDiceCount();
 		
-		System.out.println("\n ROLLING DICE \n");
+		ArrayList<Integer> attackerDiceRolls = attackPhase.getAttackerDiceRollResults();
+		ArrayList<Integer> defenderDiceRolls = attackPhase.getDefenderDiceRollResults();
 
-		ArrayList<Integer> attackerDiceRolls = playerDice.rollDice(selectedAttackerDiceCount);
-		ArrayList<Integer> defenderDiceRolls = playerDice.rollDice(selectedDefenderDiceCount);
-		
-		attackPhase.setAttackerDiceRollResults(attackerDiceRolls);
-		attackPhase.setDefenderDiceRollResults(defenderDiceRolls);
-		
-		System.out.println("\nAttacker rolled: " + attackerDiceRolls.toString());
-		System.out.println("\nDefender rolled: " + defenderDiceRolls.toString());
 		
 		// take the lowest dice count among the two
 		int benchDiceRoll = java.lang.Math.min(selectedDefenderDiceCount, selectedAttackerDiceCount);
