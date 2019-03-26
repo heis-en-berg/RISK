@@ -61,6 +61,7 @@ public class Player extends Observable {
 		fortificationPhaseState = new ArrayList<>();
 		this.playerDice = new Dice();
 	}
+	
 	/**
 	 * get player's win status
 	 * @return true if player is a winner else false
@@ -565,8 +566,6 @@ public class Player extends Observable {
 			allOut = false;
 			
 			checkIfPlayerHasConqueredTheWorld();
-			//attackPhaseState.clear();
-			//notifyView();
 			
 			if(hasConnqueredAtleastOneCountry) {
 				Card card = gameData.cardsDeck.getCard();
@@ -762,7 +761,6 @@ public class Player extends Observable {
 	 * @param attackPhase
 	 * @return true if attacker conquers the target country
 	 */
-	
 	private Boolean fight(AttackPhaseState attackPhase) {
 			
 		String selectedSourceCountry = attackPhase.getAttackingCountry();
@@ -851,6 +849,7 @@ public class Player extends Observable {
 		
 		return Integer.parseInt(selectedArmyCount);
 	}
+	
 	/**
 	 * Helper method called upon when player cannot attack anymore 
 	 * or when player does not wish to attack anymore.
@@ -1076,7 +1075,6 @@ public class Player extends Observable {
 	 * @param fortificationScenarios a HashStructure to be populated
 	 * @param rootCountry country to be checked for adjacency
 	 */
-	
 	public void buildFortificationPath(HashMap<String, ArrayList<String>> fortificationScenarios, String rootCountry) {
 		ArrayList<String> longestConqueredPathFromRoot = new ArrayList<String>();
 		longestConqueredPathFromRoot.add(rootCountry);
