@@ -1,21 +1,20 @@
 package com.java.controller.map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Method;
-
+import com.java.model.map.GameMap;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.java.model.map.GameMap;
+import java.lang.reflect.Method;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * MapTest class tests the important aspects of map loader and validator, in
  * particular map connectivity and .map file validation.
  * 
  * @author Karan Dhingra
- * @version 1.0
+ * @version 2.0.0
  */
 public class MapTest {
 

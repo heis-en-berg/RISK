@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNotEquals;
  * 
  * @author Arnav Bhardwaj
  * @author Cristian Rodriguez
- * @version 1.0
+ * @version 2.0.0
  */
 public class StartUpPhaseTest {
 	/**
