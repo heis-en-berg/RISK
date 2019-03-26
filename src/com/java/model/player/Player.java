@@ -804,12 +804,12 @@ public class Player extends Observable {
 			if(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount() == 0) {
 				// declare new winner 
 				battleOutcomeFlag = true;
+				selectedAttackerDiceCount = getNumberofArmiesAttackerWantsToMove(selectedSourceCountry);
 				this.gameData.gameMap.updateCountryConquerer(selectedDestinationCountry, this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID(), this.playerID);
-				this.gameData.gameMap.getCountry(selectedDestinationCountry).setConquerorID(this.playerID);
 				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, selectedAttackerDiceCount);
-				this.gameData.gameMap.getCountry(selectedDestinationCountry).setArmyCount(selectedAttackerDiceCount);
-				System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + " !");
-				// give him card
+				this.gameData.gameMap.deductArmyToCountry(selectedDestinationCountry, defenderLostArmyCount);
+				this.gameData.gameMap.addArmyToCountry(selectedDestinationCountry,selectedAttackerDiceCount);
+				System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + "!");
 			}
 		}
 		
@@ -828,6 +828,22 @@ public class Player extends Observable {
 		return battleOutcomeFlag;
 	}
 	
+	private Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
+
+		String selectedArmyCount = "1";
+		int maxArmyCountAllowed = this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount() - 1;
+		
+		do {
+			System.out.println("How many armies would " + this.playerName + " like to move to conquered country?" 
+					+ "\t (up to " + maxArmyCountAllowed + " armies)\n");
+			if (input.hasNextLine()) {
+				selectedArmyCount = input.nextLine();
+			}	
+		} while (isNaN(selectedArmyCount) || Integer.parseInt(selectedArmyCount) < 1 || Integer
+				.parseInt(selectedArmyCount) > maxArmyCountAllowed );
+		
+		return Integer.parseInt(selectedArmyCount);
+	}
 	/**
 	 * Helper method called upon when player cannot attack anymore 
 	 * or when player does not wish to attack anymore.
