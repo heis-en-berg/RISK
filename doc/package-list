@@ -1,0 +1,10 @@
+com.java.controller.dice
+com.java.controller.map
+com.java.controller.startup
+com.java.model
+com.java.model.cards
+com.java.model.gamedata
+com.java.model.map
+com.java.model.player
+com.java.view
+com.main
