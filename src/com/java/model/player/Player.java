@@ -804,16 +804,18 @@ public class Player extends Observable {
 			if(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount() == 0) {
 				// declare new winner 
 				battleOutcomeFlag = true;
-				selectedAttackerDiceCount = getNumberofArmiesAttackerWantsToMove(selectedSourceCountry);
+				System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + "!");
+				// if game is over, no need to worry about army counts 
+				if(!checkIfPlayerHasConqueredTheWorld()){
+					selectedAttackerDiceCount = getNumberofArmiesAttackerWantsToMove(selectedSourceCountry);
+				}
 				this.gameData.gameMap.updateCountryConquerer(selectedDestinationCountry, this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID(), this.playerID);
 				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, selectedAttackerDiceCount);
 				this.gameData.gameMap.deductArmyToCountry(selectedDestinationCountry, defenderLostArmyCount);
 				this.gameData.gameMap.addArmyToCountry(selectedDestinationCountry,selectedAttackerDiceCount);
-				System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + "!");
 			}
 		}
 		
-		 
 	    attackPhase.setBattleOutcomeFlag(battleOutcomeFlag);
 	    attackPhase.setAttackerLostArmyCount(attackerLostArmyCount);
 		attackPhase.setDefenderLostArmyCount(defenderLostArmyCount);
