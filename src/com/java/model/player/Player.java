@@ -678,7 +678,7 @@ public class Player extends Observable {
 	/**
 	 * Helper method to get and also validate the target country to be attacked.
 	 * @param attackScenarios: the comprehensive list with all source and target countries. 
-	 * @param sourceCountry: a validated country option to attack from.
+	 * @param selectedSourceCountry: a validated country option to attack from.
 	 * @return destinationCountry: a validated target country based on the source.
 	 * 
 	 */
@@ -829,7 +829,12 @@ public class Player extends Observable {
 		
 		return battleOutcomeFlag;
 	}
-	
+
+	/**
+	 * Obtain the number of armies that the attcker choses to move to the conqured country
+	 * @param selectedSourceCountry pass the value they decide to move to
+	 * @return value to move the amount of army
+	 */
 	private Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
 
 		String selectedArmyCount = "1";
@@ -850,7 +855,6 @@ public class Player extends Observable {
 	 * Helper method called upon when player cannot attack anymore 
 	 * or when player does not wish to attack anymore.
 	 */
-	
 	private void endAttack() {
 	
 		gameOn = false; 
@@ -858,10 +862,11 @@ public class Player extends Observable {
 		//attackPhaseState.clear();
 		//notifyView();
 	}
-	
-	
+
+
 	/**
 	 * Helper method to check if the player conquered the whole world.
+	 * @return true if they conqured the entire world
 	 */
 	public boolean checkIfPlayerHasConqueredTheWorld() {
 		
@@ -998,7 +1003,6 @@ public class Player extends Observable {
 		// respective countries to reflect they player's fortification move
 		this.gameData.gameMap.getCountry(fromCountry).deductArmy(Integer.parseInt(noOfArmiesToMove));
 		this.gameData.gameMap.addArmyToCountry(toCountry, Integer.parseInt(noOfArmiesToMove));
-		//this.gameData.gameMap.getCountry(toCountry).addArmy(Integer.parseInt(noOfArmiesToMove));
 
 		System.out.println("\nFortification Successful for "+ this.playerName +". Here is a summary of the new status-quo:\n");
 
@@ -1006,8 +1010,7 @@ public class Player extends Observable {
 				+ this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
 		System.out.println("Army count for " + toCountry + " is now: "
 				+ this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
-		
-		//fortificationPhase = new FortificationPhaseState();
+
 		fortificationPhaseState.clear();
 		try {
 			TimeUnit.SECONDS.sleep(5);
