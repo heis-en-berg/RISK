@@ -53,9 +53,9 @@ public class StartUpPhase {
 	 * @param playerNames list of names passed based on the console input from user
 	 * @return A list that contains all the players which now have ids assigned.
 	 */
-	public ArrayList<Player> generatePlayers(ArrayList<String> playerNames){
+	public ArrayList<Player> generatePlayers(ArrayList<String> playerNames, ArrayList<Integer> playerStrategy){
 		
-		// A collection of empty players is created.
+		// A collection of empty players is created to return it.
 		ArrayList<Player> newPlayers = new ArrayList<Player>();
 		
 		// Give every new player a unique id and the name provided by the user.

@@ -101,23 +101,36 @@ public class RiskGameDriver {
 		
 		// Array list to store the name of the players provided by the user.
 		ArrayList<String> playerNames = new ArrayList<String>();
+		ArrayList<Integer> playerStrategy = new ArrayList<Integer>();
 		
 		// Asks the name of each player.
 		for (int i = 0; i < numOfPlayer; i++) {
 			
 			String playerNameInput = "";
-			
+			String playerStrategyInput = "";
+
 			while(playerNameInput == null || playerNameInput.length() == 0) {
 				System.out.println("\nPlayer " + (i + 1));
 				System.out.println("Enter your name: ");
 				playerNameInput = input.nextLine().trim();
 			}
-			
+			//first check if it is a number then check if it is inside the range of 1 to 5
+			do {
+				do {
+					System.out.println("\n Choose your Player Strategy (BASED ON NUMBER): ");
+					System.out.println("\n (1) Aggressive \n (2) Human \n (3) Benevolent \n (4) Random \n (5) Cheater");
+
+					playerStrategyInput = input.nextLine().trim();
+				} while (isNaN(playerStrategyInput));
+			}
+			while(!(Integer.parseInt(playerStrategyInput) > 0 && Integer.parseInt(playerStrategyInput) <6));// check to make sure it is between 1 and 5 else keep asking
+
 			playerNames.add(playerNameInput.trim());
+			playerStrategy.add(Integer.parseInt(playerStrategyInput)); // parse it and store it as integer
 		}
 		
 		// Array list to store the name of the players provided by the user.
-		startUp.generatePlayers(playerNames);
+		startUp.generatePlayers(playerNames, playerStrategy);
 		startUp.generateCardsDeck();
 	}
 	
