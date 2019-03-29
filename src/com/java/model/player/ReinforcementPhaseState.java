@@ -23,7 +23,9 @@ public class ReinforcementPhaseState {
 	}
 
 	/**
-	 * Gets the name of country 
+	 * Gets the name of country
+	 * 
+	 *  @return the country
 	 * */
 	public String getToCountry() {
 		return toCountry;
@@ -31,7 +33,7 @@ public class ReinforcementPhaseState {
 	
 	/**
 	 * Sets the country to be attacked
-	 * @param toCountry
+	 * @param toCountry country
 	 */
 	public void setToCountry(String toCountry) {
 		this.toCountry = toCountry;

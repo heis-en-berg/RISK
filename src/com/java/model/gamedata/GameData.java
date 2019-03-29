@@ -66,6 +66,7 @@ public class GameData {
 	/**
 	 * Getter player.
 	 *
+	 * @param playerId player id.
 	 * @return player.
 	 * */
 	public Player getPlayer(Integer playerId) {
@@ -106,7 +107,7 @@ public class GameData {
 	
 	/**
 	 * Get player's status
-	 * @param player
+	 * @param player player id
 	 * @return true if player is active else false
 	 */
 	public Boolean getPlayerStatus(Player player) {
@@ -115,7 +116,7 @@ public class GameData {
 	
 	/**
 	 * Set player's status
-	 * @param player
+	 * @param player player id.
 	 * @param isActive set player status
 	 */
 	public void setPlayerStatus(Player player, Boolean isActive) {
