@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.java.controller.dice"},{"l":"com.java.controller.gameplay"},{"l":"com.java.controller.map"},{"l":"com.java.controller.startup"},{"l":"com.java.model.gamedata"},{"l":"com.java.model.map"},{"l":"com.java.model.player"},{"l":"com.java.view"},{"l":"com.main"}]
