@@ -41,6 +41,8 @@ public class ReinforcementTest {
 
         // Test data with two players, two continents and six countries.
         players = new ArrayList<Player>();
+        playerOne = new Player();
+        playerTwo = new Player();
         playerOne.setStrategyType(new HumanMode(1, "P1"));
         playerTwo.setStrategyType(new HumanMode(2, "P2"));
         players.add(playerOne);

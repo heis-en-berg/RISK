@@ -39,10 +39,10 @@ public class FortificationTest {
 
         // Test data with two players, two continents and six countries.
         players = new ArrayList<Player>();
-        Player player1 = new Player();
-        player1.setStrategyType(new HumanMode(1, "Player1"));
-        Player player2 = new Player();
-        player2.setStrategyType(new HumanMode(2, "Player2"));
+        playerOne   = new Player();
+        playerOne.setStrategyType(new HumanMode(1, "P1"));
+        playerTwo   = new Player();
+        playerTwo.setStrategyType(new HumanMode(2, "P2"));
         players.add(playerOne);
         players.add(playerTwo);
         gameData.gameMap.setupPlayerNames(players);
