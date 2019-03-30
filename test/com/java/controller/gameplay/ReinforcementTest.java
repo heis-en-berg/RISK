@@ -5,7 +5,9 @@ import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
 import com.java.model.map.GameMap;
-import com.java.model.player.PlayerStrategy;
+import com.java.model.player.HumanMode;
+import com.java.model.player.Player;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,8 +29,8 @@ import static org.junit.Assert.assertTrue;
 public class ReinforcementTest {
 
     private static GameData gameData;
-    private static PlayerStrategy playerOne,playerTwo;
-    private static ArrayList<PlayerStrategy> players;
+    private static Player playerOne,playerTwo;
+    private static ArrayList<Player> players;
 
     @BeforeClass
     static public void setUp() {
@@ -38,9 +40,9 @@ public class ReinforcementTest {
         gameData.gameMap = new GameMap();
 
         // Test data with two players, two continents and six countries.
-        players = new ArrayList<>();
-        playerOne = new PlayerStrategy(1, "P1");
-        playerTwo = new PlayerStrategy(2, "P2");
+        players = new ArrayList<Player>();
+        playerOne.setStrategyType(new HumanMode(1, "P1"));
+        playerTwo.setStrategyType(new HumanMode(2, "P2"));
         players.add(playerOne);
         players.add(playerTwo);
 
@@ -72,8 +74,8 @@ public class ReinforcementTest {
         gameData.gameMap.getCountry("C5").addArmy(5);
         gameData.gameMap.getCountry("C6").addArmy(6);
 
-        playerOne.setGameData(gameData);
-        playerTwo.setGameData(gameData);
+        playerOne.getStrategyType().setGameData(gameData);
+        playerTwo.getStrategyType().setGameData(gameData);
     }
 
     /**
@@ -82,7 +84,7 @@ public class ReinforcementTest {
     @Test
     public void testCalculateReinforcementArmyNoConqueredContinent() {
 
-        int actual_value = playerTwo.calculateReinforcementArmy();
+        int actual_value = playerTwo.getStrategyType().calculateReinforcementArmy();
         int expected_value = 3;
         assertEquals(expected_value, actual_value);
     }
@@ -93,7 +95,7 @@ public class ReinforcementTest {
     @Test
     public void testCalculateReinforcementArmyWithConqueredContinent() {
 
-        int actual_value = playerOne.calculateReinforcementArmy();
+        int actual_value = playerOne.getStrategyType().calculateReinforcementArmy();
         int expected_value = 14;
         assertEquals(expected_value,actual_value);
     }
@@ -114,9 +116,9 @@ public class ReinforcementTest {
 
         for (int cardCount = 0; cardCount < 3; cardCount++) {
             Card card = gameData.cardsDeck.getCard();
-            playerTwo.addToPlayerCardList(card);
+            playerTwo.getStrategyType().addToPlayerCardList(card);
         }
-        boolean actual_value = playerTwo.isValidExchange(playerTwo.getPlayerCardList());
+        boolean actual_value = playerTwo.getStrategyType().isValidExchange(playerTwo.getStrategyType().getPlayerCardList());
         assertTrue(actual_value);
     }
 
@@ -136,10 +138,10 @@ public class ReinforcementTest {
 
         for (int cardCount = 0; cardCount < 3; cardCount++) {
             Card card = gameData.cardsDeck.getCard();
-            playerOne.addToPlayerCardList(card);
+            playerOne.getStrategyType().addToPlayerCardList(card);
         }
         /*calculateTotalReinforcement internally verifies for the validity of the card exchange.*/
-        int actual_value = playerOne.calculateTotalReinforcement(playerOne.getPlayerCardList());
+        int actual_value = playerOne.getStrategyType().calculateTotalReinforcement(playerOne.getStrategyType().getPlayerCardList());
         int expected_value = 21;
         assertEquals(expected_value,actual_value);
     }

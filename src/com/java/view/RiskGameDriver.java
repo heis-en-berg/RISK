@@ -5,6 +5,7 @@ import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
 import com.java.model.player.PlayerStrategy;
+import com.java.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,9 +65,9 @@ public class RiskGameDriver {
 		CardsExchangeView cardsExchangeView = new CardsExchangeView();
 		PhaseView phaseView = new PhaseView();
 
-		for(PlayerStrategy currentPlayer : gameData.getPlayers()) {
-			currentPlayer.addObserver(phaseView);
-			currentPlayer.addObserver(cardsExchangeView);
+		for(Player currentPlayer : gameData.getPlayers()) {
+			currentPlayer.getStrategyType().addObserver(phaseView);
+			currentPlayer.getStrategyType().addObserver(cardsExchangeView);
 		}
 		
 		PlayersWorldDominationView playersWorldDominationView = new PlayersWorldDominationView();
@@ -147,11 +148,11 @@ public class RiskGameDriver {
 		// Gets all countries from game map.
 		HashMap<String, Country> countryObjects = gameData.gameMap.getAllCountries();
 
-		for (PlayerStrategy player : gameData.getPlayers()) {
+		for (Player player : gameData.getPlayers()) {
 
 			// Gets all countries from game map.
 			Boolean firstTime = true;
-			HashSet<String> countriesPerPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(player.getPlayerID());
+			HashSet<String> countriesPerPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(player.getStrategyType().getPlayerID());
 			String[] countriesPerPlayerArray = Arrays.copyOf(countriesPerPlayer.toArray(), countriesPerPlayer.size(),String[].class);
 			numberOfArmiesAvailablePerPlayer = startUp.initialArmyCalculation(gameData.getNoOfPlayers());
 			
@@ -162,7 +163,7 @@ public class RiskGameDriver {
 			while (numberOfArmiesAvailablePerPlayer > 0) {
 				
 				// Displays the lists of countries owned by a player.
-				System.out.println("PlayerStrategy: " + player.getPlayerName() + " owns the following countries: ");
+				System.out.println("PlayerStrategy: " + player.getStrategyType().getPlayerName() + " owns the following countries: ");
 
 				// At the begining every country has at least one army.
 				for (int i = 0; i < countriesPerPlayerArray.length; i++) {
@@ -197,7 +198,7 @@ public class RiskGameDriver {
 				String numberOfArmiesByUser = "";
 				
 				do {
-					System.out.println("PlayerStrategy: " + player.getPlayerName() + " How many armies do you want to place in "
+					System.out.println("PlayerStrategy: " + player.getStrategyType().getPlayerName() + " How many armies do you want to place in "
 							+ countryName + "?");
 					numberOfArmiesByUser = input.nextLine();
 
@@ -224,9 +225,9 @@ public class RiskGameDriver {
 		System.out.println(" ");
 		System.out.println("The following list has the order of the players in round robin fashion: ");
 		System.out.println("The results are based on the higher number of dice a player roled ");
-		ArrayList<PlayerStrategy> results = startUp.generateRoundRobin();
+		ArrayList<Player> results = startUp.generateRoundRobin();
 		for(int i = 0; i < results.size(); i++) {
-			System.out.println((i+1) + " " + results.get(i).getPlayerName());
+			System.out.println((i+1) + " " + results.get(i).getStrategyType().getPlayerName());
 		}
 	}
 	
@@ -260,28 +261,29 @@ public class RiskGameDriver {
 	 * Loop through player list circularly until one of the player wins
 	 */
 	private void startTurn() {
-		ArrayList<PlayerStrategy> playerList = this.gameData.getPlayers();
+		ArrayList<Player> playerList = this.gameData.getPlayers();
 		PlayerStrategy currentPlayer; // first player that will start the game
+
 		Boolean doWeHaveAWinner = false;
 
 		//There will be another round if the number of players is greater than one.
 		while(!doWeHaveAWinner) {
 
-			for (PlayerStrategy player : playerList) {
-				currentPlayer = player;
+			for (Player player : playerList) {
+				currentPlayer = player.getStrategyType();
 				
 				// before actually 
-				if(getIsActive(player)) { 
+				if(getIsActive(currentPlayer)) {
 					System.out.println("\n***** Turn Begins for player "+currentPlayer.getPlayerName() +" *****\n");
 					currentPlayer.setGameData(this.gameData);
-					currentPlayer.startTurn();
+					player.startTurn();
 					System.out.println("\n***** Turn Ends for player "+currentPlayer.getPlayerName() +" *****\n");
 				}
 				
 				// if player has won the game; break the turn loop
-				if(getIsWinner(player)) {
+				if(getIsWinner(currentPlayer)) {
 					doWeHaveAWinner = true;
-					System.out.println("Congratulations! "+playerList.get(0).getPlayerName() + " wins the game.");
+					System.out.println("Congratulations! "+playerList.get(0).getStrategyType().getPlayerName()+ " wins the game.");
 					break;
 				}
 			}
@@ -301,6 +303,7 @@ public class RiskGameDriver {
 
 		if(allConqueredCountries.size() == this.gameData.gameMap.getNumberOfCountries()) {
 			isWinner = true;
+
 			System.out.println("\n ****" + player.getPlayerName() + " HAS CONQUERED THE WORLD !****");
 			System.out.println("\n ******************************* \n");
 			System.out.println("\n ********** GAME OVER ********** \n");

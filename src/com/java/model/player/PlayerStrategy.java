@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * @author Cristian Rodriguez
  * @version 2.0.0
  */
-public abstract class  PlayerStrategy extends Observable {
+public abstract class PlayerStrategy extends Observable {
 
 	protected Integer playerID;
     protected String playerName;
@@ -33,7 +33,6 @@ public abstract class  PlayerStrategy extends Observable {
 	public Boolean gameOn = true;
     protected Boolean isWinner = false;
 
-	protected Scanner input = new Scanner(System.in);
 	protected GameData gameData;
 	protected Dice playerDice;
 
@@ -90,85 +89,11 @@ public abstract class  PlayerStrategy extends Observable {
 		this.isWinner = isWinner;
 	}
 
-	/**
-	 * Gets valid cards to trade.
-	 * 
-	 * @return array of valid cards.
-	 */
-	protected ArrayList<Card> getValidCards() {
-		ArrayList<Card> playerCardList = getPlayerCardList();
-		ArrayList<Card> playerExchangeCards = new ArrayList<>();
-		ArrayList<Card> cumulatedPlayerExchangeCards = new ArrayList<>();
-
-		System.out.println("*** Cards in hand ***");
-		this.showCards();
-		String userInput = "no";
-		if (playerCardList.size() > 2) {
-			System.out.println("Do you wish to exchange cards ? (yes/no)");
-			userInput = input.nextLine();
-		} else {
-			System.out.println(playerName + " does not have sufficient cards to trade.");
-		}
-		while (!((userInput.toLowerCase().equals("yes")) || (userInput.toLowerCase().equals("no")))) {
-			System.out.println("Please input either yes or no.");
-			userInput = input.nextLine();
-		}
-
-		while ((userInput.equals("yes")) || (userInput.equals("no") && playerCardList.size() > 4)) {
-			if (userInput.equals("no") && (playerCardList.size() > 4)) {
-				System.out.println("You must exchange cards. You have more than 4 cards in your hand.");
-			}
-			boolean can_exchange = false;
-			this.showCards();
-			Integer cardNumber;
-
-			while (!can_exchange) {
-				playerExchangeCards = new ArrayList<Card>();
-				System.out
-						.println("Please enter three card numbers from the list of the same or different army types.");
-				for (int i = 0; i < 3; i++) {
-					cardNumber = input.nextInt();
-					while (cardNumber >= playerCardList.size()) {
-						System.out.println("Please input correct number from list");
-						cardNumber = input.nextInt();
-					}
-					playerExchangeCards.add(playerCardList.get(cardNumber));
-				}
-				can_exchange = isValidExchange(playerExchangeCards);
-			}
-			for (Card card : playerExchangeCards) {
-				cumulatedPlayerExchangeCards.add(card);
-				playerCardList.remove(card);
-			}
-			System.out.println("*** Cards in hand ***");
-			this.showCards();
-
-			System.out.println("Do you wish to exchange cards ? (yes/no)");
-			userInput = input.nextLine();
-			while (!((userInput.toLowerCase().equals("yes")) || (userInput.toLowerCase().equals("no")))) {
-				System.out.println("Please input either yes or no.");
-				userInput = input.nextLine();
-			}
-		}
-		if ((userInput.equals("no")) && (playerCardList.size() > 2) && (cumulatedPlayerExchangeCards.size() == 0)) {
-			System.out.println(playerName + " does not wish to exchange cards.");
-		}
-		return cumulatedPlayerExchangeCards;
-	}
-
-	/**
-	 * PlaceArmy method allows the player to position the armies in the player's
-	 * owned countries.
-	 * 
-	 * @param reinforcementArmy total reinforcement army count to be placed by the
-	 *                          current player.
-	 */
-	public abstract void placeArmy(Integer reinforcementArmy);
 
 	/**
 	 * Displays the cards.
 	 */
-	private void showCards() {
+	protected void showCards() {
 
 		ArrayList<Card> playerCardList = getPlayerCardList();
 		ArrayList<String> playerCountryList = new ArrayList<String>();
@@ -306,8 +231,6 @@ public abstract class  PlayerStrategy extends Observable {
 		return (condition_same || condition_different);
 	}
 
-
-	public abstract void executeAttack();
 	/**
 	 * rollDiceBattle resorts to the core rollDice method in Dice but contains
 	 * additional logic to set attackPhase logic
@@ -412,20 +335,13 @@ public abstract class  PlayerStrategy extends Observable {
 						+ " of "
 
 						+ gameData.getPlayer(this.gameData.gameMap.getCountry(correspondingDestinationCountry)
-								.getCountryConquerorID()).getPlayerName()
+								.getCountryConquerorID()).getStrategyType().getPlayerName()
 						+ "'s armies**" + "\t (attack with up to "
 
 						+ maxAttackArmyCountPossiblePerSrcCountry.get(keySourceCountry) + " armies)");
 			}
 		}
 	}
-
-	public abstract String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios);
-
-	public abstract String getEnemyCountryToAttack(String selectedSourceCountry,
-			HashMap<String, ArrayList<String>> attackScenarios);
-
-	public abstract Integer getDesiredDiceCountFromPlayer(String player, String country, String action);
 
 	/**
 	 * Helper method to get max allowable dice count given specific context: action
@@ -520,13 +436,13 @@ public abstract class  PlayerStrategy extends Observable {
 				// hand over defender's cards to attacker if the defender no longer controls any
 				// country in the world
 				if (checkIfPlayerLostTheGame(defenderPlayerId)) {
-					ArrayList<Card> defendersCards = gameData.getPlayer(defenderPlayerId).cardList;
+					ArrayList<Card> defendersCards = gameData.getPlayer(defenderPlayerId).getStrategyType().cardList;
 					
 					this.cardList.addAll(defendersCards);
 					
 					System.out.println("PlayerStrategy receives defender's " + defendersCards.size() + " cards");
 					// clear defender's cardList
-					gameData.getPlayer(defenderPlayerId).cardList.clear();
+					gameData.getPlayer(defenderPlayerId).getStrategyType().cardList.clear();
 				}
 			}
 		}
@@ -543,30 +459,6 @@ public abstract class  PlayerStrategy extends Observable {
 				+ this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount());
 
 		return battleOutcomeFlag;
-	}
-
-	/**
-	 * Obtain the number of armies that the attcker choses to move to the conqured
-	 * country
-	 * 
-	 * @param selectedSourceCountry pass the value they decide to move to
-	 * @return value to move the amount of army
-	 */
-	private Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
-
-		String selectedArmyCount = "1";
-		int maxArmyCountAllowed = this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount() - 1;
-
-		do {
-			System.out.println("How many armies would " + this.playerName + " like to move to conquered country?"
-					+ "\t (up to " + maxArmyCountAllowed + " armies)\n");
-			if (input.hasNextLine()) {
-				selectedArmyCount = input.nextLine();
-			}
-		} while (isNaN(selectedArmyCount) || Integer.parseInt(selectedArmyCount) < 1
-				|| Integer.parseInt(selectedArmyCount) > maxArmyCountAllowed);
-
-		return Integer.parseInt(selectedArmyCount);
 	}
 
 	/**
@@ -614,11 +506,6 @@ public abstract class  PlayerStrategy extends Observable {
 		return false;
 	}
 
-	/**
-	 * Method to guide the player through various fortification options when
-	 * applicable.
-	 */
-	public abstract void executeFortification();
 
 	/**
 	 * Helper method to build a comprehensive map of all the possible fortification
@@ -630,7 +517,7 @@ public abstract class  PlayerStrategy extends Observable {
 	 *
 	 * @return Hashmap of all potential fortification scenarios for player.
 	 */
-	protected HashMap<String, ArrayList<String>> getPotentialFortificationScenarios() {
+	public HashMap<String, ArrayList<String>> getPotentialFortificationScenarios() {
 
 		// Draft/prelim structure which contains only directly adjacent countries owned
 		// by the player
@@ -855,5 +742,22 @@ public abstract class  PlayerStrategy extends Observable {
      */
     public abstract void executeReinforcement();
 
+    public abstract ArrayList<Card> getValidCards();
 
+    public abstract void placeArmy(Integer reinforcementArmy);
+    public abstract void executeAttack();
+
+    public abstract String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios);
+
+    public abstract String getEnemyCountryToAttack(String selectedSourceCountry,
+                                                   HashMap<String, ArrayList<String>> attackScenarios);
+    public abstract Integer getDesiredDiceCountFromPlayer(String player, String country, String action);
+
+    public abstract Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry);
+
+    /**
+     * Method to guide the player through various fortification options when
+     * applicable.
+     */
+    public abstract void executeFortification();
 }

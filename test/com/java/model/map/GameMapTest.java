@@ -1,8 +1,10 @@
 package com.java.model.map;
 
+import com.java.model.player.HumanMode;
 import com.java.model.player.PlayerStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import com.java.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,10 +32,12 @@ public class GameMapTest {
     public static void beforeEverything() {
     	gameMap = new GameMap();
 
-        PlayerStrategy player1 = new PlayerStrategy(1, "Player1");
-        PlayerStrategy player2 = new PlayerStrategy(2, "Player2");
+        Player player1 = new Player();
+        player1.setStrategyType(new HumanMode(1, "Player1"));
+        Player player2 = new Player();
+        player2.setStrategyType(new HumanMode(2, "Player2"));
 
-        ArrayList<PlayerStrategy> players = new ArrayList<PlayerStrategy>();
+        ArrayList<Player> players = new ArrayList<Player>();
         players.add(player1);
         players.add(player2);
 

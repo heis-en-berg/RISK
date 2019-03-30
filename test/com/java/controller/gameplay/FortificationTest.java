@@ -2,6 +2,8 @@ package com.java.controller.gameplay;
 
 import com.java.model.gamedata.GameData;
 import com.java.model.map.GameMap;
+import com.java.model.player.HumanMode;
+import com.java.model.player.Player;
 import com.java.model.player.PlayerStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,8 +27,8 @@ import static org.junit.Assert.assertEquals;
 public class FortificationTest {
 
     private static GameData gameData;
-    private static PlayerStrategy playerOne,playerTwo;
-    private static ArrayList<PlayerStrategy> players;
+    private static Player playerOne,playerTwo;
+    private static ArrayList<Player> players;
 
     @BeforeClass
     static public void setUp() {
@@ -36,9 +38,11 @@ public class FortificationTest {
         gameData.gameMap = new GameMap();
 
         // Test data with two players, two continents and six countries.
-        players = new ArrayList<>();
-        playerOne = new PlayerStrategy(1, "P1");
-        playerTwo = new PlayerStrategy(2, "P2");
+        players = new ArrayList<Player>();
+        Player player1 = new Player();
+        player1.setStrategyType(new HumanMode(1, "Player1"));
+        Player player2 = new Player();
+        player2.setStrategyType(new HumanMode(2, "Player2"));
         players.add(playerOne);
         players.add(playerTwo);
         gameData.gameMap.setupPlayerNames(players);
@@ -74,8 +78,8 @@ public class FortificationTest {
         gameData.gameMap.getCountry("C5").addArmy(7);
         gameData.gameMap.getCountry("C6").addArmy(9);
         
-        playerOne.setGameData(gameData);
-        playerTwo.setGameData(gameData);
+        playerOne.getStrategyType().setGameData(gameData);
+        playerTwo.getStrategyType().setGameData(gameData);
     }
 
     
@@ -87,7 +91,7 @@ public class FortificationTest {
         
         // PlayerStrategy owns all countries except C5 & C6
         // PlayerStrategy can fortify FROM C2, C3 only (as C1 and C4 only have 1 army on the ground)
-        HashMap<String, ArrayList<String>> actual_paths = playerOne.getPotentialFortificationScenarios();
+        HashMap<String, ArrayList<String>> actual_paths = playerOne.getStrategyType().getPotentialFortificationScenarios();
         HashMap<String, ArrayList<String>> expected_paths = new HashMap<String, ArrayList<String>>();
         
 		for (String keySourceCountry : actual_paths.keySet()) {

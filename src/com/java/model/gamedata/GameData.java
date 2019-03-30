@@ -2,6 +2,7 @@ package com.java.model.gamedata;
 
 import com.java.model.cards.CardsDeck;
 import com.java.model.map.GameMap;
+import com.java.model.player.Player;
 import com.java.model.player.PlayerStrategy;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class GameData {
 	/**
 	 * The players ordered in order to play.
 	 * */
-	private ArrayList<PlayerStrategy> players;
+	private ArrayList<Player> players;
 
 	/**
 	 * The minimum number of players is 2.
@@ -50,7 +51,7 @@ public class GameData {
 	 *
 	 * @return the collection of players.
 	 * */
-	public ArrayList<PlayerStrategy> getPlayers() {
+	public ArrayList<Player> getPlayers() {
 		return this.players;
 	}
 
@@ -59,7 +60,7 @@ public class GameData {
 	 *
 	 * @param players the collection of players.
 	 * */
-	public void setPlayers(ArrayList<PlayerStrategy> players) {
+	public void setPlayers(ArrayList<Player> players) {
 		this.players = players;
 	}
 	
@@ -69,9 +70,9 @@ public class GameData {
 	 * @param playerId player id.
 	 * @return player.
 	 * */
-	public PlayerStrategy getPlayer(Integer playerId) {
-		for(PlayerStrategy player : this.players) {
-			if(player.getPlayerID().equals(playerId)) {
+	public Player getPlayer(Integer playerId) {
+		for(Player player : this.players) {
+			if(player.getStrategyType().getPlayerID().equals(playerId)) {
 				return player;
 			}
 		}
@@ -83,7 +84,7 @@ public class GameData {
 	 *
 	 * @param player the player to be removed
 	 * */
-	public void removePlayers(PlayerStrategy player){
+	public void removePlayers(Player player){
 		this.players.remove(player);
 	}
 
@@ -110,8 +111,8 @@ public class GameData {
 	 * @param player player id
 	 * @return true if player is active else false
 	 */
-	public Boolean getPlayerStatus(PlayerStrategy player) {
-		return player.isActive;
+	public Boolean getPlayerStatus(Player player) {
+		return player.getStrategyType().isActive;
 	}
 	
 	/**
@@ -119,8 +120,8 @@ public class GameData {
 	 * @param player player id.
 	 * @param isActive set player status
 	 */
-	public void setPlayerStatus(PlayerStrategy player, Boolean isActive) {
-		player.isActive = isActive;
+	public void setPlayerStatus(Player player, Boolean isActive) {
+		player.getStrategyType().isActive = isActive;
 	}
 
 }

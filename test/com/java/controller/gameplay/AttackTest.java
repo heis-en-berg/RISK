@@ -3,6 +3,8 @@ package com.java.controller.gameplay;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.GameMap;
 import com.java.model.player.AttackPhaseState;
+import com.java.model.player.HumanMode;
+import com.java.model.player.Player;
 import com.java.model.player.PlayerStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,8 +29,8 @@ import static org.junit.Assert.assertTrue;
 public class AttackTest {
 
     private static GameData gameData;
-    private static PlayerStrategy playerOne,playerTwo,playerThree;
-    private static ArrayList<PlayerStrategy> players;
+    private static Player playerOne,playerTwo,playerThree;
+    private static ArrayList<Player> players;
     public static AttackPhaseState attackPhase = new AttackPhaseState();
     public static ArrayList<AttackPhaseState> attackPhaseState = new ArrayList<>();
     
@@ -42,9 +44,12 @@ public class AttackTest {
 
         // Test data with two players, two continents and six countries.
         players = new ArrayList<>();
-        playerOne   = new PlayerStrategy(1, "P1");
-        playerTwo   = new PlayerStrategy(2, "P2");
-        playerThree = new PlayerStrategy(3, "P3");
+        playerOne   = new Player();
+        playerOne.setStrategyType(new HumanMode(1, "P1"));
+        playerTwo   = new Player();
+        playerTwo.setStrategyType(new HumanMode(2, "P2"));
+        playerThree = new Player();
+        playerThree.setStrategyType(new HumanMode(3, "P3"));
         players.add(playerOne);
         players.add(playerTwo);
         players.add(playerThree);
@@ -64,13 +69,13 @@ public class AttackTest {
         gameData.gameMap.getCountry("C1").addArmy(3);
         gameData.gameMap.getCountry("C2").addArmy(2);
 
-        playerOne.setGameData(gameData);
-        playerTwo.setGameData(gameData);
+        playerOne.getStrategyType().setGameData(gameData);
+        playerTwo.getStrategyType().setGameData(gameData);
     
 		attackPhaseState.add(attackPhase);
 
-        attackPhase.setAttackingPlayer(playerOne.getPlayerName());
-        attackPhase.setDefendingPlayer(playerTwo.getPlayerName());
+        attackPhase.setAttackingPlayer(playerOne.getStrategyType().getPlayerName());
+        attackPhase.setDefendingPlayer(playerTwo.getStrategyType().getPlayerName());
         
         attackPhase.setAttackingCountry("C1");
         attackPhase.setDefendingCountry("C2");
@@ -97,7 +102,7 @@ public class AttackTest {
      */
     @Test
     public void testAttackDiceThresholds() {
-    	Integer actualMaxDice = playerOne.getActualMaxAllowedDiceCountForAction("attack", "C1", 2);
+    	Integer actualMaxDice = playerOne.getStrategyType().getActualMaxAllowedDiceCountForAction("attack", "C1", 2);
     	Integer expectedMaxDice = 2;
     	assertEquals(actualMaxDice,expectedMaxDice);
     }
@@ -107,7 +112,7 @@ public class AttackTest {
      */
     @Test
     public void testDefendDiceThresholds() {
-    	Integer actualMaxDice = playerTwo.getActualMaxAllowedDiceCountForAction("defend", "C2", 2);
+    	Integer actualMaxDice = playerTwo.getStrategyType().getActualMaxAllowedDiceCountForAction("defend", "C2", 2);
     	Integer expectedMaxDice = 2;
     	assertEquals(actualMaxDice,expectedMaxDice);
     }
@@ -125,9 +130,9 @@ public class AttackTest {
         gameData.gameMap.getCountry("C1").addArmy(3);
         gameData.gameMap.getCountry("C2").addArmy(2);
 
-        playerOne.setGameData(gameData);
-        playerTwo.setGameData(gameData);
-    	HashMap<String, ArrayList<String>> actual_scenarios_for_Player1 = playerOne.getPotentialAttackScenarios();
+        playerOne.getStrategyType().setGameData(gameData);
+        playerTwo.getStrategyType().setGameData(gameData);
+    	HashMap<String, ArrayList<String>> actual_scenarios_for_Player1 = playerOne.getStrategyType().getPotentialAttackScenarios();
         HashMap<String, ArrayList<String>> expected_scenarios_for_Player1 = new HashMap<String, ArrayList<String>>();
         
 		for (String keySourceCountry : actual_scenarios_for_Player1.keySet()) {
@@ -144,7 +149,7 @@ public class AttackTest {
         // sort the Lists because we care about contents (not order of options)
         assertEquals(actual_scenarios_for_Player1.get("C1"),expected_dest_for_C1);
         
-    	HashMap<String, ArrayList<String>> actual_scenarios_for_Player2 = playerTwo.getPotentialAttackScenarios();
+    	HashMap<String, ArrayList<String>> actual_scenarios_for_Player2 = playerTwo.getStrategyType().getPotentialAttackScenarios();
         HashMap<String, ArrayList<String>> expected_scenarios_for_Player2 = new HashMap<String, ArrayList<String>>();
         
 		for (String keySourceCountry : actual_scenarios_for_Player2.keySet()) {
@@ -169,8 +174,8 @@ public class AttackTest {
     @Test
     public void testFight() {
     	Boolean attackerWon = false;
-    	playerOne.setIsWinner(true);
-    	attackerWon = playerOne.fight(attackPhase);
+    	playerOne.getStrategyType().setIsWinner(true);
+    	attackerWon = playerOne.getStrategyType().fight(attackPhase);
     	assertTrue(attackerWon);
     }
     

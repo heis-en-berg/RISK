@@ -2,6 +2,8 @@ package com.java.controller.startup;
 
 import com.java.model.gamedata.GameData;
 import com.java.model.map.GameMap;
+import com.java.model.player.HumanMode;
+import com.java.model.player.Player;
 import com.java.model.player.PlayerStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,12 +37,12 @@ public class StartUpPhaseTest {
     /**
      * Expected players to be tested.
      * */
-    static ArrayList<PlayerStrategy> expectedPlayer;
+    static ArrayList<Player> expectedPlayer;
     
     /**
      * Holds the results of round robin in order to be tested.
      * */
-    static ArrayList<PlayerStrategy> results;
+    static ArrayList<Player> results;
     
     /**
      * Game data and a dummy map is created in order to test the methods which use this data.
@@ -52,19 +54,31 @@ public class StartUpPhaseTest {
         gameData.gameMap = new GameMap();
         
         // create players
-        results = new ArrayList<PlayerStrategy>();
-        expectedPlayer = new ArrayList<PlayerStrategy>();
-        expectedPlayer.add(new PlayerStrategy(1, "Karan"));
-        expectedPlayer.add(new PlayerStrategy(2, "Arnav"));
-        expectedPlayer.add(new PlayerStrategy(3, "Sahil"));
-        expectedPlayer.add(new PlayerStrategy(4, "Cristian"));
-        expectedPlayer.add(new PlayerStrategy(5, "Ghalia"));
-        expectedPlayer.add(new PlayerStrategy(6, "Professor"));
+        results = new ArrayList<Player>();
+        expectedPlayer = new ArrayList<Player>();
+        Player player = new Player();
+        player.setStrategyType(new HumanMode(1, "Karan"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(2, "Arnav"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(3, "Sahil"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(4, "Cristian"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(5, "Ghalia"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(6, "Professor"));
+        expectedPlayer.add(player);
 
         ArrayList<String> names = new ArrayList<String>();
 
         for (int i = 0; i<gameData.getNoOfPlayers(); i++){
-            names.add(expectedPlayer.get(i).getPlayerName());
+            names.add(expectedPlayer.get(i).getStrategyType().getPlayerName());
         }
         
         gameData.setPlayers(expectedPlayer);
@@ -86,12 +100,12 @@ public class StartUpPhaseTest {
     @Test
     public void generatePlayers() {
     
-        ArrayList<PlayerStrategy> actualPlayers = gameData.getPlayers();
+        ArrayList<Player> actualPlayers = gameData.getPlayers();
         
         // check if the ids and names are same
         for (int i = 0; i < actualPlayers.size(); i++) {
-            assertEquals(expectedPlayer.get(i).getPlayerID(), actualPlayers.get(i).getPlayerID());
-            assertEquals(expectedPlayer.get(i).getPlayerName(), actualPlayers.get(i).getPlayerName());
+            assertEquals(expectedPlayer.get(i).getStrategyType().getPlayerID(), actualPlayers.get(i).getStrategyType().getPlayerID());
+            assertEquals(expectedPlayer.get(i).getStrategyType().getPlayerName(), actualPlayers.get(i).getStrategyType().getPlayerName());
 
         }
         
@@ -103,7 +117,7 @@ public class StartUpPhaseTest {
     @Test
     public void assignCountriesToPlayers() {
     	
-    	ArrayList<PlayerStrategy> players = gameData.getPlayers();
+    	ArrayList<Player> players = gameData.getPlayers();
     	gameData.gameMap.setupPlayerNames(players);
     	startUp.assignCountriesToPlayers();
 
@@ -111,11 +125,11 @@ public class StartUpPhaseTest {
         HashSet<String> countriesOwnedByPlayer0 =  gameData.gameMap.getConqueredCountriesPerPlayer(1);
 
         for(String country : countriesOwnedByPlayer0){
-            for(PlayerStrategy player: players){
-                if(player.getPlayerID() == 1){
+            for(Player player: players){
+                if(player.getStrategyType().getPlayerID() == 1){
                     continue;
                 }
-                HashSet<String> countriesOwned =  gameData.gameMap.getConqueredCountriesPerPlayer(player.getPlayerID());
+                HashSet<String> countriesOwned =  gameData.gameMap.getConqueredCountriesPerPlayer(player.getStrategyType().getPlayerID());
                 for (String countryNotExpected : countriesOwned){
                     assertNotEquals(country, countryNotExpected);
                 }
@@ -157,19 +171,31 @@ public class StartUpPhaseTest {
         localGameMap.gameMap = new GameMap();
         
         // create players
-        results = new ArrayList<PlayerStrategy>();
-        expectedPlayer = new ArrayList<PlayerStrategy>();
-        expectedPlayer.add(new PlayerStrategy(1, "Karan"));
-        expectedPlayer.add(new PlayerStrategy(2, "Arnav"));
-        expectedPlayer.add(new PlayerStrategy(3, "Sahil"));
-        expectedPlayer.add(new PlayerStrategy(4, "Cristian"));
-        expectedPlayer.add(new PlayerStrategy(5, "Ghalia"));
-        expectedPlayer.add(new PlayerStrategy(6, "Professor"));
+        results = new ArrayList<Player>();
+        expectedPlayer = new ArrayList<Player>();
+        Player player = new Player();
+        player.setStrategyType(new HumanMode(1, "Karan"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(2, "Arnav"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(3, "Sahil"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(4, "Cristian"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(5, "Ghalia"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(6, "Professor"));
+        expectedPlayer.add(player);
 
         ArrayList<String> names = new ArrayList<String>();
 
         for (int i = 0; i<localGameMap.getNoOfPlayers(); i++){
-            names.add(expectedPlayer.get(i).getPlayerName());
+            names.add(expectedPlayer.get(i).getStrategyType().getPlayerName());
         }
         
         localGameMap.setPlayers(expectedPlayer);
@@ -214,19 +240,32 @@ public class StartUpPhaseTest {
         localGameMap.gameMap = new GameMap();
         
         // create players
-        results = new ArrayList<PlayerStrategy>();
-        expectedPlayer = new ArrayList<PlayerStrategy>();
-        expectedPlayer.add(new PlayerStrategy(1, "Karan"));
-        expectedPlayer.add(new PlayerStrategy(2, "Arnav"));
-        expectedPlayer.add(new PlayerStrategy(3, "Sahil"));
-        expectedPlayer.add(new PlayerStrategy(4, "Cristian"));
-        expectedPlayer.add(new PlayerStrategy(5, "Ghalia"));
-        expectedPlayer.add(new PlayerStrategy(6, "Professor"));
+        // create players
+        results = new ArrayList<Player>();
+        expectedPlayer = new ArrayList<Player>();
+        Player player = new Player();
+        player.setStrategyType(new HumanMode(1, "Karan"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(2, "Arnav"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(3, "Sahil"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(4, "Cristian"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(5, "Ghalia"));
+        expectedPlayer.add(player);
+        player = new Player();
+        player.setStrategyType(new HumanMode(6, "Professor"));
+        expectedPlayer.add(player);
 
         ArrayList<String> names = new ArrayList<String>();
 
         for (int i = 0; i<localGameMap.getNoOfPlayers(); i++){
-            names.add(expectedPlayer.get(i).getPlayerName());
+            names.add(expectedPlayer.get(i).getStrategyType().getPlayerName());
         }
         
         localGameMap.setPlayers(expectedPlayer);
@@ -267,7 +306,7 @@ public class StartUpPhaseTest {
     	int expected;
     	int actual;
     	for(int i = 0; i < results.size(); i++) {
-    		expected = (int)results.get(i).getOrderOfPlay();
+    		expected = (int)results.get(i).getStrategyType().getOrderOfPlay();
     		actual = i + 1;
     		assertEquals(expected, actual);
     	}

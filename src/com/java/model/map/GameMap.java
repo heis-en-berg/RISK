@@ -1,6 +1,7 @@
 package com.java.model.map;
 
 import com.java.model.Observable;
+import com.java.model.player.Player;
 import com.java.model.player.PlayerStrategy;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class GameMap extends Observable implements Cloneable {
 
 	private HashMap<String,Double> ownershipPercentage;
 	private HashMap<String,Integer> numberOfArmiesPerPlayer;
-	private ArrayList<PlayerStrategy> playersInfo;
+	private ArrayList<Player> playersInfo;
 
 	/**
 	 * Creates a default map by created instances of every map.
@@ -461,10 +462,10 @@ public class GameMap extends Observable implements Cloneable {
 		String key;
 		Integer value;
 		
-		for(PlayerStrategy player : playersInfo) {
+		for(Player player : playersInfo) {
 			
 			numberOfArmies = 0;
-			countriesPerPlayer = getConqueredCountriesPerPlayer(player.getPlayerID());
+			countriesPerPlayer = getConqueredCountriesPerPlayer(player.getStrategyType().getPlayerID());
 			
 			for(String countryName : countriesPerPlayer) {
 				
@@ -473,7 +474,7 @@ public class GameMap extends Observable implements Cloneable {
 				
 			}
 			
-			key = player.getPlayerID().toString();
+			key = player.getStrategyType().getPlayerID().toString();
 			value = numberOfArmies;
 			
 			numberOfArmiesPerPlayer.put(key, value);
@@ -490,8 +491,8 @@ public class GameMap extends Observable implements Cloneable {
         Integer counteriesOwnedPlayer = 0;
         Double percentageOfOwnership = 0.0;
 
-        for(PlayerStrategy eachPlayer : playersInfo){
-           HashSet<String> countiresOwned= conqueredCountriesPerPlayer.get(eachPlayer.getPlayerID());
+        for(Player eachPlayer : playersInfo){
+           HashSet<String> countiresOwned= conqueredCountriesPerPlayer.get(eachPlayer.getStrategyType().getPlayerID());
            
            if(countiresOwned == null) {
         	   counteriesOwnedPlayer = 0;
@@ -503,7 +504,7 @@ public class GameMap extends Observable implements Cloneable {
             percentageOfOwnership =  ((double)counteriesOwnedPlayer/totalNumberOfCountries) * 100.0;
 
             //put in map
-            getOwnershipPercentage().put(eachPlayer.getPlayerID().toString(), percentageOfOwnership);
+            getOwnershipPercentage().put(eachPlayer.getStrategyType().getPlayerID().toString(), percentageOfOwnership);
         }
         
         notifyView();
@@ -513,8 +514,8 @@ public class GameMap extends Observable implements Cloneable {
      * Sets the player's information.
      * @param players array with players.
      */
-    public void setupPlayerNames(ArrayList<PlayerStrategy> players){
-        playersInfo = new ArrayList<PlayerStrategy>(players); // obtain players
+    public void setupPlayerNames(ArrayList<Player> players){
+        playersInfo = new ArrayList<Player>(players); // obtain players
     }
     
     /**
@@ -522,7 +523,7 @@ public class GameMap extends Observable implements Cloneable {
      * 
      * @return the array with player information.
      */
-    public ArrayList<PlayerStrategy> getPlayersInfo(){
+    public ArrayList<Player> getPlayersInfo(){
     	return this.playersInfo;
     }
     

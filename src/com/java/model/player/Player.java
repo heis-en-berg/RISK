@@ -4,8 +4,13 @@ package com.java.model.player;
 public class Player {
     private PlayerStrategy strategyType;
 
-    public void setPlayer(PlayerStrategy strategyType){
+    public void setStrategyType(PlayerStrategy strategyType){
         this.strategyType = strategyType;
+    }
+
+
+    public PlayerStrategy getStrategyType() {
+        return strategyType;
     }
 
     // start turn to initiate the Strategy type.

@@ -5,7 +5,7 @@ import com.java.controller.dice.Dice;
 import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
-import com.java.model.player.PlayerStrategy;
+import com.java.model.player.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,14 +52,38 @@ public class StartUpPhase {
 	 * @param playerNames list of names passed based on the console input from user
 	 * @return A list that contains all the players which now have ids assigned.
 	 */
-	public ArrayList<PlayerStrategy> generatePlayers(ArrayList<String> playerNames, ArrayList<Integer> playerStrategy){
+	public ArrayList<Player> generatePlayers(ArrayList<String> playerNames, ArrayList<Integer> playerStrategy){
 		
 		// A collection of empty players is created to return it.
-		ArrayList<PlayerStrategy> newPlayers = new ArrayList<PlayerStrategy>();
+		ArrayList<Player> newPlayers = new ArrayList<Player>();
 		
 		// Give every new player a unique id and the name provided by the user.
 		for(int i=0; i < playerNames.size(); i++){
-			newPlayers.add(new PlayerStrategy(playerId,playerNames.get(i)));
+			Integer strategyType = playerStrategy.get(i);
+			PlayerStrategy strategy;
+			switch (strategyType){
+				case 1:
+					strategy = new AggresiveMode(playerId,playerNames.get(i));
+					break;
+                case 2:
+                    strategy = new HumanMode(playerId,playerNames.get(i));
+                    break;
+                case 3:
+                    strategy = new BenevolentMode(playerId,playerNames.get(i));
+                    break;
+                case 4:
+                    strategy = new RandomMode(playerId,playerNames.get(i));
+                    break;
+                case 5:
+                    strategy = new CheaterMode(playerId,playerNames.get(i));
+                    break;
+				default:
+					strategy = new HumanMode(playerId,playerNames.get(i));
+					break;
+			}
+			Player player = new Player();
+			player.setStrategyType(strategy);
+			newPlayers.add(player);
 			playerId++;
 		}
 		
@@ -89,7 +113,7 @@ public class StartUpPhase {
 	public void assignCountriesToPlayers() {
 		
 		// Get the list of players from game data.
-		ArrayList<PlayerStrategy> players = gameData.getPlayers();
+		ArrayList<Player> players = gameData.getPlayers();
 
 		// Used to obtain the country objects
 		HashMap<String, Country> countryObject = gameData.gameMap.getAllCountries();
@@ -114,7 +138,7 @@ public class StartUpPhase {
 		for(int i = 0; i < numberOfPlayers; i++) {
 			int numberOfCountriesToBeAssignedToPlayer = (numOfCountriesToAssign - indexKeeper) / (numberOfPlayers - i);
 			for(int j = indexKeeper; j < indexKeeper + numberOfCountriesToBeAssignedToPlayer; j++) {
-				gameData.gameMap.setCountryConquerer(countiresToAssignArrayList.get(j), players.get(i).getPlayerID());
+				gameData.gameMap.setCountryConquerer(countiresToAssignArrayList.get(j), players.get(i).getStrategyType().getPlayerID());
 			}
 			indexKeeper += numberOfCountriesToBeAssignedToPlayer;
 		}
@@ -165,11 +189,11 @@ public class StartUpPhase {
 	 * a tie the player roll again until one has a greter result.
 	 * @return List of all players with proper order in which they will play for the rest of the game
 	 */
-	public ArrayList<PlayerStrategy> generateRoundRobin(){
+	public ArrayList<Player> generateRoundRobin(){
 
 		// Auxiliary variables to perform the order of player calculation.
-		ArrayList<PlayerStrategy> temp = new ArrayList<PlayerStrategy>();
-		ArrayList<PlayerStrategy> tiePlayers = gameData.getPlayers();
+		ArrayList<Player> temp = new ArrayList<Player>();
+		ArrayList<Player> tiePlayers = gameData.getPlayers();
 		Boolean flag = false;
 		
 		// Dice object to get the random numbers from 1 to 6
@@ -182,10 +206,10 @@ public class StartUpPhase {
 			// Assign the player object to the roll die integer amount
 			for(int k = 0; k < aux; k++){
 				try {
-					tiePlayers.get(k).setOrderOfPlay(dice.rollDice());
+					tiePlayers.get(k).getStrategyType().setOrderOfPlay(dice.rollDice());
 				} catch(Exception e) {
 					// If something goes wrong with the return.
-					for(PlayerStrategy tie : tiePlayers) {
+					for(Player tie : tiePlayers) {
 						temp.add(tie);
 					}
 					break;
@@ -197,7 +221,7 @@ public class StartUpPhase {
 			tiePlayers = sort(tiePlayers, 0, aux);
 
             // To check if the first two players do not have the same number rolled add to temp array
-			if(tiePlayers.size() > 1 && tiePlayers.get(0).getOrderOfPlay() != tiePlayers.get(1).getOrderOfPlay()) {
+			if(tiePlayers.size() > 1 && tiePlayers.get(0).getStrategyType().getOrderOfPlay() != tiePlayers.get(1).getStrategyType().getOrderOfPlay()) {
 				temp.add(tiePlayers.get(0));
 				tiePlayers.remove(0);
 			}
@@ -210,7 +234,7 @@ public class StartUpPhase {
 			// Gets the index of tie players.
 			for(int i = 0; i < tiePlayers.size() - 1; i++) {
 				try {
-					if(tiePlayers.get(0).getOrderOfPlay() == tiePlayers.get(i+1).getOrderOfPlay()) {
+					if(tiePlayers.get(0).getStrategyType().getOrderOfPlay() == tiePlayers.get(i+1).getStrategyType().getOrderOfPlay()) {
 						aux = i + 1 + 1;
 						flag = true;
 
@@ -222,7 +246,7 @@ public class StartUpPhase {
 					}
 				} catch(Exception e) {
 					// If something goes wrong with the return.
-					for(PlayerStrategy tie : tiePlayers) {
+					for(Player tie : tiePlayers) {
 						temp.add(tie);
 					}
 					break;
@@ -232,7 +256,7 @@ public class StartUpPhase {
 		
 		// Sets the order of play.
 		for(int i = 0; i < temp.size(); i++) {
-			temp.get(i).setOrderOfPlay(i+1);
+			temp.get(i).getStrategyType().setOrderOfPlay(i+1);
 		}
 		
 		// Sets the player list in order of play.
@@ -251,14 +275,14 @@ public class StartUpPhase {
 	 * @return List of players with sorted order from given index to end
 	 * 
 	 */
-	private ArrayList<PlayerStrategy> sort(ArrayList<PlayerStrategy> array, int from, int to) {
+	private ArrayList<Player> sort(ArrayList<Player> array, int from, int to) {
 		
 		// Each element of the array is compared with the rest of elements.
 		for(int i = from; i < to; i++) {
 			for(int j = from; j < to; j++) {
 				try {
-					if(array.get(i).getOrderOfPlay() > array.get(j).getOrderOfPlay() ) {
-						PlayerStrategy temp = array.get(i);
+					if(array.get(i).getStrategyType().getOrderOfPlay() > array.get(j).getStrategyType().getOrderOfPlay() ) {
+						Player temp = array.get(i);
 						array.set(i, array.get(j));
 						array.set(j, temp);
 					}

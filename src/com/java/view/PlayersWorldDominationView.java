@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import com.java.model.Observable;
 import com.java.model.map.GameMap;
+import com.java.model.player.Player;
 import com.java.model.player.PlayerStrategy;
 
 /**
@@ -72,7 +73,7 @@ public class PlayersWorldDominationView implements GameView {
             	HashMap<String,Double> ownershipPercentage = ((GameMap) observable).getOwnershipPercentage();
             	HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer = ((GameMap) observable).getConqueredContinentsPerPlayer();
             	HashMap<String,Integer> numberOfArmiesPerPlayer = ((GameMap) observable).getNumberOfArmiesPerPlayer();
-            	ArrayList<PlayerStrategy> playersInfo = ((GameMap) observable).getPlayersInfo();
+            	ArrayList<Player> playersInfo = ((GameMap) observable).getPlayersInfo();
             	HashSet<String> continentsPerPlayer;
             	
                 editView.write("\nPercentage of the map controlled by every player:\n");
@@ -85,10 +86,10 @@ public class PlayersWorldDominationView implements GameView {
                 
                 editView.write("\n\nContinents controlled by every player:\n");
                 
-                for(PlayerStrategy player : playersInfo) {
+                for(Player player : playersInfo) {
                 	
-                	editView.write("\nPlayerStrategy: " + player.getPlayerID() + " " + player.getPlayerName());
-                	continentsPerPlayer = conqueredContinentsPerPlayer.get(player.getPlayerID());
+                	editView.write("\nPlayerStrategy: " + player.getStrategyType().getPlayerID() + " " + player.getStrategyType().getPlayerName());
+                	continentsPerPlayer = conqueredContinentsPerPlayer.get(player.getStrategyType().getPlayerID());
                 	
                 	if(continentsPerPlayer == null) {
                 		editView.write("\n\t\t");
@@ -103,8 +104,8 @@ public class PlayersWorldDominationView implements GameView {
                 editView.write("\nNumber of armies per player:\n");
                 
                 if(numberOfArmiesPerPlayer != null ) {
-                	for(PlayerStrategy player : playersInfo) {
-                    	editView.write("\nPlayerStrategy " + player.getPlayerID() + " " + player.getPlayerName()+ " has " + numberOfArmiesPerPlayer.get(player.getPlayerID().toString()) + " armies.");
+                	for(Player player : playersInfo) {
+                    	editView.write("\nPlayerStrategy " + player.getStrategyType().getPlayerID() + " " + player.getStrategyType().getPlayerName()+ " has " + numberOfArmiesPerPlayer.get(player.getStrategyType().getPlayerID().toString()) + " armies.");
                     }
                 }
                 

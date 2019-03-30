@@ -5,12 +5,82 @@ import com.java.model.cards.Card;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class HumanMode extends PlayerStrategy {
+    private Scanner input = new Scanner(System.in);
 
-    public HumanMode() {
+    public HumanMode(Integer playerID, String playerName) {
+        super(playerID,playerName);
     }
+    /**
+     * Gets valid cards to trade.
+     *
+     * @return array of valid cards.
+     */
+
+    @Override
+    public ArrayList<Card> getValidCards() {
+            ArrayList<Card> playerCardList = getPlayerCardList();
+            ArrayList<Card> playerExchangeCards = new ArrayList<>();
+            ArrayList<Card> cumulatedPlayerExchangeCards = new ArrayList<>();
+
+            System.out.println("*** Cards in hand ***");
+            this.showCards();
+            String userInput = "no";
+            if (playerCardList.size() > 2) {
+                System.out.println("Do you wish to exchange cards ? (yes/no)");
+                userInput = input.nextLine();
+            } else {
+                System.out.println(playerName + " does not have sufficient cards to trade.");
+            }
+            while (!((userInput.toLowerCase().equals("yes")) || (userInput.toLowerCase().equals("no")))) {
+                System.out.println("Please input either yes or no.");
+                userInput = input.nextLine();
+            }
+
+            while ((userInput.equals("yes")) || (userInput.equals("no") && playerCardList.size() > 4)) {
+                if (userInput.equals("no") && (playerCardList.size() > 4)) {
+                    System.out.println("You must exchange cards. You have more than 4 cards in your hand.");
+                }
+                boolean can_exchange = false;
+                this.showCards();
+                Integer cardNumber;
+
+                while (!can_exchange) {
+                    playerExchangeCards = new ArrayList<Card>();
+                    System.out
+                            .println("Please enter three card numbers from the list of the same or different army types.");
+                    for (int i = 0; i < 3; i++) {
+                        cardNumber = input.nextInt();
+                        while (cardNumber >= playerCardList.size()) {
+                            System.out.println("Please input correct number from list");
+                            cardNumber = input.nextInt();
+                        }
+                        playerExchangeCards.add(playerCardList.get(cardNumber));
+                    }
+                    can_exchange = isValidExchange(playerExchangeCards);
+                }
+                for (Card card : playerExchangeCards) {
+                    cumulatedPlayerExchangeCards.add(card);
+                    playerCardList.remove(card);
+                }
+                System.out.println("*** Cards in hand ***");
+                this.showCards();
+
+                System.out.println("Do you wish to exchange cards ? (yes/no)");
+                userInput = input.nextLine();
+                while (!((userInput.toLowerCase().equals("yes")) || (userInput.toLowerCase().equals("no")))) {
+                    System.out.println("Please input either yes or no.");
+                    userInput = input.nextLine();
+                }
+            }
+            if ((userInput.equals("no")) && (playerCardList.size() > 2) && (cumulatedPlayerExchangeCards.size() == 0)) {
+                System.out.println(playerName + " does not wish to exchange cards.");
+            }
+            return cumulatedPlayerExchangeCards;
+        }
 
     /**
      * The executeAttack() method encompasses the overall attack phase logic and flow
@@ -99,7 +169,7 @@ public class HumanMode extends PlayerStrategy {
 
             String defendingPlayer = gameData
                     .getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID())
-                    .getPlayerName();
+                    .getStrategyType().getPlayerName();
             attackPhase.setDefendingPlayer(defendingPlayer);
             notifyView();
 
@@ -176,7 +246,13 @@ public class HumanMode extends PlayerStrategy {
 
         endAttack();
     }
-
+    /**
+     * PlaceArmy method allows the player to position the armies in the player's
+     * owned countries.
+     *
+     * @param reinforcementArmy total reinforcement army count to be placed by the
+     *                          current player.
+     */
     @Override
     public void placeArmy(Integer reinforcementArmy) {
 
@@ -362,6 +438,31 @@ public class HumanMode extends PlayerStrategy {
 
         return Integer.parseInt(selectedDiceCount);
     }
+
+    /**
+     * Obtain the number of armies that the attcker choses to move to the conqured
+     * country
+     *
+     * @param selectedSourceCountry pass the value they decide to move to
+     * @return value to move the amount of army
+     */
+    @Override
+    public Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
+
+            String selectedArmyCount = "1";
+            int maxArmyCountAllowed = this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount() - 1;
+
+            do {
+                System.out.println("How many armies would " + this.playerName + " like to move to conquered country?"
+                        + "\t (up to " + maxArmyCountAllowed + " armies)\n");
+                if (input.hasNextLine()) {
+                    selectedArmyCount = input.nextLine();
+                }
+            } while (isNaN(selectedArmyCount) || Integer.parseInt(selectedArmyCount) < 1
+                    || Integer.parseInt(selectedArmyCount) > maxArmyCountAllowed);
+
+            return Integer.parseInt(selectedArmyCount);
+        }
 
     @Override
     public void executeFortification() {
