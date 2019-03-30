@@ -5,7 +5,7 @@ import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
 import com.java.model.map.GameMap;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,8 +27,8 @@ import static org.junit.Assert.assertTrue;
 public class ReinforcementTest {
 
     private static GameData gameData;
-    private static Player playerOne,playerTwo;
-    private static ArrayList<Player> players;
+    private static PlayerStrategy playerOne,playerTwo;
+    private static ArrayList<PlayerStrategy> players;
 
     @BeforeClass
     static public void setUp() {
@@ -39,8 +39,8 @@ public class ReinforcementTest {
 
         // Test data with two players, two continents and six countries.
         players = new ArrayList<>();
-        playerOne = new Player(1, "P1");
-        playerTwo = new Player(2, "P2");
+        playerOne = new PlayerStrategy(1, "P1");
+        playerTwo = new PlayerStrategy(2, "P2");
         players.add(playerOne);
         players.add(playerTwo);
 

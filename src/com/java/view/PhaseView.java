@@ -3,7 +3,7 @@ package com.java.view;
 import com.java.model.Observable;
 import com.java.model.player.AttackPhaseState;
 import com.java.model.player.FortificationPhaseState;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 import com.java.model.player.ReinforcementPhaseState;
 
 import java.io.File;
@@ -65,18 +65,18 @@ public class PhaseView implements GameView {
     @Override
     public void update(Observable observable) {
 
-        if(observable instanceof Player){
+        if(observable instanceof PlayerStrategy){
 
-            ArrayList<ReinforcementPhaseState> reinforcementList = ((Player) observable).getReinforcementPhaseState();
-            ArrayList<AttackPhaseState> attackList = ((Player) observable).getAttackPhaseState();
-            ArrayList<FortificationPhaseState> fortificationList = ((Player) observable).getFortificationPhaseState();
+            ArrayList<ReinforcementPhaseState> reinforcementList = ((PlayerStrategy) observable).getReinforcementPhaseState();
+            ArrayList<AttackPhaseState> attackList = ((PlayerStrategy) observable).getAttackPhaseState();
+            ArrayList<FortificationPhaseState> fortificationList = ((PlayerStrategy) observable).getFortificationPhaseState();
 
             // reinforcement PHase view
             if(!reinforcementList.isEmpty()) {
                 try {
                 	setUpFile();
                     editView.write("\nCurrent Phase: Reinforcement Phase");
-                    editView.write("\nCurrent Player: " + ((Player) observable).getPlayerName());
+                    editView.write("\nCurrent PlayerStrategy: " + ((PlayerStrategy) observable).getPlayerName());
                     editView.write("\nActions:" );
 
                     editView.flush();
@@ -110,7 +110,7 @@ public class PhaseView implements GameView {
             	try {
            		 setUpFile();
                     editView.write("\nCurrent Phase: Attack Phase");
-                    editView.write("\nCurrent Player: " + ((Player) observable).getPlayerName());
+                    editView.write("\nCurrent PlayerStrategy: " + ((PlayerStrategy) observable).getPlayerName());
                     editView.write("\nActions:" );
 
                     editView.flush();
@@ -118,7 +118,7 @@ public class PhaseView implements GameView {
                     // iterate over AttackPhaseState and write to the file results
                     for (AttackPhaseState eachAttack : attackList) {
                     	
-                    	String attackingPlayer = ((Player) observable).getPlayerName();
+                    	String attackingPlayer = ((PlayerStrategy) observable).getPlayerName();
                     	String defendingPlayer = eachAttack.getDefendingPlayer();
 
                     	String attackingCountry = eachAttack.getAttackingCountry();
@@ -168,7 +168,7 @@ public class PhaseView implements GameView {
             	 try {
             		 setUpFile();
                      editView.write("\nCurrent Phase: Fortification Phase");
-                     editView.write("\nCurrent Player: " + ((Player) observable).getPlayerName());
+                     editView.write("\nCurrent PlayerStrategy: " + ((PlayerStrategy) observable).getPlayerName());
                      editView.write("\nActions:" );
 
                      editView.flush();

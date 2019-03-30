@@ -1,19 +1,13 @@
 package com.java.controller.gameplay;
 
-import com.java.controller.map.MapLoader;
-import com.java.model.cards.Card;
-import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
-import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 import com.java.model.player.AttackPhaseState;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -33,8 +27,8 @@ import static org.junit.Assert.assertTrue;
 public class AttackTest {
 
     private static GameData gameData;
-    private static Player playerOne,playerTwo,playerThree;
-    private static ArrayList<Player> players;
+    private static PlayerStrategy playerOne,playerTwo,playerThree;
+    private static ArrayList<PlayerStrategy> players;
     public static AttackPhaseState attackPhase = new AttackPhaseState();
     public static ArrayList<AttackPhaseState> attackPhaseState = new ArrayList<>();
     
@@ -48,9 +42,9 @@ public class AttackTest {
 
         // Test data with two players, two continents and six countries.
         players = new ArrayList<>();
-        playerOne   = new Player(1, "P1");
-        playerTwo   = new Player(2, "P2");
-        playerThree = new Player(3, "P3");
+        playerOne   = new PlayerStrategy(1, "P1");
+        playerTwo   = new PlayerStrategy(2, "P2");
+        playerThree = new PlayerStrategy(3, "P3");
         players.add(playerOne);
         players.add(playerTwo);
         players.add(playerThree);
@@ -99,7 +93,7 @@ public class AttackTest {
            
     }
     /**
-     * Test dice count thresholds for attack - Player 1 from C1
+     * Test dice count thresholds for attack - PlayerStrategy 1 from C1
      */
     @Test
     public void testAttackDiceThresholds() {
@@ -109,7 +103,7 @@ public class AttackTest {
     }
     
     /**
-     * Test dice count thresholds for defense - Player 2 for C2
+     * Test dice count thresholds for defense - PlayerStrategy 2 for C2
      */
     @Test
     public void testDefendDiceThresholds() {

@@ -1,14 +1,11 @@
 package com.java.model.map;
 
 import com.java.model.Observable;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 
-import javax.swing.text.html.parser.Parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * This class models the game map
@@ -37,7 +34,7 @@ public class GameMap extends Observable implements Cloneable {
 
 	private HashMap<String,Double> ownershipPercentage;
 	private HashMap<String,Integer> numberOfArmiesPerPlayer;
-	private ArrayList<Player> playersInfo;
+	private ArrayList<PlayerStrategy> playersInfo;
 
 	/**
 	 * Creates a default map by created instances of every map.
@@ -464,7 +461,7 @@ public class GameMap extends Observable implements Cloneable {
 		String key;
 		Integer value;
 		
-		for(Player player : playersInfo) {
+		for(PlayerStrategy player : playersInfo) {
 			
 			numberOfArmies = 0;
 			countriesPerPlayer = getConqueredCountriesPerPlayer(player.getPlayerID());
@@ -493,7 +490,7 @@ public class GameMap extends Observable implements Cloneable {
         Integer counteriesOwnedPlayer = 0;
         Double percentageOfOwnership = 0.0;
 
-        for(Player eachPlayer : playersInfo){
+        for(PlayerStrategy eachPlayer : playersInfo){
            HashSet<String> countiresOwned= conqueredCountriesPerPlayer.get(eachPlayer.getPlayerID());
            
            if(countiresOwned == null) {
@@ -516,8 +513,8 @@ public class GameMap extends Observable implements Cloneable {
      * Sets the player's information.
      * @param players array with players.
      */
-    public void setupPlayerNames(ArrayList<Player> players){
-        playersInfo = new ArrayList<Player>(players); // obtain players
+    public void setupPlayerNames(ArrayList<PlayerStrategy> players){
+        playersInfo = new ArrayList<PlayerStrategy>(players); // obtain players
     }
     
     /**
@@ -525,7 +522,7 @@ public class GameMap extends Observable implements Cloneable {
      * 
      * @return the array with player information.
      */
-    public ArrayList<Player> getPlayersInfo(){
+    public ArrayList<PlayerStrategy> getPlayersInfo(){
     	return this.playersInfo;
     }
     

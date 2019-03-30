@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import com.java.model.Observable;
 import com.java.model.cards.Card;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 import com.java.model.player.ReinforcementPhaseState;
 
 /**
@@ -58,15 +58,15 @@ public class CardsExchangeView implements GameView {
 	
 	@Override
 	public void update(Observable o) {
-		Player player = (Player) o;
+		PlayerStrategy player = (PlayerStrategy) o;
 		ArrayList<ReinforcementPhaseState> reinforcementList = player.getReinforcementPhaseState();
 		if(reinforcementList.isEmpty()) {
 			setUpFile();
 		} else {
 			try {
 				ArrayList<Card> cardList = player.getPlayerCardList();
-				editView.write("\r\nCurrent Player: " + player.getPlayerName());
-				editView.write("\r\nPlayer has " + cardList.size() + " cards");
+				editView.write("\r\nCurrent PlayerStrategy: " + player.getPlayerName());
+				editView.write("\r\nPlayerStrategy has " + cardList.size() + " cards");
 				editView.write("\r\nCards owned by player:");
 				for(int i = 0; i < cardList.size(); i++) {
 					editView.write("\r\nCard " + (i + 1) + ":");

@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 import com.java.model.Observable;
 import com.java.model.map.GameMap;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 
 /**
  * This class displays the information regarding each player's control over country,
@@ -72,22 +72,22 @@ public class PlayersWorldDominationView implements GameView {
             	HashMap<String,Double> ownershipPercentage = ((GameMap) observable).getOwnershipPercentage();
             	HashMap<Integer, HashSet<String>> conqueredContinentsPerPlayer = ((GameMap) observable).getConqueredContinentsPerPlayer();
             	HashMap<String,Integer> numberOfArmiesPerPlayer = ((GameMap) observable).getNumberOfArmiesPerPlayer();
-            	ArrayList<Player> playersInfo = ((GameMap) observable).getPlayersInfo();
+            	ArrayList<PlayerStrategy> playersInfo = ((GameMap) observable).getPlayersInfo();
             	HashSet<String> continentsPerPlayer;
             	
                 editView.write("\nPercentage of the map controlled by every player:\n");
                 
                 for(Entry<String, Double> entry : ownershipPercentage.entrySet()) {
                 	
-                	editView.write("\nPlayer: " + entry.getKey() + "\t\t\t" + String.format("%.2f", entry.getValue()) + "%");
+                	editView.write("\nPlayerStrategy: " + entry.getKey() + "\t\t\t" + String.format("%.2f", entry.getValue()) + "%");
                 	
                 }
                 
                 editView.write("\n\nContinents controlled by every player:\n");
                 
-                for(Player player : playersInfo) {
+                for(PlayerStrategy player : playersInfo) {
                 	
-                	editView.write("\nPlayer: " + player.getPlayerID() + " " + player.getPlayerName());
+                	editView.write("\nPlayerStrategy: " + player.getPlayerID() + " " + player.getPlayerName());
                 	continentsPerPlayer = conqueredContinentsPerPlayer.get(player.getPlayerID());
                 	
                 	if(continentsPerPlayer == null) {
@@ -103,8 +103,8 @@ public class PlayersWorldDominationView implements GameView {
                 editView.write("\nNumber of armies per player:\n");
                 
                 if(numberOfArmiesPerPlayer != null ) {
-                	for(Player player : playersInfo) {
-                    	editView.write("\nPlayer " + player.getPlayerID() + " " + player.getPlayerName()+ " has " + numberOfArmiesPerPlayer.get(player.getPlayerID().toString()) + " armies.");
+                	for(PlayerStrategy player : playersInfo) {
+                    	editView.write("\nPlayerStrategy " + player.getPlayerID() + " " + player.getPlayerName()+ " has " + numberOfArmiesPerPlayer.get(player.getPlayerID().toString()) + " armies.");
                     }
                 }
                 

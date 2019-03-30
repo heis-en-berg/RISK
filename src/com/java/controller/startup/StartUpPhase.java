@@ -5,8 +5,7 @@ import com.java.controller.dice.Dice;
 import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
-import com.java.model.map.GameMap;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,14 +52,14 @@ public class StartUpPhase {
 	 * @param playerNames list of names passed based on the console input from user
 	 * @return A list that contains all the players which now have ids assigned.
 	 */
-	public ArrayList<Player> generatePlayers(ArrayList<String> playerNames, ArrayList<Integer> playerStrategy){
+	public ArrayList<PlayerStrategy> generatePlayers(ArrayList<String> playerNames, ArrayList<Integer> playerStrategy){
 		
 		// A collection of empty players is created to return it.
-		ArrayList<Player> newPlayers = new ArrayList<Player>();
+		ArrayList<PlayerStrategy> newPlayers = new ArrayList<PlayerStrategy>();
 		
 		// Give every new player a unique id and the name provided by the user.
 		for(int i=0; i < playerNames.size(); i++){
-			newPlayers.add(new Player(playerId,playerNames.get(i)));
+			newPlayers.add(new PlayerStrategy(playerId,playerNames.get(i)));
 			playerId++;
 		}
 		
@@ -90,7 +89,7 @@ public class StartUpPhase {
 	public void assignCountriesToPlayers() {
 		
 		// Get the list of players from game data.
-		ArrayList<Player> players = gameData.getPlayers();
+		ArrayList<PlayerStrategy> players = gameData.getPlayers();
 
 		// Used to obtain the country objects
 		HashMap<String, Country> countryObject = gameData.gameMap.getAllCountries();
@@ -166,11 +165,11 @@ public class StartUpPhase {
 	 * a tie the player roll again until one has a greter result.
 	 * @return List of all players with proper order in which they will play for the rest of the game
 	 */
-	public ArrayList<Player> generateRoundRobin(){
+	public ArrayList<PlayerStrategy> generateRoundRobin(){
 
 		// Auxiliary variables to perform the order of player calculation.
-		ArrayList<Player> temp = new ArrayList<Player>();
-		ArrayList<Player> tiePlayers = gameData.getPlayers();
+		ArrayList<PlayerStrategy> temp = new ArrayList<PlayerStrategy>();
+		ArrayList<PlayerStrategy> tiePlayers = gameData.getPlayers();
 		Boolean flag = false;
 		
 		// Dice object to get the random numbers from 1 to 6
@@ -186,12 +185,12 @@ public class StartUpPhase {
 					tiePlayers.get(k).setOrderOfPlay(dice.rollDice());
 				} catch(Exception e) {
 					// If something goes wrong with the return.
-					for(Player tie : tiePlayers) {
+					for(PlayerStrategy tie : tiePlayers) {
 						temp.add(tie);
 					}
 					break;
 				}
-				//System.out.println("Player " + tiePlayers.get(k).getPlayerName() + " rolled the dice: " + tiePlayers.get(k).getOrderOfPlay());
+				//System.out.println("PlayerStrategy " + tiePlayers.get(k).getPlayerName() + " rolled the dice: " + tiePlayers.get(k).getOrderOfPlay());
 			}
 
             // When the player roll the dice the tie has to be resolved by calling custom sort from 0 till the index of tie player.
@@ -223,7 +222,7 @@ public class StartUpPhase {
 					}
 				} catch(Exception e) {
 					// If something goes wrong with the return.
-					for(Player tie : tiePlayers) {
+					for(PlayerStrategy tie : tiePlayers) {
 						temp.add(tie);
 					}
 					break;
@@ -252,14 +251,14 @@ public class StartUpPhase {
 	 * @return List of players with sorted order from given index to end
 	 * 
 	 */
-	private ArrayList<Player> sort(ArrayList<Player> array, int from, int to) {
+	private ArrayList<PlayerStrategy> sort(ArrayList<PlayerStrategy> array, int from, int to) {
 		
 		// Each element of the array is compared with the rest of elements.
 		for(int i = from; i < to; i++) {
 			for(int j = from; j < to; j++) {
 				try {
 					if(array.get(i).getOrderOfPlay() > array.get(j).getOrderOfPlay() ) {
-						Player temp = array.get(i);
+						PlayerStrategy temp = array.get(i);
 						array.set(i, array.get(j));
 						array.set(j, temp);
 					}

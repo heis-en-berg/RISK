@@ -4,7 +4,7 @@ import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,13 +58,13 @@ public class RiskGameDriver {
 	}
 
 	/**
-	 * Able to attach the views Phase View, CardsExchange View to the observer Player
+	 * Able to attach the views Phase View, CardsExchange View to the observer PlayerStrategy
 	 */
 	private void registerObservers() {
 		CardsExchangeView cardsExchangeView = new CardsExchangeView();
 		PhaseView phaseView = new PhaseView();
 
-		for(Player currentPlayer : gameData.getPlayers()) {
+		for(PlayerStrategy currentPlayer : gameData.getPlayers()) {
 			currentPlayer.addObserver(phaseView);
 			currentPlayer.addObserver(cardsExchangeView);
 		}
@@ -110,14 +110,14 @@ public class RiskGameDriver {
 			String playerStrategyInput = "";
 
 			while(playerNameInput == null || playerNameInput.length() == 0) {
-				System.out.println("\nPlayer " + (i + 1));
+				System.out.println("\nPlayerStrategy " + (i + 1));
 				System.out.println("Enter your name: ");
 				playerNameInput = input.nextLine().trim();
 			}
 			//first check if it is a number then check if it is inside the range of 1 to 5
 			do {
 				do {
-					System.out.println("\n Choose your Player Strategy (BASED ON NUMBER): ");
+					System.out.println("\n Choose your PlayerStrategy Strategy (BASED ON NUMBER): ");
 					System.out.println("\n (1) Aggressive \n (2) Human \n (3) Benevolent \n (4) Random \n (5) Cheater");
 
 					playerStrategyInput = input.nextLine().trim();
@@ -147,7 +147,7 @@ public class RiskGameDriver {
 		// Gets all countries from game map.
 		HashMap<String, Country> countryObjects = gameData.gameMap.getAllCountries();
 
-		for (Player player : gameData.getPlayers()) {
+		for (PlayerStrategy player : gameData.getPlayers()) {
 
 			// Gets all countries from game map.
 			Boolean firstTime = true;
@@ -162,7 +162,7 @@ public class RiskGameDriver {
 			while (numberOfArmiesAvailablePerPlayer > 0) {
 				
 				// Displays the lists of countries owned by a player.
-				System.out.println("Player: " + player.getPlayerName() + " owns the following countries: ");
+				System.out.println("PlayerStrategy: " + player.getPlayerName() + " owns the following countries: ");
 
 				// At the begining every country has at least one army.
 				for (int i = 0; i < countriesPerPlayerArray.length; i++) {
@@ -197,7 +197,7 @@ public class RiskGameDriver {
 				String numberOfArmiesByUser = "";
 				
 				do {
-					System.out.println("Player: " + player.getPlayerName() + " How many armies do you want to place in "
+					System.out.println("PlayerStrategy: " + player.getPlayerName() + " How many armies do you want to place in "
 							+ countryName + "?");
 					numberOfArmiesByUser = input.nextLine();
 
@@ -224,7 +224,7 @@ public class RiskGameDriver {
 		System.out.println(" ");
 		System.out.println("The following list has the order of the players in round robin fashion: ");
 		System.out.println("The results are based on the higher number of dice a player roled ");
-		ArrayList<Player> results = startUp.generateRoundRobin();
+		ArrayList<PlayerStrategy> results = startUp.generateRoundRobin();
 		for(int i = 0; i < results.size(); i++) {
 			System.out.println((i+1) + " " + results.get(i).getPlayerName());
 		}
@@ -260,14 +260,14 @@ public class RiskGameDriver {
 	 * Loop through player list circularly until one of the player wins
 	 */
 	private void startTurn() {
-		ArrayList<Player> playerList = this.gameData.getPlayers();
-		Player currentPlayer; // first player that will start the game
+		ArrayList<PlayerStrategy> playerList = this.gameData.getPlayers();
+		PlayerStrategy currentPlayer; // first player that will start the game
 		Boolean doWeHaveAWinner = false;
 
 		//There will be another round if the number of players is greater than one.
 		while(!doWeHaveAWinner) {
 
-			for (Player player : playerList) {
+			for (PlayerStrategy player : playerList) {
 				currentPlayer = player;
 				
 				// before actually 
@@ -293,7 +293,7 @@ public class RiskGameDriver {
 	 * @param player check based on the player passed in if they hav won the game
 	 * @return true if the player has won the game
 	 */
-	private boolean getIsWinner(Player player) {
+	private boolean getIsWinner(PlayerStrategy player) {
 		
 		boolean isWinner = false;
 		HashSet<String> allConqueredCountries = new HashSet<String>();
@@ -315,7 +315,7 @@ public class RiskGameDriver {
 	 * @param player pass the value of the player that is in game
 	 * @return true if the player is active
 	 */
-	private boolean getIsActive(Player player) {
+	private boolean getIsActive(PlayerStrategy player) {
 		
 		boolean isActive = true;
 		HashSet<String> allConqueredCountries = new HashSet<String>();

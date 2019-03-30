@@ -2,7 +2,7 @@ package com.java.model.gamedata;
 
 import com.java.model.cards.CardsDeck;
 import com.java.model.map.GameMap;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 
 import java.util.ArrayList;
 
@@ -32,7 +32,7 @@ public class GameData {
 	/**
 	 * The players ordered in order to play.
 	 * */
-	private ArrayList<Player> players;
+	private ArrayList<PlayerStrategy> players;
 
 	/**
 	 * The minimum number of players is 2.
@@ -50,7 +50,7 @@ public class GameData {
 	 *
 	 * @return the collection of players.
 	 * */
-	public ArrayList<Player> getPlayers() {
+	public ArrayList<PlayerStrategy> getPlayers() {
 		return this.players;
 	}
 
@@ -59,7 +59,7 @@ public class GameData {
 	 *
 	 * @param players the collection of players.
 	 * */
-	public void setPlayers(ArrayList<Player> players) {
+	public void setPlayers(ArrayList<PlayerStrategy> players) {
 		this.players = players;
 	}
 	
@@ -69,8 +69,8 @@ public class GameData {
 	 * @param playerId player id.
 	 * @return player.
 	 * */
-	public Player getPlayer(Integer playerId) {
-		for(Player player : this.players) {
+	public PlayerStrategy getPlayer(Integer playerId) {
+		for(PlayerStrategy player : this.players) {
 			if(player.getPlayerID().equals(playerId)) {
 				return player;
 			}
@@ -83,7 +83,7 @@ public class GameData {
 	 *
 	 * @param player the player to be removed
 	 * */
-	public void removePlayers(Player player){
+	public void removePlayers(PlayerStrategy player){
 		this.players.remove(player);
 	}
 
@@ -110,7 +110,7 @@ public class GameData {
 	 * @param player player id
 	 * @return true if player is active else false
 	 */
-	public Boolean getPlayerStatus(Player player) {
+	public Boolean getPlayerStatus(PlayerStrategy player) {
 		return player.isActive;
 	}
 	
@@ -119,7 +119,7 @@ public class GameData {
 	 * @param player player id.
 	 * @param isActive set player status
 	 */
-	public void setPlayerStatus(Player player, Boolean isActive) {
+	public void setPlayerStatus(PlayerStrategy player, Boolean isActive) {
 		player.isActive = isActive;
 	}
 

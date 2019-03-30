@@ -1,6 +1,6 @@
 package com.java.model.map;
 
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -30,10 +30,10 @@ public class GameMapTest {
     public static void beforeEverything() {
     	gameMap = new GameMap();
 
-        Player player1 = new Player(1, "Player1");
-        Player player2 = new Player(2, "Player2");
+        PlayerStrategy player1 = new PlayerStrategy(1, "Player1");
+        PlayerStrategy player2 = new PlayerStrategy(2, "Player2");
 
-        ArrayList<Player> players = new ArrayList<Player>();
+        ArrayList<PlayerStrategy> players = new ArrayList<PlayerStrategy>();
         players.add(player1);
         players.add(player2);
 

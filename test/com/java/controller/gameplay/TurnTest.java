@@ -2,12 +2,11 @@ package com.java.controller.gameplay;
 
 import com.java.model.gamedata.GameData;
 import com.java.model.map.GameMap;
-import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import static java.util.Arrays.asList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -19,8 +18,8 @@ import static org.junit.Assert.assertEquals;
 public class TurnTest {
 
     private static GameData gameData;
-    private static Player playerOne,playerTwo;
-    private static ArrayList<Player> players;
+    private static PlayerStrategy playerOne,playerTwo;
+    private static ArrayList<PlayerStrategy> players;
 
     @BeforeClass
     static public void setUp() {
@@ -31,8 +30,8 @@ public class TurnTest {
 
         // Test data with two players, two continents and six countries.
         players = new ArrayList<>();
-        playerOne = new Player(1, "P1");
-        playerTwo = new Player(2, "P2");
+        playerOne = new PlayerStrategy(1, "P1");
+        playerTwo = new PlayerStrategy(2, "P2");
         players.add(playerOne);
         players.add(playerTwo);
 
@@ -122,8 +121,8 @@ public class TurnTest {
         gameData.gameMap.getCountry("C3").setArmyCount(3);
         gameData.gameMap.getCountry("C4").setArmyCount(1);
         
-        // Player owns all countries except C5 & C6
-        // Player can fortify FROM C2, C3 only (as C1 and C4 only have 1 army on the ground)
+        // PlayerStrategy owns all countries except C5 & C6
+        // PlayerStrategy can fortify FROM C2, C3 only (as C1 and C4 only have 1 army on the ground)
         HashMap<String, ArrayList<String>> actual_paths = playerOne.getPotentialFortificationScenarios();
         HashMap<String, ArrayList<String>> expected_paths = new HashMap<String, ArrayList<String>>();
         
