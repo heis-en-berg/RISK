@@ -1,5 +1,6 @@
 package com.java.model.player;
 
+
 public class Player {
     private PlayerStrategy strategyType;
 
@@ -16,7 +17,6 @@ public class Player {
         boolean isWinner = false;
         startReinforcement();
         startAttack();
-
         // attack phase changes state so before going to fortify logic, check
          isWinner = checkIfPlayerHasConqueredTheWorld();
         if (!isWinner) {
@@ -32,7 +32,7 @@ public class Player {
     }
 
     public void startFortification() {
-        // TODO  strategyType.executeFortification();
+        strategyType.executeFortification();
     }
 
     public boolean checkIfPlayerHasConqueredTheWorld(){

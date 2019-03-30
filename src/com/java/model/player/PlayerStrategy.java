@@ -599,7 +599,7 @@ public abstract class  PlayerStrategy extends Observable {
 	
 	/**
 	 * Helper method to check if the player lost the game.
-	 * @param player pass the value of the player that is in game
+	 * @param playerId pass the value of the player that is in game
 	 * @return true if the player is active
 	 */
 	private boolean checkIfPlayerLostTheGame(Integer playerId) {
@@ -618,146 +618,7 @@ public abstract class  PlayerStrategy extends Observable {
 	 * Method to guide the player through various fortification options when
 	 * applicable.
 	 */
-	public void fortify() {
-
-		System.out.println();
-		System.out.println("**** Fortification Phase Begins for player " + this.playerName + "..****\n");
-
-		FortificationPhaseState fortificationPhase = new FortificationPhaseState();
-		fortificationPhaseState.add(fortificationPhase);
-		notifyView();
-
-		// First get confirmation from the player that fortification is desired.
-
-		boolean doFortify = false;
-		String playerDecision = "no";
-		System.out.println("Would you like to fortify? (YES/NO)");
-		if (input.hasNextLine()) {
-			playerDecision = input.nextLine();
-		}
-
-		switch (playerDecision.toLowerCase()) {
-		case "yes":
-			doFortify = true;
-			break;
-		case "yeah":
-			doFortify = true;
-			break;
-		case "y":
-			doFortify = true;
-			break;
-		case "sure":
-			doFortify = true;
-			break;
-		}
-
-		if (!doFortify) {
-			System.out.println(this.playerName + " does not wish to fortify. Ending turn..");
-			System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
-			return;
-		} else {
-			System.out.println("\n" + "Fetching potential fortification scenarios for " + this.playerName + "...\n");
-		}
-
-		// Now fetch all possibilities for player (this could get long as the game
-		// progresses and more land is acquired)
-
-		HashMap<String, ArrayList<String>> fortificationScenarios = getPotentialFortificationScenarios();
-
-		if (fortificationScenarios == null) {
-			System.out.println(
-					"There are currently no fortification opportunities for " + this.playerName + ".. Sorry!\n");
-			System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
-			return;
-		}
-
-		if (fortificationScenarios.isEmpty()) {
-			System.out.println(
-					"There are currently no fortification opportunities for " + this.playerName + ".. Sorry!\n");
-			System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
-			return;
-		}
-
-		// This structure will accelerate and organize the army count process/validation
-		HashMap<String, Integer> armiesPerPotentialFortificationSourceCountry = new HashMap<String, Integer>();
-
-		// Print all the options out for the player to see and choose from
-		for (String keySourceCountry : fortificationScenarios.keySet()) {
-			armiesPerPotentialFortificationSourceCountry.put(keySourceCountry,
-					this.gameData.gameMap.getCountry(keySourceCountry).getCountryArmyCount());
-			// the range is one less because of the minimum requirement of having at least 1
-			// army on the ground at all times.
-			int possibleNumOfArmyRange = armiesPerPotentialFortificationSourceCountry.get(keySourceCountry) - 1;
-			for (String correspondingDestinationCountry : fortificationScenarios.get(keySourceCountry)) {
-				if (!correspondingDestinationCountry.equalsIgnoreCase(keySourceCountry)) {
-					System.out.println("\n" + keySourceCountry + "\t -> \t" + correspondingDestinationCountry
-							+ "\t (up to " + possibleNumOfArmyRange + " armies)");
-				}
-			}
-		}
-
-		// Recycle variable
-		// clear the decision variable holder between choices
-		playerDecision = "";
-
-		// while selection doesn't match any of the offered options, prompt user
-		while (!fortificationScenarios.containsKey(playerDecision)) {
-			System.out.println("\n" + "Please choose one of the suggested countries to move armies FROM: ");
-			playerDecision = input.nextLine();
-		}
-		String fromCountry = playerDecision;
-		fortificationPhase.setFromCountry(fromCountry);
-		notifyView();
-		// while number of armies to be moved is not coherent, prompt user
-		// 0 is a valid selection
-		String noOfArmiesToMove = "-1";
-		do {
-			System.out.println("\n" + "How many armies would you like to move from " + fromCountry + "?");
-			noOfArmiesToMove = input.nextLine();
-		} while (isNaN(noOfArmiesToMove) || Integer.parseInt(noOfArmiesToMove) < 0
-				|| Integer.parseInt(noOfArmiesToMove) >= armiesPerPotentialFortificationSourceCountry.get(fromCountry));
-
-		fortificationPhase.setNumberOfArmiesMoved(Integer.parseInt(noOfArmiesToMove));
-		notifyView();
-
-		playerDecision = "";
-
-		// check that the {from - to} combination specifically makes sense as a valid
-		// path
-		while (!fortificationScenarios.get(fromCountry).contains(playerDecision)) {
-			System.out.println("\n"
-					+ "Please choose one of the valid countries to move armies INTO (knowing that you've chosen to move them from country "
-					+ fromCountry + "): ");
-			playerDecision = input.nextLine();
-		}
-
-		String toCountry = playerDecision;
-
-		fortificationPhase.setToCountry(toCountry);
-		notifyView();
-
-		// At this stage all that's left to do really is adjust the army counts in the
-		// respective countries to reflect they player's fortification move
-		this.gameData.gameMap.getCountry(fromCountry).deductArmy(Integer.parseInt(noOfArmiesToMove));
-		this.gameData.gameMap.addArmyToCountry(toCountry, Integer.parseInt(noOfArmiesToMove));
-
-		System.out.println(
-				"\nFortification Successful for " + this.playerName + ". Here is a summary of the new status-quo:\n");
-
-		System.out.println("Army count for " + fromCountry + " is now: "
-				+ this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
-		System.out.println("Army count for " + toCountry + " is now: "
-				+ this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
-
-		fortificationPhaseState.clear();
-		try {
-			TimeUnit.SECONDS.sleep(5);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
-	}
+	public abstract void executeFortification();
 
 	/**
 	 * Helper method to build a comprehensive map of all the possible fortification
@@ -769,7 +630,7 @@ public abstract class  PlayerStrategy extends Observable {
 	 *
 	 * @return Hashmap of all potential fortification scenarios for player.
 	 */
-	public HashMap<String, ArrayList<String>> getPotentialFortificationScenarios() {
+	protected HashMap<String, ArrayList<String>> getPotentialFortificationScenarios() {
 
 		// Draft/prelim structure which contains only directly adjacent countries owned
 		// by the player
@@ -824,7 +685,7 @@ public abstract class  PlayerStrategy extends Observable {
 	 * @param fortificationScenarios a HashStructure to be populated
 	 * @param rootCountry            country to be checked for adjacency
 	 */
-	public void buildFortificationPath(HashMap<String, ArrayList<String>> fortificationScenarios, String rootCountry) {
+	protected void buildFortificationPath(HashMap<String, ArrayList<String>> fortificationScenarios, String rootCountry) {
 		ArrayList<String> longestConqueredPathFromRoot = new ArrayList<String>();
 		longestConqueredPathFromRoot.add(rootCountry);
 		traverseNeighbouringCountries(longestConqueredPathFromRoot, rootCountry);
@@ -840,7 +701,7 @@ public abstract class  PlayerStrategy extends Observable {
 	 *                                     country ownership
 	 * @param rootCountry                  country to serve as root of search
 	 */
-	public void traverseNeighbouringCountries(ArrayList<String> longestConqueredPathFromRoot, String rootCountry) {
+	protected void traverseNeighbouringCountries(ArrayList<String> longestConqueredPathFromRoot, String rootCountry) {
 
 		HashSet<String> adjacentCountries = new HashSet<String>();
 		adjacentCountries = this.gameData.gameMap.getAdjacentCountries(rootCountry);
