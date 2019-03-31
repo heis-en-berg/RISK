@@ -1,10 +1,12 @@
 package com.java.model.player;
 
 import com.java.model.cards.Card;
+import com.java.model.map.Country;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
 
 public class CheaterMode extends PlayerStrategy{
 
@@ -137,6 +139,75 @@ public class CheaterMode extends PlayerStrategy{
     }
 
     @Override
+    public void executeFortification() {
+        System.out.println();
+        System.out.println("**** Fortification Phase Begins for player " + this.playerName + "..****\n");
+
+        FortificationPhaseState fortificationPhase = new FortificationPhaseState();
+        fortificationPhaseState.add(fortificationPhase);
+        notifyView();
+
+        // First get confirmation from the player that fortification is desired.
+
+        boolean doFortify = true;
+
+        System.out.println("\n" + "I am a Cheater! , Going to double all my arimies where I dont own any neighbour countries " + this.playerName + "...\n");
+
+        //get list of countries owned by player
+        HashSet<String> countriesOwned = gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
+
+        HashSet<String> adacentCountries;
+
+        boolean isCountryBelongsToMe = false;
+
+        for(String entry : countriesOwned) {
+            Country belongsToPlayer = new Country();
+            // then check if thoes countries nebouires are nont owned by me
+             adacentCountries = gameData.gameMap.getAdjacentCountries(entry);
+
+             for(String adjEntry: adacentCountries){
+                 // check if the countries are not owned by me the player
+                  belongsToPlayer = gameData.gameMap.getCountry(adjEntry);
+
+                 if(belongsToPlayer.getCountryConquerorID() == playerID){
+                     isCountryBelongsToMe = true;
+                 }
+
+                 if(isCountryBelongsToMe == true){
+                     break;
+                 }
+
+             }
+             // when it is not in the list I own just double the army amount.
+             if(isCountryBelongsToMe == false){
+                  gameData.gameMap.addArmyToCountry(belongsToPlayer.getCountryName(),belongsToPlayer.getCountryArmyCount() *2);
+
+                  fortificationPhase = new FortificationPhaseState();
+
+                  fortificationPhase.setFromCountry(belongsToPlayer.getCountryName());
+                 fortificationPhase.setToCountry(" I am Cheating, :) ");
+                 fortificationPhase.setNumberOfArmiesMoved(belongsToPlayer.getCountryArmyCount());
+
+                 fortificationPhaseState.add(fortificationPhase);
+
+                 notifyView();
+             }
+
+        }
+
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
+
+        fortificationPhaseState.clear();
+    }
+
+
+    @Override
     public String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios) {
         return null;
     }
@@ -156,8 +227,4 @@ public class CheaterMode extends PlayerStrategy{
         return null;
     }
 
-    @Override
-    public void executeFortification() {
-
-    }
 }

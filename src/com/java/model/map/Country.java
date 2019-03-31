@@ -32,7 +32,10 @@ public class Country {
 	 * The number of armies placed in the country.
 	 */
 	private Integer armyCount;
-	
+
+	public Country(){
+	}
+
 	/**
 	 * A country is created by provinding the name and the continent name.
 	 * 
