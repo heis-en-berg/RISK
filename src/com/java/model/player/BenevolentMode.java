@@ -189,11 +189,16 @@ public class BenevolentMode extends PlayerStrategy {
              gameData.gameMap.getCountry(weakestCountry).addArmy(1);
              reinforcementArmy -= 1;
         }
+        System.out.println("\nReinforcement is done for player "+playerName+". Here is an overview. \n");
+        for(String country: conqueredCountryByThisPlayer){
+            System.out.println("Country: "+country+", Army Count: "+gameData.gameMap.getCountry(country).getCountryArmyCount());
+        }
     }
     @Override
     public void executeAttack() {
 
-        System.out.println("\nPlayer "+playerName+" is Benevolent. The player never attacks");
+        System.out.println("\n\n**** Attack Phase Begins for player " + this.playerName + "..****\n");
+        System.out.println("Player "+playerName+" is Benevolent. The player never attacks");
     }
 
     @Override
