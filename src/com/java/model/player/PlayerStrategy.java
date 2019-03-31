@@ -8,8 +8,6 @@ import com.java.model.gamedata.GameData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This class models the player, it holds the id, the name, and the order to
@@ -132,10 +130,6 @@ public abstract class PlayerStrategy extends Observable {
 		Integer totalReinforcementArmyCount = 0;
 		Integer totalCountriesOwnedByPlayer;
 		Integer currentPlayerID = playerID;
-		ArrayList<Card> playerCardList = getPlayerCardList();
-		ArrayList<Card> playerExchangeCards;
-		ArrayList<String> playerCountryList = new ArrayList<String>();
-		boolean can_exchange = false;
 
 		/*
 		 * Count the total number of continents owned by the player and retrieve the
