@@ -6,6 +6,7 @@ import com.java.model.map.Country;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class CheaterMode extends PlayerStrategy{
@@ -135,6 +136,156 @@ public class CheaterMode extends PlayerStrategy{
 
     @Override
     public void executeAttack() {
+        System.out.println();
+        System.out.println("**** Attack Phase Begins for player " + this.playerName + "..****\n");
+
+        // implement an all-out mode
+        boolean allOut = false;
+        Boolean hasConnqueredAtleastOneCountry = false;
+
+        while (gameOn) {
+
+            AttackPhaseState attackPhaseState = new AttackPhaseState();
+            attackPhaseState.setAttackingPlayer(this.playerName);
+            this.attackPhaseState.add(attackPhaseState);
+            notifyView();
+
+
+            // Now fetch all attack possibilities for player
+            System.out.println("\n" + "Fetching potential attack scenarios for " + this.playerName + "...\n");
+
+            // K = my source country , V = list of other countries that i dont own ( as nebiours)
+            HashMap<String, ArrayList<String>> attackScenarios = getPotentialAttackScenarios();
+
+            if (attackScenarios.isEmpty()) {
+                System.out
+                        .println("There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
+                break;
+            }
+
+            // show PlayerStrategy all the options they have
+            showAllAttackScenarios(attackScenarios);
+
+            // TODO Now chose the country to attack from and in a loop conqure all the nebiours
+            for(Map.Entry<String,ArrayList<String>> currCountry : attackScenarios.entrySet()){
+
+                String selectedCountry = currCountry.getKey();
+
+                // get the arraylist here for that player at "i"
+                ArrayList<String> attackingCountries = currCountry.getValue();
+
+                // now iterate over each of the attacking countries
+                for(String eachattackingCountry : attackingCountries){
+
+                    // get the country object
+                    Country countryObject = gameData.gameMap.getCountry(eachattackingCountry);
+
+                    String defendingPlayerName = gameData
+                            .getPlayer(countryObject.getCountryConquerorID()).getStrategyType().getPlayerName();
+
+                    attackPhaseState.setDefendingPlayer(defendingPlayerName);
+                    this.notifyView();
+
+                    attackPhaseState.setAttackingCountry(countryObject.getCountryName());
+                    this.notifyView();
+
+                    // change the country conqurer to the current player's lit of countries owned
+
+
+                    //change the ownership of the country in the game map ( update that view as well)
+
+
+                }
+
+            }
+
+
+
+
+
+            String selectedDestinationCountry = getEnemyCountryToAttack(selectedSourceCountry, attackScenarios);
+
+            attackPhaseState.setDefendingCountry(selectedDestinationCountry);
+            notifyView();
+
+            String defendingPlayer = gameData
+                    .getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID())
+                    .getStrategyType().getPlayerName();
+            attackPhaseState.setDefendingPlayer(defendingPlayer);
+            notifyView();
+
+            // Check if attacking player wants to "go all out"
+            if (!allOut) {
+                System.out.println("\n Would you like to go all out? (YES/NO)");
+                if (input.hasNextLine()) {
+                    playerDecision = input.nextLine();
+                }
+
+                switch (playerDecision.toLowerCase()) {
+                    case "yes":
+                    case "yeah":
+                    case "y":
+                    case "sure":
+                        allOut = true;
+                        break;
+                }
+            }
+
+            // Based on what mode the attack is set to happen in, these will be determined
+            // differently
+            Integer selectedAttackerDiceCount = 1;
+            Integer selectedDefenderDiceCount = 1;
+
+            // attack once
+            if (!allOut) {
+                // prompt attacker and defender for dice count preferences
+                selectedAttackerDiceCount = getDesiredDiceCountFromPlayer(this.playerName, selectedSourceCountry,
+                        "attack");
+                attackPhaseState.setAttackerDiceCount(selectedAttackerDiceCount);
+                notifyView();
+
+                selectedDefenderDiceCount = getDesiredDiceCountFromPlayer(defendingPlayer, selectedDestinationCountry,
+                        "defend");
+                attackPhaseState.setDefenderDiceCount(selectedDefenderDiceCount);
+                notifyView();
+
+                rollDiceBattle(attackPhaseState);
+
+                hasConnqueredAtleastOneCountry = fight(attackPhaseState) || hasConnqueredAtleastOneCountry;
+            }
+
+            // or keep attacking if all-out mode & player still can attack & player still
+            // hasn't conquered target
+            while (allOut && !attackPhaseState.getBattleOutcomeFlag()) {
+                if (this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount() > 1) {
+                    // dont prompt players for input, proceed with max allowed dice count for both
+                    // players
+                    selectedAttackerDiceCount = getActualMaxAllowedDiceCountForAction("attack", selectedSourceCountry,
+                            3);
+                    attackPhaseState.setAttackerDiceCount(selectedAttackerDiceCount);
+                    selectedDefenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",
+                            selectedDestinationCountry, 2);
+                    attackPhaseState.setDefenderDiceCount(selectedDefenderDiceCount);
+                    rollDiceBattle(attackPhaseState);
+                    hasConnqueredAtleastOneCountry = fight(attackPhaseState) || hasConnqueredAtleastOneCountry;
+                } else {
+                    break;
+                }
+            }
+            allOut = false;
+
+            checkIfPlayerHasConqueredTheWorld();
+
+        }
+
+        if (hasConnqueredAtleastOneCountry) {
+            Card card = gameData.cardsDeck.getCard();
+            this.cardList.add(card);
+            System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: " + card.getCountry().getCountryName());
+            System.out.println("Total cards : " + this.cardList.size());
+        }
+
+        endAttack();
 
     }
 
@@ -209,12 +360,12 @@ public class CheaterMode extends PlayerStrategy{
 
     @Override
     public String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios) {
-        return null;
+        return null; // not needed since each country will be automatically be attacked from
     }
 
     @Override
     public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios) {
-        return null;
+        return null; // Not needed
     }
 
     @Override

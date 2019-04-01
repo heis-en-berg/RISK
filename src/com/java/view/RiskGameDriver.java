@@ -181,6 +181,7 @@ public class RiskGameDriver {
 
 				firstTime = false;
 
+
 				String chosedCountryByUser = "";
 				do {
 					System.out.println("\nYou have " + numberOfArmiesAvailablePerPlayer + " armies left.");
@@ -190,6 +191,7 @@ public class RiskGameDriver {
 							|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length) {
 						System.out.println("Invalid Input!!");
 					}
+
 				} while(isNaN(chosedCountryByUser) || Integer.parseInt(chosedCountryByUser) < 0 
 						|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length);
 				
