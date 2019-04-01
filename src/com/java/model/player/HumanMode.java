@@ -550,10 +550,8 @@ public class HumanMode extends PlayerStrategy {
             // army on the ground at all times.
             int possibleNumOfArmyRange = armiesPerPotentialFortificationSourceCountry.get(keySourceCountry) - 1;
             for (String correspondingDestinationCountry : fortificationScenarios.get(keySourceCountry)) {
-                if (!correspondingDestinationCountry.equalsIgnoreCase(keySourceCountry)) {
-                    System.out.println("\n" + keySourceCountry + "\t -> \t" + correspondingDestinationCountry
-                            + "\t (up to " + possibleNumOfArmyRange + " armies)");
-                }
+                System.out.println("\n" + keySourceCountry + "\t -> \t" + correspondingDestinationCountry
+                        + "\t (up to " + possibleNumOfArmyRange + " armies)");    
             }
         }
 

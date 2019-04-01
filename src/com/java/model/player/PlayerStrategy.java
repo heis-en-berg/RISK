@@ -543,8 +543,10 @@ public abstract class PlayerStrategy extends Observable {
 				continue;
 			}
 			for (String correspondingDestinationCountry : prelimFortificationScenarios.get(keySourceCountry)) {
-				allFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
-				allFortificationScenarios.get(keySourceCountry).add(correspondingDestinationCountry);
+				if (!correspondingDestinationCountry.equalsIgnoreCase(keySourceCountry)) {
+					allFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
+					allFortificationScenarios.get(keySourceCountry).add(correspondingDestinationCountry);
+				}
 			}
 		}
 
