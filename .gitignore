@@ -1,8 +1,0 @@
-*.class
-*.html
-*.xml
-*.txt
-map/finalMap.map
-out/production/soen6441_risk/META-INF/soen6441_risk.kotlin_module
-out/test/soen6441_risk/META-INF/soen6441_risk.kotlin_module
-soen6441_risk.iml
