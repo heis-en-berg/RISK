@@ -27,6 +27,15 @@ public class Dice {
 	}
 	
 	/**
+	 * Generates a range modified dice in order to get a random number between the specifiend range
+	 * @return a single integer value of random number
+	 */
+	public Integer rollDice(int min, int max){
+		Random rand1 = new Random();
+		return 	rand1.nextInt((max - min) + 1) + min;
+	}
+	
+	/**
 	 * When called will generate numbers ranging from 1 to 6
 	 * @param numberOfDiceToRoll Number of dice to roll
 	 * @return array list of Integers representing outcomes of rolling n dice 

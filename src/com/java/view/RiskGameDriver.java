@@ -1,10 +1,12 @@
 package com.java.view;
 
+import com.java.controller.dice.Dice;
 import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
 import com.java.model.player.PlayerStrategy;
+import com.java.model.player.HumanMode;
 import com.java.model.player.Player;
 
 import java.util.ArrayList;
@@ -118,8 +120,8 @@ public class RiskGameDriver {
 			//first check if it is a number then check if it is inside the range of 1 to 5
 			do {
 				do {
-					System.out.println("\n Choose your PlayerStrategy Strategy (BASED ON NUMBER): ");
-					System.out.println("\n (1) Aggressive \n (2) Human \n (3) Benevolent \n (4) Random \n (5) Cheater");
+					System.out.println("\nChoose your PlayerStrategy Strategy (BASED ON NUMBER): ");
+					System.out.println("\n(1) Aggressive \n(2) Human \n(3) Benevolent \n(4) Random \n(5) Cheater");
 
 					playerStrategyInput = input.nextLine().trim();
 				} while (isNaN(playerStrategyInput));
@@ -163,7 +165,7 @@ public class RiskGameDriver {
 			while (numberOfArmiesAvailablePerPlayer > 0) {
 				
 				// Displays the lists of countries owned by a player.
-				System.out.println("PlayerStrategy: " + player.getStrategyType().getPlayerName() + " owns the following countries: ");
+				System.out.println("Player: " + player.getStrategyType().getPlayerName() + " owns the following countries: ");
 
 				// At the begining every country has at least one army.
 				for (int i = 0; i < countriesPerPlayerArray.length; i++) {
@@ -182,10 +184,24 @@ public class RiskGameDriver {
 				firstTime = false;
 
 				String chosedCountryByUser = "";
+				
+				Dice newDice = new Dice();
+				Integer randomNumberOfArmiesToPlace;
+				Integer randomChoosedCountry;
+				
 				do {
 					System.out.println("\nYou have " + numberOfArmiesAvailablePerPlayer + " armies left.");
 					System.out.println("Please pick the number associated with the country in order to place your armies: ");
-					chosedCountryByUser = input.nextLine();
+					
+					if(player.getStrategyType() instanceof HumanMode) {
+						chosedCountryByUser = input.nextLine();
+					} else {
+						randomChoosedCountry = newDice.rollDice(0,countriesPerPlayerArray.length - 1);
+						chosedCountryByUser =  Integer.toString(randomChoosedCountry);
+					}
+					
+					System.out.println("You picked: " + chosedCountryByUser);
+					
 					if(isNaN(chosedCountryByUser) || Integer.parseInt(chosedCountryByUser) < 0 
 							|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length) {
 						System.out.println("Invalid Input!!");
@@ -198,10 +214,18 @@ public class RiskGameDriver {
 				String numberOfArmiesByUser = "";
 				
 				do {
-					System.out.println("PlayerStrategy: " + player.getStrategyType().getPlayerName() + " How many armies do you want to place in "
+					System.out.println("Player: " + player.getStrategyType().getPlayerName() + " How many armies do you want to place in "
 							+ countryName + "?");
-					numberOfArmiesByUser = input.nextLine();
-
+					
+					if(player.getStrategyType() instanceof HumanMode) {
+						numberOfArmiesByUser = input.nextLine();
+					} else {
+						randomNumberOfArmiesToPlace = newDice.rollDice(0,numberOfArmiesAvailablePerPlayer);
+						numberOfArmiesByUser =  Integer.toString(randomNumberOfArmiesToPlace);
+					}
+					
+					System.out.println("You picked: " + numberOfArmiesByUser);
+					
 					if(isNaN(numberOfArmiesByUser) || Integer.parseInt(numberOfArmiesByUser) < 0 
 							|| Integer.parseInt(numberOfArmiesByUser) > numberOfArmiesAvailablePerPlayer) {
 						System.out.println("Invalid input!!");
