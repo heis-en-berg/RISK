@@ -47,7 +47,6 @@ public class BenevolentMode extends PlayerStrategy {
         Integer cavalryCount = 0;
         Integer artilleryCount = 0;
         int minArmyType = 0;
-        boolean isExchange = false;
         boolean isExtraTerritoryMatch = false;
         ArrayList<Card> toBeRemoved = new ArrayList<>();
         for(Enum armyType: ArmyType.values()){
@@ -101,7 +100,8 @@ public class BenevolentMode extends PlayerStrategy {
                 }
             }
             reinforcementAICount += getCardExchangeArmyCount();
-            isExchange = true;
+            setCardExchangeArmyCount();
+
             minArmyType = Math.min(Math.min(infantryCount,cavalryCount),artilleryCount);
             for(Card card: toBeRemoved){
                 playerCardList.remove(card);
@@ -114,6 +114,7 @@ public class BenevolentMode extends PlayerStrategy {
         for(Enum key :playerDeck.keySet()){
             while(playerDeck.get(key) > 2){
                 reinforcementAICount += getCardExchangeArmyCount();
+                setCardExchangeArmyCount();
                 int count = 0;
                 for(Card card : playerCardList){
                     if((card.getArmyType().equals(key)) && (count < 3)){
@@ -132,14 +133,10 @@ public class BenevolentMode extends PlayerStrategy {
                         break;
                     }
                 }
-                isExchange = true;
                 playerDeck.put(key,playerDeck.get(key)-3);
             }
         }
 
-        if(isExchange == true){
-            setCardExchangeArmyCount();
-        }
         if(isExtraTerritoryMatch == true){
             reinforcementAICount += 2;
         }

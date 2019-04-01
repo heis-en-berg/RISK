@@ -48,7 +48,7 @@ public class HumanMode extends PlayerStrategy {
                 this.showCards();
                 Integer cardNumber;
 
-                while (!can_exchange) {
+                if (!can_exchange) {
                     playerExchangeCards = new ArrayList<Card>();
                     System.out
                             .println("Please enter three card numbers from the list of the same or different army types.");
@@ -61,6 +61,20 @@ public class HumanMode extends PlayerStrategy {
                         playerExchangeCards.add(playerCardList.get(cardNumber));
                     }
                     can_exchange = isValidExchange(playerExchangeCards);
+                    if(!can_exchange){
+                        System.out.println("You cannot trade these cards. You should enter three card numbers from the " +
+                                "list of the same or different army types.");
+                        System.out.println("*** Cards in hand ***");
+                        this.showCards();
+                        System.out.println("Do you wish to exchange cards ? (yes/no)");
+                        userInput = input.nextLine();
+                        userInput = input.nextLine();
+                        while (!((userInput.toLowerCase().equals("yes")) || (userInput.toLowerCase().equals("no")))) {
+                            System.out.println("Please input either yes or no.");
+                            userInput = input.nextLine();
+                        }
+                        continue;
+                    }
                 }
                 for (Card card : playerExchangeCards) {
                     cumulatedPlayerExchangeCards.add(card);
