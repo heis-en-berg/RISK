@@ -2,13 +2,11 @@ package com.java.model.player;
 
 import com.java.model.cards.ArmyType;
 import com.java.model.cards.Card;
-import com.java.model.map.Country;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class BenevolentMode extends PlayerStrategy {
 
@@ -200,70 +198,49 @@ public class BenevolentMode extends PlayerStrategy {
 
     @Override
     public void executeFortification() {
+
         System.out.println();
         System.out.println("**** Fortification Phase Begins for player " + this.playerName + "..****\n");
 
-        FortificationPhaseState fortificationPhase = new FortificationPhaseState();
-        fortificationPhaseState.add(fortificationPhase);
-        notifyView();
+        System.out.println("\n" + "Fetching potential fortification scenarios for " + this.playerName + "...\n");
 
-        // First get confirmation from the player that fortification is desired.
-
-        boolean doFortify = true;
-
-        System.out.println("\n" + "I am a Cheater! , Going to double all my arimies where I dont own any neighbour countries " + this.playerName + "...\n");
-
-        //get list of countries owned by player
-        HashSet<String> countriesOwned = gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
-
-        HashSet<String> adacentCountries;
-
-        boolean isCountryBelongsToMe = false;
-
-        for(String entry : countriesOwned) {
-            Country belongsToPlayer = new Country();
-            // then check if thoes countries nebouires are nont owned by me
-            adacentCountries = gameData.gameMap.getAdjacentCountries(entry);
-
-            for(String adjEntry: adacentCountries){
-                // check if the countries are not owned by me the player
-                belongsToPlayer = gameData.gameMap.getCountry(adjEntry);
-
-                if(belongsToPlayer.getCountryConquerorID() == playerID){
-                    isCountryBelongsToMe = true;
-                }
-
-                if(isCountryBelongsToMe == true){
-                    break;
-                }
-
+        HashMap<String, ArrayList<String>> potentialFortificationScenarios = getPotentialFortificationScenarios();
+        HashSet<String> potentialCountriesToBeFortified = new HashSet<>();
+        for(String country: potentialFortificationScenarios.keySet()){
+            ArrayList<String> countries = potentialFortificationScenarios.get(country);
+            for (String cntry : countries) {
+                potentialCountriesToBeFortified.add(cntry);
             }
-            // when it is not in the list I own just double the army amount.
-            if(isCountryBelongsToMe == false){
-                gameData.gameMap.addArmyToCountry(belongsToPlayer.getCountryName(),belongsToPlayer.getCountryArmyCount() *2);
-
-                fortificationPhase = new FortificationPhaseState();
-
-                fortificationPhase.setFromCountry(belongsToPlayer.getCountryName());
-                fortificationPhase.setToCountry(" I am Cheating, :) ");
-                fortificationPhase.setNumberOfArmiesMoved(belongsToPlayer.getCountryArmyCount());
-
-                fortificationPhaseState.add(fortificationPhase);
-
-                notifyView();
-            }
-
         }
 
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
+        String weakestCountry = "";
+        Integer weakerCountryArmyCount = 0;
+        Integer currentPlayerID = playerID;
 
-        fortificationPhaseState.clear();
+            for(String country : potentialCountriesToBeFortified){
+                Integer currentCountryArmyCount = gameData.gameMap.getCountry(country).getCountryArmyCount();
+
+                HashSet<String> adjacentCountries = gameData.gameMap.getAdjacentCountries(country);
+                Integer enemyArmyCount = 0;
+                for(String adjCountry : adjacentCountries){
+                    if(gameData.gameMap.getCountry(adjCountry).getCountryConquerorID() != currentPlayerID){
+                        enemyArmyCount += gameData.gameMap.getCountry(adjCountry).getCountryArmyCount();
+                    }
+                }
+                if(weakerCountryArmyCount < (enemyArmyCount - currentCountryArmyCount)){
+                    weakerCountryArmyCount = (enemyArmyCount - currentCountryArmyCount);
+                    weakestCountry = country;
+                }
+            }
+
+        System.out.println("Weakest Country: "+weakestCountry+" Army Count: "+weakerCountryArmyCount);
+
+        HashSet<String> conqueredCountryByThisPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
+        System.out.println("After Fortification");
+        for(String country: conqueredCountryByThisPlayer){
+            System.out.println("Country: "+country+", Army Count: "+gameData.gameMap.getCountry(country).getCountryArmyCount());
+        }
+
     }
 
 
