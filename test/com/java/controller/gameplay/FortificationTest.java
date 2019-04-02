@@ -105,7 +105,6 @@ public class FortificationTest {
         expected_dest_for_C2.add("C4");
         expected_dest_for_C2.add("C1");
         expected_dest_for_C2.add("C3");
-        expected_dest_for_C2.add("C2");
         expected_paths.put("C2", expected_dest_for_C2);
 
         // sort the Lists because we care about contents (not order of options)
@@ -115,7 +114,6 @@ public class FortificationTest {
         
         ArrayList<String> expected_dest_for_C3 = new ArrayList<String>();
         expected_dest_for_C3.add("C1");
-        expected_dest_for_C3.add("C3");
         expected_dest_for_C3.add("C4");
         expected_dest_for_C3.add("C2");
         expected_paths.put("C3", expected_dest_for_C3);
