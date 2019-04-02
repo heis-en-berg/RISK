@@ -183,6 +183,7 @@ public class RiskGameDriver {
 
 				firstTime = false;
 
+
 				String chosedCountryByUser = "";
 				
 				Dice newDice = new Dice();
@@ -206,6 +207,7 @@ public class RiskGameDriver {
 							|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length) {
 						System.out.println("Invalid Input!!");
 					}
+
 				} while(isNaN(chosedCountryByUser) || Integer.parseInt(chosedCountryByUser) < 0 
 						|| Integer.parseInt(chosedCountryByUser) >= countriesPerPlayerArray.length);
 				

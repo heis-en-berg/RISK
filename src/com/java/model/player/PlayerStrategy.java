@@ -259,6 +259,7 @@ public abstract class PlayerStrategy extends Observable {
 	public HashMap<String, ArrayList<String>> getPotentialAttackScenarios() {
 
 		HashMap<String, ArrayList<String>> attackScenarios = new HashMap<String, ArrayList<String>>();
+
 		// source countries which PlayerStrategy could attack FROM
 		HashSet<String> poolOfPotentialSourceCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
 

@@ -6,6 +6,7 @@ import com.java.model.map.Country;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class CheaterMode extends PlayerStrategy{
@@ -135,7 +136,76 @@ public class CheaterMode extends PlayerStrategy{
 
     @Override
     public void executeAttack() {
+        System.out.println();
+        System.out.println("**** Attack Phase Begins for player " + this.playerName + "..****\n");
 
+        Boolean hasConnqueredAtleastOneCountry = true;
+
+        while (gameOn) {
+
+            AttackPhaseState attackPhaseState = new AttackPhaseState();
+            attackPhaseState.setAttackingPlayer(this.playerName);
+            this.attackPhaseState.add(attackPhaseState);
+            notifyView();
+
+
+            // Now fetch all attack possibilities for player
+            System.out.println("\n" + "Fetching potential attack scenarios for " + this.playerName + "...\n");
+
+            // K = my source country , V = list of other countries that i dont own ( as nebiours)
+            HashMap<String, ArrayList<String>> attackScenarios = getPotentialAttackScenarios();
+
+            if (attackScenarios.isEmpty()) {
+                System.out
+                        .println("There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
+                break;
+            }
+
+            // show PlayerStrategy all the options they have
+            showAllAttackScenarios(attackScenarios);
+            System.out.println("\nCheater is getting all countries");
+            // TODO Now chose the country to attack from and in a loop conqure all the nebiours
+            for(Map.Entry<String,ArrayList<String>> currCountry : attackScenarios.entrySet()){
+
+                // get the arraylist here for that player at "i"
+                ArrayList<String> attackingCountries = currCountry.getValue();
+
+                // now iterate over each of the attacking countries
+                for(String eachattackingCountry : attackingCountries){
+
+                    // get the country object
+                    Country countryObject = gameData.gameMap.getCountry(eachattackingCountry);
+
+                    String defendingPlayerName = gameData
+                            .getPlayer(countryObject.getCountryConquerorID()).getStrategyType().getPlayerName();
+
+                    attackPhaseState.setDefendingPlayer(defendingPlayerName);
+                    this.notifyView();
+
+                    attackPhaseState.setAttackingCountry(countryObject.getCountryName());
+                    this.notifyView();
+
+                    // change the country conqurer to the current player's lit of countries owned
+                    Integer oldConquererPlayerId = countryObject.getCountryConquerorID();
+                    Integer newConquererPlayerId = this.playerID;
+                    
+                    this.gameData.gameMap.updateCountryConquerer(eachattackingCountry, oldConquererPlayerId, newConquererPlayerId);
+                    System.out.println("\nCheater " + getPlayerName() + " is conquering " + eachattackingCountry + "  from " + defendingPlayerName);
+                }
+            }
+
+            checkIfPlayerHasConqueredTheWorld();
+
+        }
+
+        if (hasConnqueredAtleastOneCountry) {
+            Card card = gameData.cardsDeck.getCard();
+            this.cardList.add(card);
+            System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: " + card.getCountry().getCountryName());
+            System.out.println("Total cards : " + this.cardList.size());
+        }
+
+        endAttack();
     }
 
     @Override
@@ -209,12 +279,12 @@ public class CheaterMode extends PlayerStrategy{
 
     @Override
     public String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios) {
-        return null;
+        return null; // not needed since each country will be automatically be attacked from
     }
 
     @Override
     public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios) {
-        return null;
+        return null; // Not needed
     }
 
     @Override
