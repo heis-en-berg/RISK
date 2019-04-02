@@ -30,36 +30,77 @@ import java.util.Arrays;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  */
-public class RiskGameDriver {
+public class RiskGameDriver extends TournamentModeHelper{
 
 	private GameData gameData;
 	private StartUpPhase startUp;
-	Scanner input = new Scanner(System.in);
+	private MapLoader maploader;
+	Scanner input;
 
+	private static Integer MAX_TURNS = -1; // -1 by default represents no restriction on number of turns
+	private static Boolean IS_TOURNAMENT_MODE = false;
     /**
      * Constructor will allow to load the map from user selection.
      * It would assign the parsed values from the map and store it in gameData object to use.
      */
 	public RiskGameDriver() {
+		input = new Scanner(System.in);
 		gameData = new GameData();
+		tournamentModeGameData = new ArrayList<>();
 		// using this will load the map
-		MapLoader maploader = new MapLoader();
-		gameData.gameMap = maploader.loadMap();
+		maploader = new MapLoader();
 	}
 
     /**
-     * Begins the console interface by initating the startup
+     * Begins the console interface by initiating the startup
      */
 	public void startGame() {
-		// Call the helpers here
-		initiateStartUpPhase();
-		initiateRoundRobin();
-		registerObservers();
-		ramdomAssignationOfCountries();
-		initialArmyPlacement();
-		startTurn();
+
+		setAndGetGameModeFromUser();
+		
+		if (RiskGameDriver.IS_TOURNAMENT_MODE) {
+			getTournamentModeDetailsFromUser();
+		} else {
+			gameData.gameMap = maploader.loadMap();
+			initiateStartUpPhase();
+			initiateRoundRobin();
+			registerObservers();
+			ramdomAssignationOfCountries();
+			initialArmyPlacement();
+			startTurn();
+		}
 	}
 
+	/**
+	 * Prompts user to choose game mode between "Single Game Mode" and "Tournament
+	 * Mode"
+	 * 
+	 * @return selected game mode represented as 1(Integer) for Single Game Mode and
+	 *         2(Integer) for Tournament Mode
+	 */
+	private Integer setAndGetGameModeFromUser() {
+
+		String gameModeUserDecision = "";
+
+		do {
+			do {
+				System.out.println("\nSelect GameMode (BASED ON NUMBER): ");
+				System.out.println("\n(1) Single Game Mode \n(2) Tournament\n");
+
+				System.out.print("Enter choice: ");
+
+				gameModeUserDecision = input.nextLine().trim();
+			} while (isNaN(gameModeUserDecision));
+		} while (!(Integer.parseInt(gameModeUserDecision) > 0 && Integer.parseInt(gameModeUserDecision) < 3));
+
+		if (Integer.parseInt(gameModeUserDecision) == 2) {
+			RiskGameDriver.IS_TOURNAMENT_MODE = true;
+		}
+
+		return Integer.parseInt(gameModeUserDecision);
+	}
+	
+	
 	/**
 	 * Able to attach the views Phase View, CardsExchange View to the observer PlayerStrategy
 	 */
@@ -292,10 +333,27 @@ public class RiskGameDriver {
 
 		Boolean doWeHaveAWinner = false;
 
+		Integer turnsLeft = RiskGameDriver.MAX_TURNS;
+		
+		if(RiskGameDriver.IS_TOURNAMENT_MODE) {
+			turnsLeft = TournamentModeHelper.TM_MAX_NUMBER_OF_TURNS;
+		}
+		
 		//There will be another round if the number of players is greater than one.
 		while(!doWeHaveAWinner) {
 
+			if(turnsLeft == 0) {
+				break;
+			}
+			
 			for (Player player : playerList) {
+				
+				if(turnsLeft == 0) {
+					break;
+				} else {
+					turnsLeft--;
+				}
+				
 				currentPlayer = player.getStrategyType();
 				
 				// before actually 

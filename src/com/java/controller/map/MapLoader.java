@@ -329,7 +329,7 @@ public class MapLoader {
 	 * Saves the map as a file text.
 	 * */
 	private void saveMapAsTextFile() {
-		File file = new File("./map/finalMap.map");
+		File file = new File("./map/game_map/finalMap.map");
 		HashMap<String, Continent> continents;
 		HashMap<String, Country> countries;
 

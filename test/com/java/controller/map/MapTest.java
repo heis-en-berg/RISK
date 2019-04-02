@@ -30,8 +30,8 @@ public class MapTest {
 	public static void beforeEverything() {
 
 		mapValidator = new MapValidator();
-		invalidMapFilePath1 = "./map/invalid1_continent_missing.map";
-		invalidMapFilePath2 = "./map/invalid2_disconnected_map.map";
+		invalidMapFilePath1 = "./map/invalid_maps/invalid1_continent_missing.map";
+		invalidMapFilePath2 = "./map/invalid_maps/invalid2_disconnected_map.map";
 		validMapFilePath = "./map/Manhattan.map";
 
 		try {
