@@ -1,3 +1,4 @@
+
 package com.java.model.player;
 
 import com.java.controller.dice.Dice;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 /**
  * This class models the player, it holds the id, the name, and the order to
  * play for the round robin.
- * 
+ *
  * @author Arnav Bhardwaj
  * @author Karan Dhingra
  * @author Ghalia Elkerdi
@@ -23,13 +24,13 @@ import java.util.HashSet;
 public abstract class PlayerStrategy extends Observable {
 
 	protected Integer playerID;
-    protected String playerName;
-    protected Integer orderOfPlay;
-    protected ArrayList<Card> cardList;
-    protected static int cardExchangeArmyCount = 5;
+	protected String playerName;
+	protected Integer orderOfPlay;
+	protected ArrayList<Card> cardList;
+	protected static int cardExchangeArmyCount = 5;
 	public Boolean isActive = true;
 	public Boolean gameOn = true;
-    protected Boolean isWinner = false;
+	protected Boolean isWinner = false;
 
 	protected GameData gameData;
 	protected Dice playerDice;
@@ -42,11 +43,11 @@ public abstract class PlayerStrategy extends Observable {
 	protected static final int REINFORCEMENT_DIVISION_FACTOR = 3;
 
 	public PlayerStrategy(){
-    }
+	}
 
 	/**
 	 * Creates a player by giving the id and the name
-	 * 
+	 *
 	 * @param playerID   the player id.
 	 * @param playerName the player name.
 	 */
@@ -62,7 +63,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * get player's win status
-	 * 
+	 *
 	 * @return true if player is a winner else false
 	 */
 	public Boolean getIsWinner() {
@@ -71,7 +72,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * get player's active status
-	 * 
+	 *
 	 * @return true if player is still in the game else false
 	 */
 	public boolean getIsActive() {
@@ -80,7 +81,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * set true if player won the game
-	 * 
+	 *
 	 * @param isWinner
 	 */
 	public void setIsWinner(Boolean isWinner) {
@@ -107,7 +108,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Calculates the total number of armies to be given during reinforcement.
-	 * 
+	 *
 	 * @param playerExchangeCards the cards that the player exchanged
 	 * @return The total number of reinforcement army for the player(integer value).
 	 */
@@ -122,7 +123,7 @@ public abstract class PlayerStrategy extends Observable {
 	/**
 	 * Function to count the reinforcement army based on the number of territories
 	 * and continents owned.
-	 * 
+	 *
 	 * @return total reinforcement army count
 	 */
 	public Integer calculateReinforcementArmy() {
@@ -150,17 +151,17 @@ public abstract class PlayerStrategy extends Observable {
 		totalCountriesOwnedByPlayer = this.gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID).size();
 		totalReinforcementArmyCount += totalCountriesOwnedByPlayer
 				/ REINFORCEMENT_DIVISION_FACTOR > MINIMUM_REINFORCEMENT_ARMY_NUMBER
-						? totalCountriesOwnedByPlayer / REINFORCEMENT_DIVISION_FACTOR
-								: MINIMUM_REINFORCEMENT_ARMY_NUMBER;
+				? totalCountriesOwnedByPlayer / REINFORCEMENT_DIVISION_FACTOR
+				: MINIMUM_REINFORCEMENT_ARMY_NUMBER;
 		return totalReinforcementArmyCount;
 	}
 
 	/**
 	 * Calculates the reinforcement army from card exchange.
-	 * 
+	 *
 	 * @param cumulatedPlayerExchangeCards the cards that the player holds.
 	 * @return the number of reinforcement army from card exchange.
-	 * 
+	 *
 	 */
 	private int reinforcementArmyCountFromCards(ArrayList<Card> cumulatedPlayerExchangeCards) {
 		ArrayList<Card> playerExchangeCards;
@@ -192,7 +193,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * If a player has card with a country that he owns he will receive more armies.
-	 * 
+	 *
 	 * @param playerExchangeCards cards to be exchanged
 	 * @return true if the player deserves more armies.
 	 */
@@ -210,7 +211,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/***
 	 * Helper method to check if it is valid card exchange.
-	 * 
+	 *
 	 * @param playerExchangeCards cards to exchange.
 	 * @return true if the exchange is valid.
 	 */
@@ -228,7 +229,7 @@ public abstract class PlayerStrategy extends Observable {
 	/**
 	 * rollDiceBattle resorts to the core rollDice method in Dice but contains
 	 * additional logic to set attackPhase logic
-	 * 
+	 *
 	 * @param attackPhase has all the dice count info for attacker and defender
 	 */
 
@@ -252,14 +253,13 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * All of the potential attack scenarios for current player.
-	 * 
+	 *
 	 * @return the comprehensive list with all source and target countries.
 	 */
 
 	public HashMap<String, ArrayList<String>> getPotentialAttackScenarios() {
 
 		HashMap<String, ArrayList<String>> attackScenarios = new HashMap<String, ArrayList<String>>();
-
 		// source countries which PlayerStrategy could attack FROM
 		HashSet<String> poolOfPotentialSourceCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
 
@@ -288,10 +288,10 @@ public abstract class PlayerStrategy extends Observable {
 	/**
 	 * Helper method to print out all of the potential attack scenarios for current
 	 * player.
-	 * 
+	 *
 	 * @param attackScenarios: the comprehensive list with all source and target
 	 *        countries.
-	 * 
+	 *
 	 */
 	protected void showAllAttackScenarios(HashMap<String, ArrayList<String>> attackScenarios) {
 
@@ -330,7 +330,7 @@ public abstract class PlayerStrategy extends Observable {
 						+ " of "
 
 						+ gameData.getPlayer(this.gameData.gameMap.getCountry(correspondingDestinationCountry)
-								.getCountryConquerorID()).getStrategyType().getPlayerName()
+						.getCountryConquerorID()).getStrategyType().getPlayerName()
 						+ "'s armies**" + "\t (attack with up to "
 
 						+ maxAttackArmyCountPossiblePerSrcCountry.get(keySourceCountry) + " armies)");
@@ -341,17 +341,17 @@ public abstract class PlayerStrategy extends Observable {
 	/**
 	 * Helper method to get max allowable dice count given specific context: action
 	 * and country army count.
-	 * 
+	 *
 	 * @param action: either attack/defense.
 	 * @param countryInScopeForAction: either the source country to attack from /
 	 *        the target country to be attacked.
 	 * @param maxDiceCountAllowedForAction: a default max based on Risk game rules.
 	 * @return selectedDiceCount: a valid number of dice to roll based on action and
 	 *         army counts.
-	 * 
+	 *
 	 */
 	public int getActualMaxAllowedDiceCountForAction(String action, String countryInScopeForAction,
-			int maxDiceCountAllowedForAction) {
+													 int maxDiceCountAllowedForAction) {
 
 		int countryArmyCount = this.gameData.gameMap.getCountry(countryInScopeForAction).getCountryArmyCount();
 
@@ -371,7 +371,7 @@ public abstract class PlayerStrategy extends Observable {
 	 * Main fight method which encompasses the dynamic interactions of rolling &
 	 * comparing dice This handles the army count updates as well as conqueror id's
 	 * if need be.
-	 * 
+	 *
 	 * @param attackPhase
 	 * @return true if attacker conquers the target country
 	 */
@@ -408,12 +408,12 @@ public abstract class PlayerStrategy extends Observable {
 				this.gameData.gameMap.deductArmyToCountry(selectedDestinationCountry, 1);
 				defenderLostArmyCount++;
 			}
-			
+
 			// if attacker wins
 			if (this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryArmyCount() == 0) {
 				// declare new winner
 				Integer defenderPlayerId = this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID();
-				
+
 				battleOutcomeFlag = true;
 				System.out.println("\n" + this.playerName + " has conquered " + selectedDestinationCountry + "!");
 				// if game is over, no need to worry about army counts
@@ -427,14 +427,14 @@ public abstract class PlayerStrategy extends Observable {
 				this.gameData.gameMap.deductArmyToCountry(selectedSourceCountry, selectedAttackerDiceCount);
 				this.gameData.gameMap.deductArmyToCountry(selectedDestinationCountry, defenderLostArmyCount);
 				this.gameData.gameMap.addArmyToCountry(selectedDestinationCountry, selectedAttackerDiceCount);
-				
+
 				// hand over defender's cards to attacker if the defender no longer controls any
 				// country in the world
 				if (checkIfPlayerLostTheGame(defenderPlayerId)) {
 					ArrayList<Card> defendersCards = gameData.getPlayer(defenderPlayerId).getStrategyType().cardList;
-					
+
 					this.cardList.addAll(defendersCards);
-					
+
 					System.out.println("PlayerStrategy receives defender's " + defendersCards.size() + " cards");
 					// clear defender's cardList
 					gameData.getPlayer(defenderPlayerId).getStrategyType().cardList.clear();
@@ -468,7 +468,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Helper method to check if the player conquered the whole world.
-	 * 
+	 *
 	 * @return true if they conquered the entire world
 	 */
 	public boolean checkIfPlayerHasConqueredTheWorld() {
@@ -483,21 +483,21 @@ public abstract class PlayerStrategy extends Observable {
 		}
 		return isWinner;
 	}
-	
+
 	/**
 	 * Helper method to check if the player lost the game.
 	 * @param playerId pass the value of the player that is in game
 	 * @return true if the player is active
 	 */
 	private boolean checkIfPlayerLostTheGame(Integer playerId) {
-		
+
 		HashSet<String> allConqueredCountries = new HashSet<String>();
 		allConqueredCountries = this.gameData.gameMap.getConqueredCountriesPerPlayer(playerId);
 
 		if(allConqueredCountries.size() == 0) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -560,6 +560,22 @@ public abstract class PlayerStrategy extends Observable {
 	}
 
 	/**
+	 *
+	 * @return Reversed the source and destination from getPotentialFortificationScenarios.
+	 */
+	HashMap<String,ArrayList<String>> reversedPotentialFortificationScenarios() {
+		HashMap<String, ArrayList<String>> potentialFortificationScenarios = getPotentialFortificationScenarios();
+		HashMap<String, ArrayList<String>> reversedPotentialFortificationScenarios = new HashMap<>();
+		for (String key : potentialFortificationScenarios.keySet()) {
+			for (String country : potentialFortificationScenarios.get(key)) {
+				reversedPotentialFortificationScenarios.putIfAbsent(country, new ArrayList<>());
+				reversedPotentialFortificationScenarios.get(country).add(key);
+			}
+		}
+		return reversedPotentialFortificationScenarios;
+	}
+
+	/**
 	 * Small helper method to ensure countries in scope are recursively traversed
 	 * and included in the "path" This is NOT the final and full picture for
 	 * fortification scenarios, it is merely a stepping stone. The main
@@ -579,7 +595,7 @@ public abstract class PlayerStrategy extends Observable {
 	/**
 	 * Small helper method to recursively traverse all countries owned by player and
 	 * build a steady path starting from the root country passed in.
-	 * 
+	 *
 	 *
 	 * @param longestConqueredPathFromRoot to be drawn based on adjacency and
 	 *                                     country ownership
@@ -602,7 +618,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Getter of the player name.
-	 * 
+	 *
 	 * @return the player name.
 	 */
 	public String getPlayerName() {
@@ -611,7 +627,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Getter of the player id.
-	 * 
+	 *
 	 * @return the player id.
 	 */
 	public Integer getPlayerID() {
@@ -620,7 +636,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Getter of the order to play.
-	 * 
+	 *
 	 * @return the order of playe.
 	 */
 	public Integer getOrderOfPlay() {
@@ -629,7 +645,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Setter of the order of play.
-	 * 
+	 *
 	 * @param orderOfPlay order of play.
 	 */
 	public void setOrderOfPlay(Integer orderOfPlay) {
@@ -645,7 +661,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Getter for cardExchangeArmyCount which holds the card exchange army count.
-	 * 
+	 *
 	 * @return the card exchange army count.
 	 */
 	public static int getCardExchangeArmyCount() {
@@ -654,7 +670,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Getter for cardList.
-	 * 
+	 *
 	 * @return the card list
 	 */
 	public ArrayList<Card> getPlayerCardList() {
@@ -663,7 +679,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Adds a player to a card list.
-	 * 
+	 *
 	 * @param card to be added.
 	 */
 	public void addToPlayerCardList(Card card) {
@@ -672,7 +688,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Removes the player from the card list.
-	 * 
+	 *
 	 * @param card to be removed.
 	 */
 	public void removeFromPlayerCardList(Card card) {
@@ -681,7 +697,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Acts as previous turn constructor to allow acess to the gamedata's data
-	 * 
+	 *
 	 * @param gamedata gamedata objecto to set.
 	 */
 	public void setGameData(GameData gamedata) {
@@ -690,7 +706,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Helper method to test if a given strin can be converted to a int.
-	 * 
+	 *
 	 * @param stringInput determines if the string typed by user is an integer
 	 * @return the evaluation of true if it is an integer or false otherwise
 	 */
@@ -708,7 +724,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Getter for Attack Phase State to show in the phase view.
-	 * 
+	 *
 	 * @return the attack phase states to be showed in phase view.
 	 */
 	public ArrayList<AttackPhaseState> getAttackPhaseState() {
@@ -717,7 +733,7 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Getter for Reinforcement Phase State to show in the phase view.
-	 * 
+	 *
 	 * @return the reinforcement phase states to be showed in phase view.
 	 */
 	public ArrayList<ReinforcementPhaseState> getReinforcementPhaseState() {
@@ -726,35 +742,36 @@ public abstract class PlayerStrategy extends Observable {
 
 	/**
 	 * Getter for Fortification Phase State to show in the phase view.
-	 * 
+	 *
 	 * @return the Fortification phase states to be showed in phase view.
 	 */
 	public ArrayList<FortificationPhaseState> getFortificationPhaseState() {
 		return fortificationPhaseState;
 	}
 
-    /**
-     * Starts the reinforcement phase by getting valid cards and calculating the
-     * number of armies.
-     */
-    public abstract void executeReinforcement();
+	/**
+	 * Starts the reinforcement phase by getting valid cards and calculating the
+	 * number of armies.
+	 */
+	public abstract void executeReinforcement();
 
-    public abstract ArrayList<Card> getValidCards();
+	public abstract ArrayList<Card> getValidCards();
 
-    public abstract void placeArmy(Integer reinforcementArmy);
-    public abstract void executeAttack();
+	public abstract void placeArmy(Integer reinforcementArmy);
+	public abstract void executeAttack();
 
-    public abstract String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios);
+	public abstract String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios);
 
-    public abstract String getEnemyCountryToAttack(String selectedSourceCountry,
-                                                   HashMap<String, ArrayList<String>> attackScenarios);
-    public abstract Integer getDesiredDiceCountFromPlayer(String player, String country, String action);
+	public abstract String getEnemyCountryToAttack(String selectedSourceCountry,
+												   HashMap<String, ArrayList<String>> attackScenarios);
+	public abstract Integer getDesiredDiceCountFromPlayer(String player, String country, String action);
 
-    public abstract Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry);
+	public abstract Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry);
 
-    /**
-     * Method to guide the player through various fortification options when
-     * applicable.
-     */
-    public abstract void executeFortification();
+	/**
+	 * Method to guide the player through various fortification options when
+	 * applicable.
+	 */
+	public abstract void executeFortification();
 }
+

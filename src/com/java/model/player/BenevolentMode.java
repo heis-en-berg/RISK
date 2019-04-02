@@ -6,11 +6,9 @@ import com.java.model.cards.Card;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Scanner;
 
 public class BenevolentMode extends PlayerStrategy {
 
-    private Scanner input = new Scanner(System.in);
     public BenevolentMode(Integer playerID, String playerName) {
 
         super(playerID,playerName);
@@ -204,7 +202,15 @@ public class BenevolentMode extends PlayerStrategy {
 
         System.out.println("\n" + "Fetching potential fortification scenarios for " + this.playerName + "...\n");
 
+        HashMap<String,ArrayList<String>> reversedPotentialFortificationScenarios = reversedPotentialFortificationScenarios();
         HashMap<String, ArrayList<String>> potentialFortificationScenarios = getPotentialFortificationScenarios();
+
+        for (String key : potentialFortificationScenarios.keySet()){
+            for(String country: potentialFortificationScenarios.get(key)) {
+                reversedPotentialFortificationScenarios.putIfAbsent(country, new ArrayList<>());
+                reversedPotentialFortificationScenarios.get(country).add(key);
+            }
+        }
         HashSet<String> potentialCountriesToBeFortified = new HashSet<>();
         for(String country: potentialFortificationScenarios.keySet()){
             ArrayList<String> countries = potentialFortificationScenarios.get(country);
@@ -233,14 +239,25 @@ public class BenevolentMode extends PlayerStrategy {
                 }
             }
 
-        System.out.println("Weakest Country: "+weakestCountry+" Army Count: "+weakerCountryArmyCount);
-
+        ArrayList<String> potentialArmySuppliers = reversedPotentialFortificationScenarios.get(weakestCountry);
+        Integer maximumArmy = 0;
+        Integer currentArmyCount;
+        String armySupplier = "";
+        for(String country: potentialArmySuppliers){
+            currentArmyCount = ((gameData.gameMap.getCountry(country).getCountryArmyCount())-1);
+            if(currentArmyCount > maximumArmy){
+                maximumArmy = currentArmyCount;
+                armySupplier = country;
+            }
+        }
+        gameData.gameMap.getCountry(armySupplier).deductArmy(maximumArmy);
+        gameData.gameMap.getCountry(weakestCountry).addArmy(maximumArmy);
         HashSet<String> conqueredCountryByThisPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
-        System.out.println("After Fortification");
+        System.out.println("Moved "+maximumArmy+" armies from "+armySupplier+" to "+weakestCountry);
+        System.out.println("\nAn overview after Fortification.\n");
         for(String country: conqueredCountryByThisPlayer){
             System.out.println("Country: "+country+", Army Count: "+gameData.gameMap.getCountry(country).getCountryArmyCount());
         }
-
     }
 
 
@@ -265,4 +282,3 @@ public class BenevolentMode extends PlayerStrategy {
     }
 
 }
-
