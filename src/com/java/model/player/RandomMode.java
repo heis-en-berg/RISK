@@ -262,24 +262,25 @@ public class RandomMode extends PlayerStrategy {
 		notifyView();
 
 		while (gameOn) {
-			
+
 			attackScenarios = getPotentialAttackScenarios();
-			
+
 			if (attackScenarios.isEmpty()) {
 				System.out
 						.println("There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
 				break;
 			}
-			
+
 			if (!attackScenarios.containsKey(selectedSourceCountry)
 					|| !attackScenarios.get(selectedSourceCountry).contains(selectedDestinationCountry)) {
-				System.out
-						.println("Attack from " + selectedSourceCountry + " to " + selectedDestinationCountry + " not possible!!!");
+				System.out.println("Attack from " + selectedSourceCountry + " to " + selectedDestinationCountry
+						+ " not possible!!!");
 				break;
 			}
 
-			System.out.println("\nAttacker decided to attack " + selectedDestinationCountry + " from " + selectedSourceCountry + "!!!");
-			
+			System.out.println("\nAttacker decided to attack " + selectedDestinationCountry + " from "
+					+ selectedSourceCountry + "!!!");
+
 			Integer selectedAttackerDiceCount = 1;
 			Integer selectedDefenderDiceCount = 1;
 
@@ -296,12 +297,11 @@ public class RandomMode extends PlayerStrategy {
 
 			hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry;
 
-			
 			Integer botsDecisionToAttack = random.nextInt(2);
-			if(botsDecisionToAttack == 0) {
+			if (botsDecisionToAttack == 0) {
 				gameOn = false;
 			}
-			
+
 			checkIfPlayerHasConqueredTheWorld();
 
 		}
@@ -397,13 +397,12 @@ public class RandomMode extends PlayerStrategy {
 			} while (isNaN(selectedDiceCount) || Integer.parseInt(selectedDiceCount) < 1
 					|| Integer.parseInt(selectedDiceCount) > maxDiceCountAllowedForAction);
 
-			
 		} else {
-			
+
 			while (selectedDiceCount.equals("0")) {
 				selectedDiceCount = Integer.toString(random.nextInt(maxDiceCountAllowedForAction + 1));
 			}
-			
+
 		}
 
 		return Integer.parseInt(selectedDiceCount);
@@ -439,51 +438,14 @@ public class RandomMode extends PlayerStrategy {
 		fortificationPhaseState.add(fortificationPhase);
 		notifyView();
 
-		// First get confirmation from the player that fortification is desired.
-
-		boolean doFortify = false;
-		String playerDecision = "no";
-		System.out.println("Would you like to fortify? (YES/NO)");
-		if (input.hasNextLine()) {
-			playerDecision = input.nextLine();
-		}
-
-		switch (playerDecision.toLowerCase()) {
-		case "yes":
-			doFortify = true;
-			break;
-		case "yeah":
-			doFortify = true;
-			break;
-		case "y":
-			doFortify = true;
-			break;
-		case "sure":
-			doFortify = true;
-			break;
-		}
-
-		if (!doFortify) {
-			System.out.println(this.playerName + " does not wish to fortify. Ending turn..");
-			System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
-			return;
-		} else {
-			System.out.println("\n" + "Fetching potential fortification scenarios for " + this.playerName + "...\n");
-		}
+		System.out.println("\n" + "Fetching potential fortification scenarios for " + this.playerName + "...\n");
 
 		// Now fetch all possibilities for player (this could get long as the game
 		// progresses and more land is acquired)
 
 		HashMap<String, ArrayList<String>> fortificationScenarios = getPotentialFortificationScenarios();
 
-		if (fortificationScenarios == null) {
-			System.out.println(
-					"There are currently no fortification opportunities for " + this.playerName + ".. Sorry!\n");
-			System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
-			return;
-		}
-
-		if (fortificationScenarios.isEmpty()) {
+		if (fortificationScenarios == null || fortificationScenarios.isEmpty()) {
 			System.out.println(
 					"There are currently no fortification opportunities for " + this.playerName + ".. Sorry!\n");
 			System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
@@ -508,66 +470,38 @@ public class RandomMode extends PlayerStrategy {
 			}
 		}
 
-		// Recycle variable
-		// clear the decision variable holder between choices
-		playerDecision = "";
-
-		// while selection doesn't match any of the offered options, prompt user
-		while (!fortificationScenarios.containsKey(playerDecision)) {
-			System.out.println("\n" + "Please choose one of the suggested countries to move armies FROM: ");
-			playerDecision = input.nextLine();
-		}
-		String fromCountry = playerDecision;
-		fortificationPhase.setFromCountry(fromCountry);
-		notifyView();
-		// while number of armies to be moved is not coherent, prompt user
-		// 0 is a valid selection
-		String noOfArmiesToMove = "-1";
-		do {
-			System.out.println("\n" + "How many armies would you like to move from " + fromCountry + "?");
-			noOfArmiesToMove = input.nextLine();
-		} while (isNaN(noOfArmiesToMove) || Integer.parseInt(noOfArmiesToMove) < 0
-				|| Integer.parseInt(noOfArmiesToMove) >= armiesPerPotentialFortificationSourceCountry.get(fromCountry));
-
-		fortificationPhase.setNumberOfArmiesMoved(Integer.parseInt(noOfArmiesToMove));
+		ArrayList<String> sourceCountries = new ArrayList<String>(fortificationScenarios.keySet());
+		String randomSourceCountry = sourceCountries.get(random.nextInt(sourceCountries.size()));
+		fortificationPhase.setFromCountry(randomSourceCountry);
 		notifyView();
 
-		playerDecision = "";
-
-		// check that the {from - to} combination specifically makes sense as a valid
-		// path
-		while (!fortificationScenarios.get(fromCountry).contains(playerDecision)) {
-			System.out.println("\n"
-					+ "Please choose one of the valid countries to move armies INTO (knowing that you've chosen to move them from country "
-					+ fromCountry + "): ");
-			playerDecision = input.nextLine();
-		}
-
-		String toCountry = playerDecision;
-
-		fortificationPhase.setToCountry(toCountry);
+		ArrayList<String> correspondingDestinationCountries = fortificationScenarios.get(randomSourceCountry);
+		String randomCorrespondingDestinationCountry = correspondingDestinationCountries
+				.get(random.nextInt(correspondingDestinationCountries.size()));
+		fortificationPhase.setToCountry(randomCorrespondingDestinationCountry);
 		notifyView();
 
-		// At this stage all that's left to do really is adjust the army counts in the
-		// respective countries to reflect they player's fortification move
-		this.gameData.gameMap.getCountry(fromCountry).deductArmy(Integer.parseInt(noOfArmiesToMove));
-		this.gameData.gameMap.addArmyToCountry(toCountry, Integer.parseInt(noOfArmiesToMove));
+		Integer possibleNumOfArmyRange = armiesPerPotentialFortificationSourceCountry.get(randomSourceCountry) - 1;
+		Integer randomNumberOfArmiesToMove = random.nextInt(possibleNumOfArmyRange + 1);
+		fortificationPhase.setNumberOfArmiesMoved(randomNumberOfArmiesToMove);
+		notifyView();
+
+		System.out.println("\nPlayer decided to move " + randomNumberOfArmiesToMove + " armies from "
+				+ randomSourceCountry + " to " + randomCorrespondingDestinationCountry);
+
+		this.gameData.gameMap.deductArmyToCountry(randomSourceCountry, randomNumberOfArmiesToMove);
+		this.gameData.gameMap.addArmyToCountry(randomCorrespondingDestinationCountry, randomNumberOfArmiesToMove);
 
 		System.out.println(
 				"\nFortification Successful for " + this.playerName + ". Here is a summary of the new status-quo:\n");
 
-		System.out.println("Army count for " + fromCountry + " is now: "
-				+ this.gameData.gameMap.getCountry(fromCountry).getCountryArmyCount());
-		System.out.println("Army count for " + toCountry + " is now: "
-				+ this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
+		System.out.println("Army count for " + randomSourceCountry + " is now: "
+				+ this.gameData.gameMap.getCountry(randomSourceCountry).getCountryArmyCount());
+		System.out.println("Army count for " + randomCorrespondingDestinationCountry + " is now: "
+				+ this.gameData.gameMap.getCountry(randomCorrespondingDestinationCountry).getCountryArmyCount());
 
 		fortificationPhaseState.clear();
-		try {
-			TimeUnit.SECONDS.sleep(5);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
 	}
 }
