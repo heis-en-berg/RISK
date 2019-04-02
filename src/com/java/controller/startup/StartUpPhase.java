@@ -66,16 +66,16 @@ public class StartUpPhase {
 					strategy = new AggresiveMode(playerId,playerNames.get(i));
 					break;
                 case 2:
-                    strategy = new HumanMode(playerId,playerNames.get(i));
-                    break;
-                case 3:
                     strategy = new BenevolentMode(playerId,playerNames.get(i));
                     break;
-                case 4:
+                case 3:
                     strategy = new RandomMode(playerId,playerNames.get(i));
                     break;
-                case 5:
+                case 4:
                     strategy = new CheaterMode(playerId,playerNames.get(i));
+                    break;
+                case 5:
+                    strategy = new HumanMode(playerId,playerNames.get(i));
                     break;
 				default:
 					strategy = new HumanMode(playerId,playerNames.get(i));

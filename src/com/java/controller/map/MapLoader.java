@@ -29,9 +29,10 @@ import com.java.model.map.GameMap;
  */
 public class MapLoader {
 
-	GameMap map = new GameMap();
+	public GameMap map = new GameMap();
 	Scanner scanner;
 	public static final String DEFAULT_MAP_FILE_PATH = "./map/default.map";
+	public static final String SAVED_MAP_FILE_PATH = "./map/game_map/finalMap.map";
 
 	public MapLoader() {
 		scanner = new Scanner(System.in);
@@ -179,7 +180,7 @@ public class MapLoader {
 	 * @param mapFilePath takes in a file path from as a string
 	 * @return true if the file has been read and false otherwise with an message stating why
 	 */
-	private Boolean loadMapFromFile(String mapFilePath) {
+	public Boolean loadMapFromFile(String mapFilePath) {
 
 		Boolean response = true;
 		BufferedReader mapFileBufferedReader = null;
@@ -329,7 +330,7 @@ public class MapLoader {
 	 * Saves the map as a file text.
 	 * */
 	private void saveMapAsTextFile() {
-		File file = new File("./map/game_map/finalMap.map");
+		File file = new File(SAVED_MAP_FILE_PATH);
 		HashMap<String, Continent> continents;
 		HashMap<String, Country> countries;
 

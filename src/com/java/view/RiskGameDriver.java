@@ -46,7 +46,6 @@ public class RiskGameDriver extends TournamentModeHelper{
 	public RiskGameDriver() {
 		input = new Scanner(System.in);
 		gameData = new GameData();
-		tournamentModeGameData = new ArrayList<>();
 		// using this will load the map
 		maploader = new MapLoader();
 	}
@@ -60,6 +59,20 @@ public class RiskGameDriver extends TournamentModeHelper{
 		
 		if (RiskGameDriver.IS_TOURNAMENT_MODE) {
 			getTournamentModeDetailsFromUser();
+			
+			for(Integer key : this.tournamentModeGameData.keySet()) {
+				for(GameData gameData : this.tournamentModeGameData.get(key)) {
+					this.gameData = gameData;
+					startUp = new StartUpPhase(gameData);
+					initiateRoundRobin();
+					registerObservers();
+					ramdomAssignationOfCountries();
+					initialArmyPlacement();
+					startTurn();
+					printTournamentModeResults();
+				}
+			}
+			
 		} else {
 			gameData.gameMap = maploader.loadMap();
 			initiateStartUpPhase();
@@ -162,7 +175,7 @@ public class RiskGameDriver extends TournamentModeHelper{
 			do {
 				do {
 					System.out.println("\nChoose your PlayerStrategy Strategy (BASED ON NUMBER): ");
-					System.out.println("\n(1) Aggressive \n(2) Human \n(3) Benevolent \n(4) Random \n(5) Cheater");
+					System.out.println("\n(1) Aggressive \n(2) Benevolent \n(3) Random \n(4) Cheater \n(5) Human");
 
 					playerStrategyInput = input.nextLine().trim();
 				} while (isNaN(playerStrategyInput));
@@ -387,7 +400,7 @@ public class RiskGameDriver extends TournamentModeHelper{
 
 		if(allConqueredCountries.size() == this.gameData.gameMap.getNumberOfCountries()) {
 			isWinner = true;
-
+			player.setIsWinner(isWinner);
 			System.out.println("\n ****" + player.getPlayerName() + " HAS CONQUERED THE WORLD !****");
 			System.out.println("\n ******************************* \n");
 			System.out.println("\n ********** GAME OVER ********** \n");

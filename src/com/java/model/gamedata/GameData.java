@@ -123,5 +123,18 @@ public class GameData {
 	public void setPlayerStatus(Player player, Boolean isActive) {
 		player.getStrategyType().isActive = isActive;
 	}
-
+	
+	/**
+	 * Get Winner
+	 * 
+	 * @return returns winner of the game; return null if game ended with a draw
+	 */
+	public Player getWinner() {
+		for (Player player : this.players) {
+			if (player.getStrategyType().getIsWinner() == true) {
+				return player;
+			}
+		}
+		return null;
+	}
 }

@@ -1,17 +1,23 @@
 package com.java.view;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 import com.java.controller.map.MapLoader;
+import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
+import com.java.model.player.AggresiveMode;
+import com.java.model.player.BenevolentMode;
+import com.java.model.player.CheaterMode;
+import com.java.model.player.Player;
+import com.java.model.player.RandomMode;
 
 public class TournamentModeHelper {
 
 	Scanner scanner;
-	private MapLoader maploader;
 
-	protected ArrayList<GameData> tournamentModeGameData;
+	protected LinkedHashMap<Integer, ArrayList<GameData>> tournamentModeGameData;
 	
 	protected static Integer TM_NUMBER_OF_MAPS = 1;
 	protected static Integer TM_NUMBER_OF_GAMES_ON_EACH_MAP = 1;
@@ -29,7 +35,7 @@ public class TournamentModeHelper {
 
 	public TournamentModeHelper() {
 		scanner = new Scanner(System.in);
-		maploader = new MapLoader();
+		tournamentModeGameData = new LinkedHashMap<>();
 	}
 
 	/**
@@ -40,6 +46,79 @@ public class TournamentModeHelper {
 		setAndGetNumberOfPlayers();
 		setAndGetNumberOfGamesToBePlayedOnEachMap();
 		setAndGetMaxNumberOfTurnsForEachGame();
+		
+		// set up tournament game data
+		for(int i = 1; i <= TournamentModeHelper.TM_NUMBER_OF_MAPS; i++) {
+			for(int j = 1; j <= TournamentModeHelper.TM_NUMBER_OF_GAMES_ON_EACH_MAP; j++) {
+				if(!tournamentModeGameData.containsKey(i) || tournamentModeGameData.get(i).isEmpty()) {
+					tournamentModeGameData.put(i, new ArrayList<>());
+				}
+				GameData gameData = new GameData();
+				gameData.setNoOfPlayers(TM_NUMBER_OF_PLAYERS);
+				tournamentModeGameData.get(i).add(gameData);
+			}
+		}
+		
+		loadGameMaps();
+		getPlayersFromUser();
+	}
+
+	
+	private void getPlayersFromUser() {
+
+		// Array list to store the name of the players provided by the user.
+		ArrayList<String> playerNames = new ArrayList<String>();
+		ArrayList<Integer> playerStrategy = new ArrayList<Integer>();
+
+		// Asks the name of each player.
+		for (int i = 0; i < TournamentModeHelper.TM_NUMBER_OF_PLAYERS; i++) {
+
+			String playerNameInput = "";
+			String playerStrategyInput = "";
+
+			while (playerNameInput == null || playerNameInput.length() == 0) {
+				System.out.println("\nPlayer " + (i + 1));
+				System.out.println("Enter your name: ");
+				playerNameInput = scanner.nextLine().trim();
+			}
+			// first check if it is a number then check if it is inside the range of 1 to 5
+			do {
+				do {
+					System.out.println("\nChoose your PlayerStrategy Strategy (BASED ON NUMBER): ");
+					System.out.println("\n(1) Aggressive \n(2) Benevolent \n(3) Random \n(4) Cheater");
+
+					playerStrategyInput = scanner.nextLine().trim();
+				} while (isNaN(playerStrategyInput));
+				// check to make sure it is between 1 and 5 else keep asking
+			} while (!(Integer.parseInt(playerStrategyInput) > 0 && Integer.parseInt(playerStrategyInput) < 5));
+
+			playerNames.add(playerNameInput.trim());
+			playerStrategy.add(Integer.parseInt(playerStrategyInput)); // parse it and store it as integer
+		}
+
+		for(Integer key : tournamentModeGameData.keySet()) {
+			for(GameData gameData : tournamentModeGameData.get(key)) {
+				StartUpPhase startUp = new StartUpPhase(gameData);
+				startUp.generatePlayers(playerNames, playerStrategy);
+				startUp.generateCardsDeck();
+			}
+		}
+	}
+
+	private void loadGameMaps() {
+		
+		for(Integer key : tournamentModeGameData.keySet()) {
+			
+			System.out.println("\nMap " + key + ":\n");
+			MapLoader maploader = new MapLoader();
+			maploader.loadMap();
+			for (GameData gameData : tournamentModeGameData.get(key)) {
+				maploader = new MapLoader();
+				maploader.loadMapFromFile(MapLoader.SAVED_MAP_FILE_PATH);
+				gameData.gameMap = maploader.map;
+			}
+		}
+		
 	}
 
 	private void setAndGetMaxNumberOfTurnsForEachGame() {
@@ -107,10 +186,39 @@ public class TournamentModeHelper {
 
 		// Stores the number of players in game data.
 		TournamentModeHelper.TM_NUMBER_OF_MAPS = Integer.parseInt(usersInput);
+		
+	}
+	
+	protected void printTournamentModeResults() {
+		
+		System.out.println("\nResults of Tournament: ");
+		
+		for (Integer key : this.tournamentModeGameData.keySet()) {
+			System.out.println("\nMap " + key);
+			ArrayList<GameData> games = this.tournamentModeGameData.get(key);
+			for (int i = 0; i < games.size(); i++) {
+				String result = "Draw";
+				Player winnerPlayer = games.get(i).getWinner();
+				
+				if(winnerPlayer != null) {
+					if (winnerPlayer.getStrategyType() instanceof RandomMode) {
+						result = winnerPlayer.getStrategyType().getPlayerName() + "(Random)";
+					} else if (winnerPlayer.getStrategyType() instanceof AggresiveMode) {
+						result = winnerPlayer.getStrategyType().getPlayerName() + "(Aggresive)";
+					} else if (winnerPlayer.getStrategyType() instanceof CheaterMode) {
+						result = winnerPlayer.getStrategyType().getPlayerName() + "(Cheater)";
+					} else if (winnerPlayer.getStrategyType() instanceof BenevolentMode) {
+						result = winnerPlayer.getStrategyType().getPlayerName() + "(Benevolent)";
+					}
+				}
+				
+				System.out.println("  Game " + (i+1) + ": " + result);
+			}
+		}
 	}
 
 	/**
-	 * Helper method to test if a given strin can be converted to a int.
+	 * Helper method to test if a given string can be converted to a integer.
 	 * 
 	 * @param stringInput determines if the string typed by user is an integer
 	 * @return the evaluation of true if it is an integer or false otherwise
