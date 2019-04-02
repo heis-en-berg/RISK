@@ -1,5 +1,6 @@
 package com.java.model.player;
 
+import com.java.controller.dice.Dice;
 import com.java.model.cards.Card;
 
 import java.util.ArrayList;
@@ -212,13 +213,11 @@ public class HumanMode extends PlayerStrategy {
             // attack once
             if (!allOut) {
                 // prompt attacker and defender for dice count preferences
-                selectedAttackerDiceCount = getDesiredDiceCountFromPlayer(this.playerName, selectedSourceCountry,
-                        "attack");
+                selectedAttackerDiceCount = getDesiredDiceCountFromPlayer(this.playerName, selectedSourceCountry,"attack");
                 attackPhase.setAttackerDiceCount(selectedAttackerDiceCount);
                 notifyView();
 
-                selectedDefenderDiceCount = getDesiredDiceCountFromPlayer(defendingPlayer, selectedDestinationCountry,
-                        "defend");
+                selectedDefenderDiceCount = getDesiredDiceCountFromPlayer(defendingPlayer, selectedDestinationCountry,"defend");
                 attackPhase.setDefenderDiceCount(selectedDefenderDiceCount);
                 notifyView();
 
@@ -427,7 +426,9 @@ public class HumanMode extends PlayerStrategy {
     public Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
 
         String selectedDiceCount = "1";
-
+        
+        PlayerStrategy defendingPlayerStrategy = gameData.getPlayer(this.gameData.gameMap.getCountry(country).getCountryConquerorID()).getStrategyType();
+        
         // max # of dice a defender can roll is 2
         int defaultMaxDiceCountAllowedForAction = 2;
 
@@ -435,20 +436,26 @@ public class HumanMode extends PlayerStrategy {
         if (action.equals("attack")) {
             defaultMaxDiceCountAllowedForAction = 3;
         }
-
+        
         // but as countries are attacked, army counts changes and we need to dynamically
         // update thresholds
-        int maxDiceCountAllowedForAction = getActualMaxAllowedDiceCountForAction(action, country,
-                defaultMaxDiceCountAllowedForAction);
-
-        do {
-            System.out.println("How many dice would " + player + " like to roll to " + action + "?" + "\t (up to "
-                    + maxDiceCountAllowedForAction + " dice)\n");
-            if (input.hasNextLine()) {
-                selectedDiceCount = input.nextLine();
-            }
-        } while (isNaN(selectedDiceCount) || Integer.parseInt(selectedDiceCount) < 1
-                || Integer.parseInt(selectedDiceCount) > maxDiceCountAllowedForAction);
+        int maxDiceCountAllowedForAction = getActualMaxAllowedDiceCountForAction(action, country, defaultMaxDiceCountAllowedForAction);
+        
+        System.out.println("How many dice would " + player + " like to roll to " + action + "?" + "\t (up to " + maxDiceCountAllowedForAction + " dice)\n");
+        
+        if(defendingPlayerStrategy instanceof HumanMode) {
+        	do {
+                if (input.hasNextLine()) {
+                    selectedDiceCount = input.nextLine();
+                }
+            } while (isNaN(selectedDiceCount) || Integer.parseInt(selectedDiceCount) < 1
+                    || Integer.parseInt(selectedDiceCount) > maxDiceCountAllowedForAction);
+    	} else {
+  
+    		Dice dice = new Dice();
+    		selectedDiceCount = dice.rollDice(1, maxDiceCountAllowedForAction).toString();
+    		System.out.println(player + " will roll " + selectedDiceCount);
+    	}
 
         return Integer.parseInt(selectedDiceCount);
     }
