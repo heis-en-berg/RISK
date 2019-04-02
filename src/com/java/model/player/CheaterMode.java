@@ -241,13 +241,10 @@ public class CheaterMode extends PlayerStrategy{
 
                  if(belongsToPlayer.getCountryConquerorID() == playerID){
                      isCountryBelongsToMe = true;
-                 }
-
-                 if(isCountryBelongsToMe == true){
                      break;
                  }
-
              }
+
              // when it is not in the list I own just double the army amount.
              if(isCountryBelongsToMe == false){
                   gameData.gameMap.addArmyToCountry(belongsToPlayer.getCountryName(),belongsToPlayer.getCountryArmyCount() *2);
