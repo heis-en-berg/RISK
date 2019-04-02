@@ -139,9 +139,7 @@ public class CheaterMode extends PlayerStrategy{
         System.out.println();
         System.out.println("**** Attack Phase Begins for player " + this.playerName + "..****\n");
 
-        // implement an all-out mode
-        boolean allOut = false;
-        Boolean hasConnqueredAtleastOneCountry = false;
+        Boolean hasConnqueredAtleastOneCountry = true;
 
         while (gameOn) {
 
@@ -165,11 +163,9 @@ public class CheaterMode extends PlayerStrategy{
 
             // show PlayerStrategy all the options they have
             showAllAttackScenarios(attackScenarios);
-
+            System.out.println("\nCheater is getting all countries");
             // TODO Now chose the country to attack from and in a loop conqure all the nebiours
             for(Map.Entry<String,ArrayList<String>> currCountry : attackScenarios.entrySet()){
-
-                String selectedCountry = currCountry.getKey();
 
                 // get the arraylist here for that player at "i"
                 ArrayList<String> attackingCountries = currCountry.getValue();
@@ -190,89 +186,13 @@ public class CheaterMode extends PlayerStrategy{
                     this.notifyView();
 
                     // change the country conqurer to the current player's lit of countries owned
-
-
-                    //change the ownership of the country in the game map ( update that view as well)
-
-
-                }
-
-            }
-
-
-
-
-
-            String selectedDestinationCountry = getEnemyCountryToAttack(selectedSourceCountry, attackScenarios);
-
-            attackPhaseState.setDefendingCountry(selectedDestinationCountry);
-            notifyView();
-
-            String defendingPlayer = gameData
-                    .getPlayer(this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID())
-                    .getStrategyType().getPlayerName();
-            attackPhaseState.setDefendingPlayer(defendingPlayer);
-            notifyView();
-
-            // Check if attacking player wants to "go all out"
-            if (!allOut) {
-                System.out.println("\n Would you like to go all out? (YES/NO)");
-                if (input.hasNextLine()) {
-                    playerDecision = input.nextLine();
-                }
-
-                switch (playerDecision.toLowerCase()) {
-                    case "yes":
-                    case "yeah":
-                    case "y":
-                    case "sure":
-                        allOut = true;
-                        break;
+                    Integer oldConquererPlayerId = countryObject.getCountryConquerorID();
+                    Integer newConquererPlayerId = this.playerID;
+                    
+                    this.gameData.gameMap.updateCountryConquerer(eachattackingCountry, oldConquererPlayerId, newConquererPlayerId);
+                    System.out.println("\nCheater " + getPlayerName() + " is conquering " + eachattackingCountry + "  from " + defendingPlayerName);
                 }
             }
-
-            // Based on what mode the attack is set to happen in, these will be determined
-            // differently
-            Integer selectedAttackerDiceCount = 1;
-            Integer selectedDefenderDiceCount = 1;
-
-            // attack once
-            if (!allOut) {
-                // prompt attacker and defender for dice count preferences
-                selectedAttackerDiceCount = getDesiredDiceCountFromPlayer(this.playerName, selectedSourceCountry,
-                        "attack");
-                attackPhaseState.setAttackerDiceCount(selectedAttackerDiceCount);
-                notifyView();
-
-                selectedDefenderDiceCount = getDesiredDiceCountFromPlayer(defendingPlayer, selectedDestinationCountry,
-                        "defend");
-                attackPhaseState.setDefenderDiceCount(selectedDefenderDiceCount);
-                notifyView();
-
-                rollDiceBattle(attackPhaseState);
-
-                hasConnqueredAtleastOneCountry = fight(attackPhaseState) || hasConnqueredAtleastOneCountry;
-            }
-
-            // or keep attacking if all-out mode & player still can attack & player still
-            // hasn't conquered target
-            while (allOut && !attackPhaseState.getBattleOutcomeFlag()) {
-                if (this.gameData.gameMap.getCountry(selectedSourceCountry).getCountryArmyCount() > 1) {
-                    // dont prompt players for input, proceed with max allowed dice count for both
-                    // players
-                    selectedAttackerDiceCount = getActualMaxAllowedDiceCountForAction("attack", selectedSourceCountry,
-                            3);
-                    attackPhaseState.setAttackerDiceCount(selectedAttackerDiceCount);
-                    selectedDefenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",
-                            selectedDestinationCountry, 2);
-                    attackPhaseState.setDefenderDiceCount(selectedDefenderDiceCount);
-                    rollDiceBattle(attackPhaseState);
-                    hasConnqueredAtleastOneCountry = fight(attackPhaseState) || hasConnqueredAtleastOneCountry;
-                } else {
-                    break;
-                }
-            }
-            allOut = false;
 
             checkIfPlayerHasConqueredTheWorld();
 
@@ -286,7 +206,6 @@ public class CheaterMode extends PlayerStrategy{
         }
 
         endAttack();
-
     }
 
     @Override
