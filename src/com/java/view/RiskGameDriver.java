@@ -415,7 +415,7 @@ public class RiskGameDriver extends TournamentModeHelper{
 				// if player has won the game; break the turn loop
 				if(getIsWinner(currentPlayer)) {
 					doWeHaveAWinner = true;
-					System.out.println("Congratulations! "+playerList.get(0).getStrategyType().getPlayerName()+ " wins the game.");
+					System.out.println("Congratulations! "+ currentPlayer.getPlayerName()+ " wins the game.");
 					break;
 				}
 			}

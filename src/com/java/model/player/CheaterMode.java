@@ -265,12 +265,6 @@ public class CheaterMode extends PlayerStrategy{
 
         }
 
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
 
         fortificationPhaseState.clear();
