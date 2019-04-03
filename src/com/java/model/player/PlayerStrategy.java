@@ -6,6 +6,7 @@ import com.java.model.Observable;
 import com.java.model.cards.Card;
 import com.java.model.gamedata.GameData;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +22,7 @@ import java.util.HashSet;
  * @author Cristian Rodriguez
  * @version 2.0.0
  */
-public abstract class PlayerStrategy extends Observable {
+public abstract class PlayerStrategy extends Observable implements Serializable {
 
 	protected Integer playerID;
 	protected String playerName;

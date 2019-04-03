@@ -2,6 +2,8 @@ package com.java.controller.map;
 
 import com.java.model.map.GameMap;
 
+import java.io.Serializable;
+
 /**
  * MapCreator implements the logic to make it possible for a user to create map
  * on console. It extends MapEditor class to make use of all the map creation
@@ -14,7 +16,7 @@ import com.java.model.map.GameMap;
  * @author Cristian Rodriguez
  * @version 1.0.0
  */
-public class MapCreator extends MapEditor {
+public class MapCreator extends MapEditor implements Serializable {
 
 	/**
 	 * Constructor to initialize local map object

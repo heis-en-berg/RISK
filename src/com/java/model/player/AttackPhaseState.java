@@ -1,5 +1,6 @@
 package com.java.model.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  * */
-public class AttackPhaseState {
+public class AttackPhaseState implements Serializable {
 
 	private String attackingPlayer = " ";
 	private String defendingPlayer = " ";

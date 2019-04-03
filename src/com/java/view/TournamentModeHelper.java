@@ -1,21 +1,17 @@
 package com.java.view;
 
+import com.java.controller.map.MapLoader;
+import com.java.controller.startup.StartUpPhase;
+import com.java.model.gamedata.GameData;
+import com.java.model.player.*;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
-import com.java.controller.map.MapLoader;
-import com.java.controller.startup.StartUpPhase;
-import com.java.model.gamedata.GameData;
-import com.java.model.player.AggresiveMode;
-import com.java.model.player.BenevolentMode;
-import com.java.model.player.CheaterMode;
-import com.java.model.player.Player;
-import com.java.model.player.RandomMode;
-
 public class TournamentModeHelper {
 
-	Scanner scanner;
+	static Scanner scanner;
 
 	protected LinkedHashMap<Integer, ArrayList<GameData>> tournamentModeGameData;
 	

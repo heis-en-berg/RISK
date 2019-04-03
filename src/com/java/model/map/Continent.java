@@ -1,5 +1,7 @@
 package com.java.model.map;
 
+import java.io.Serializable;
+
 /**
  * This class models the Continent, the name, the control value which is the number of armies
  * to be given once a player conquer a continent. Also, the continent holds a player id as conqueror.
@@ -11,7 +13,7 @@ package com.java.model.map;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  * */
-public class Continent {
+public class Continent implements Serializable {
 	
 	/**
 	 * Continent name

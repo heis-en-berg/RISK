@@ -2,6 +2,7 @@ package com.java.model.cards;
 
 import com.java.model.map.Country;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,7 +17,7 @@ import java.util.Collections;
  * @author Cristian Rodriguez
  * @version 2.0.0
  * */
-public class CardsDeck {
+public class CardsDeck implements Serializable {
 
     ArrayList<Card> deck = new ArrayList<Card>();
     ArmyType[] armyTypes = ArmyType.values();

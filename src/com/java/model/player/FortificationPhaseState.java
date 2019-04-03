@@ -1,5 +1,7 @@
 package com.java.model.player;
 
+import java.io.Serializable;
+
 /**
  * This class models the state of Fortification phase to be presented in phase View.
  * 
@@ -11,7 +13,7 @@ package com.java.model.player;
  * @version 1.0.0
  * */
 
-public class FortificationPhaseState {
+public class FortificationPhaseState implements Serializable {
 
 	private String fromCountry = " ";
 	private String toCountry = " ";

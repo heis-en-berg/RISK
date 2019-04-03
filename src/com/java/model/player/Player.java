@@ -1,7 +1,8 @@
 package com.java.model.player;
 
+import java.io.Serializable;
 
-public class Player {
+public class Player implements Serializable {
     private PlayerStrategy strategyType;
 
     public void setStrategyType(PlayerStrategy strategyType){
@@ -43,5 +44,4 @@ public class Player {
     public boolean checkIfPlayerHasConqueredTheWorld(){
         return strategyType.checkIfPlayerHasConqueredTheWorld();
     }
-
 }

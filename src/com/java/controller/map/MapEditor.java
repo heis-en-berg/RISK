@@ -1,8 +1,9 @@
 package com.java.controller.map;
 
-import java.util.Scanner;
-
 import com.java.model.map.GameMap;
+
+import java.io.Serializable;
+import java.util.Scanner;
 
 /**
  * MapEditor implements the logic to make it possible for a user to edit an
@@ -15,11 +16,11 @@ import com.java.model.map.GameMap;
  * @author Cristian Rodriguez
  * @version 1.0.0
  */
-public class MapEditor {
+public class MapEditor implements Serializable {
 
 	GameMap originalMap;
 	GameMap editedMap;
-	Scanner scanner;
+	static Scanner scanner;
 	MapValidator mapValidator;
 
 	/**

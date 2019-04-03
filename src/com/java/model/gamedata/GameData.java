@@ -3,8 +3,8 @@ package com.java.model.gamedata;
 import com.java.model.cards.CardsDeck;
 import com.java.model.map.GameMap;
 import com.java.model.player.Player;
-import com.java.model.player.PlayerStrategy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * @author Cristian Rodriguez
  * @version 1.0.0
  */
-public class GameData {
+public class GameData implements Serializable {
 
 	/**
 	 * Holds the map. Countries, continents, and adjacencies.
@@ -137,4 +137,6 @@ public class GameData {
 		}
 		return null;
 	}
+
+
 }

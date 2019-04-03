@@ -3,14 +3,15 @@ package com.java.model.player;
 import com.java.controller.dice.Dice;
 import com.java.model.cards.Card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class HumanMode extends PlayerStrategy {
-    private Scanner input = new Scanner(System.in);
+public class HumanMode extends PlayerStrategy implements Serializable {
+    private static Scanner input = new Scanner(System.in);
 
     public HumanMode(Integer playerID, String playerName) {
         super(playerID,playerName);
@@ -299,9 +300,13 @@ public class HumanMode extends PlayerStrategy {
                     }
                 }
             }
-
             System.out.println("\nEnter the country name to place armies: ");
-            String countryNameByUser = input.nextLine();
+            String countryNameByUser = "";
+            do{
+                System.out.println("Please enter the country name to place armies: ");
+                countryNameByUser = input.nextLine();
+            }while (countryNameByUser.equals(""));
+
 
             /* Check for an invalid country name. */
             if (this.gameData.gameMap.getCountry(countryNameByUser) == null) {

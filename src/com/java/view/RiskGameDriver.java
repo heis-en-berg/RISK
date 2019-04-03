@@ -5,15 +5,12 @@ import com.java.controller.map.MapLoader;
 import com.java.controller.startup.StartUpPhase;
 import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
-import com.java.model.player.PlayerStrategy;
 import com.java.model.player.HumanMode;
 import com.java.model.player.Player;
+import com.java.model.player.PlayerStrategy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
 
 /**
@@ -35,7 +32,7 @@ public class RiskGameDriver extends TournamentModeHelper{
 	private GameData gameData;
 	private StartUpPhase startUp;
 	private MapLoader maploader;
-	Scanner input;
+	static Scanner input;
 
 	private static Integer MAX_TURNS = -1; // -1 by default represents no restriction on number of turns
 	private static Boolean IS_TOURNAMENT_MODE = false;
@@ -55,7 +52,7 @@ public class RiskGameDriver extends TournamentModeHelper{
      */
 	public void startGame() {
 
-		setAndGetGameModeFromUser();
+		Integer userChoice = setAndGetGameModeFromUser();
 		
 		if (RiskGameDriver.IS_TOURNAMENT_MODE) {
 			getTournamentModeDetailsFromUser();
@@ -73,7 +70,39 @@ public class RiskGameDriver extends TournamentModeHelper{
 				}
 			}
 			
-		} else {
+		}
+		else if(userChoice == 3){
+			GameData gameData_load = null;
+			String filename = "";
+			File folder = new File("./SavedGames");
+			System.out.println("List of files saved:\n");
+			for(File filenames:folder.listFiles()){
+				System.out.println(filenames.getName());
+			}
+			System.out.println("\nEnter name of the file: ");
+			filename = input.nextLine().trim();
+
+				try {
+					// Reading the object from a file
+					FileInputStream inputFile = new FileInputStream("./SavedGames/"+filename);
+					ObjectInputStream in = new ObjectInputStream(inputFile);
+
+					// Method for deserialization of object
+					gameData_load = (GameData) in.readObject();
+
+					in.close();
+					inputFile.close();
+
+					System.out.println("Map has been loaded successfully. Game is resumed.");
+				} catch (IOException ex) {
+					System.out.println("IOException is caught. " + ex.getMessage());
+				} catch (ClassNotFoundException ex) {
+					System.out.println("ClassNotFoundException is caught"+ex.getMessage());
+				}
+				this.gameData = gameData_load;
+				startTurn();
+		}
+		else {
 			gameData.gameMap = maploader.loadMap();
 			initiateStartUpPhase();
 			initiateRoundRobin();
@@ -94,17 +123,21 @@ public class RiskGameDriver extends TournamentModeHelper{
 	private Integer setAndGetGameModeFromUser() {
 
 		String gameModeUserDecision = "";
-
+		File file = new File("./SavedGames");
 		do {
 			do {
 				System.out.println("\nSelect GameMode (BASED ON NUMBER): ");
-				System.out.println("\n(1) Single Game Mode \n(2) Tournament\n");
-
+				if((file.isDirectory()) && (file.list().length>0)) {
+					System.out.println("\n(1) Single Game Mode \n(2) Tournament\n(3) Load Saved Games\n");
+				}
+				else{
+					System.out.println("\n(1) Single Game Mode \n(2) Tournament\n");
+				}
 				System.out.print("Enter choice: ");
 
 				gameModeUserDecision = input.nextLine().trim();
 			} while (isNaN(gameModeUserDecision));
-		} while (!(Integer.parseInt(gameModeUserDecision) > 0 && Integer.parseInt(gameModeUserDecision) < 3));
+		} while (!(Integer.parseInt(gameModeUserDecision) > 0 && Integer.parseInt(gameModeUserDecision) < 4));
 
 		if (Integer.parseInt(gameModeUserDecision) == 2) {
 			RiskGameDriver.IS_TOURNAMENT_MODE = true;
@@ -304,7 +337,7 @@ public class RiskGameDriver extends TournamentModeHelper{
 	private void initiateRoundRobin() {
 		System.out.println(" ");
 		System.out.println("The following list has the order of the players in round robin fashion: ");
-		System.out.println("The results are based on the higher number of dice a player roled ");
+		System.out.println("The results are based on the higher number of dice a player rolled ");
 		ArrayList<Player> results = startUp.generateRoundRobin();
 		for(int i = 0; i < results.size(); i++) {
 			System.out.println((i+1) + " " + results.get(i).getStrategyType().getPlayerName());
@@ -343,6 +376,8 @@ public class RiskGameDriver extends TournamentModeHelper{
 	private void startTurn() {
 		ArrayList<Player> playerList = this.gameData.getPlayers();
 		PlayerStrategy currentPlayer; // first player that will start the game
+		String choiceToSave = "";
+		String filename = "";
 
 		Boolean doWeHaveAWinner = false;
 
@@ -382,6 +417,34 @@ public class RiskGameDriver extends TournamentModeHelper{
 					doWeHaveAWinner = true;
 					System.out.println("Congratulations! "+playerList.get(0).getStrategyType().getPlayerName()+ " wins the game.");
 					break;
+				}
+			}
+
+			if(!IS_TOURNAMENT_MODE) {
+				while ((!(choiceToSave.equals("y") || choiceToSave.equals("n")))) {
+
+					System.out.println("Would you like to save the game (y/n)?");
+					choiceToSave = input.nextLine();
+
+					if (choiceToSave.equals("y")) {
+						try {
+							System.out.println("Please enter the file name: ");
+							filename = input.nextLine();
+							FileOutputStream file = new FileOutputStream("./SavedGames/"+filename);
+							ObjectOutputStream out = new ObjectOutputStream(file);
+
+							// Method for serialization of object
+							out.writeObject(this.gameData);
+
+							out.close();
+							file.close();
+
+							System.out.println("Game has been saved.");
+							return;
+						} catch (IOException ex) {
+							System.out.println("IOException is caught. " + ex.getMessage());
+						}
+					}
 				}
 			}
 		}

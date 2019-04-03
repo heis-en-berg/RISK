@@ -2,7 +2,9 @@ package com.java.model.cards;
 
 import com.java.model.map.Country;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private ArmyType armyType;
     private Country country;
 

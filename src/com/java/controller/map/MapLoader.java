@@ -1,19 +1,14 @@
 package com.java.controller.map;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.java.model.map.Continent;
+import com.java.model.map.Country;
+import com.java.model.map.GameMap;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
-
-import com.java.model.map.Continent;
-import com.java.model.map.Country;
-import com.java.model.map.GameMap;
 
 /**
  * MapLoader manages the complete map generation operations for the game, in
@@ -27,10 +22,10 @@ import com.java.model.map.GameMap;
  * @author Cristian Rodriguez
  * @version 1.0.0
  */
-public class MapLoader {
+public class MapLoader implements Serializable {
 
 	public GameMap map = new GameMap();
-	Scanner scanner;
+	static Scanner scanner;
 	public static final String DEFAULT_MAP_FILE_PATH = "./map/default.map";
 	public static final String SAVED_MAP_FILE_PATH = "./map/game_map/finalMap.map";
 

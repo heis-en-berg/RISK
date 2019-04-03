@@ -8,16 +8,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
+
 
 public class RandomMode extends PlayerStrategy {
 
-	private Scanner input;
+	private static Scanner input = new Scanner(System.in);;
 	Random random;
 
 	public RandomMode(Integer playerID, String playerName) {
 		super(playerID, playerName);
-		input = new Scanner(System.in);
 		random = new Random();
 	}
 

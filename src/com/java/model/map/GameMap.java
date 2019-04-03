@@ -2,8 +2,8 @@ package com.java.model.map;
 
 import com.java.model.Observable;
 import com.java.model.player.Player;
-import com.java.model.player.PlayerStrategy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ import java.util.HashSet;
  * @author Cristian Rodriguez 
  * @version 2.0.0
  * */
-public class GameMap extends Observable implements Cloneable {
+public class GameMap extends Observable implements Cloneable, Serializable {
 
 	public static final Integer DEFAULT_NUMBER_OF_COUNTRIES = 42;
 	private HashMap<String, Country> countryObjects;

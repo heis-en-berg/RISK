@@ -1,6 +1,8 @@
 package com.java.model.cards;
 
-public enum ArmyType {
+import java.io.Serializable;
+
+public enum ArmyType implements Serializable {
     INFANTRY,
     CAVALRY,
     ARTILLERY

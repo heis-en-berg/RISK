@@ -1,16 +1,13 @@
 package com.java.controller.map;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import com.java.model.map.Continent;
 import com.java.model.map.Country;
 import com.java.model.map.GameMap;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * MapValidator handles the map validation part of the game. It can validate
@@ -23,7 +20,7 @@ import com.java.model.map.GameMap;
  * @author Cristian Rodriguez
  * @version 1.0.0
  */
-public class MapValidator {
+public class MapValidator implements Serializable {
 
 	GameMap map;
 

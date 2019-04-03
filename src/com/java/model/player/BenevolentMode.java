@@ -280,5 +280,4 @@ public class BenevolentMode extends PlayerStrategy {
     public Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
         return null;
     }
-
 }

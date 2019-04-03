@@ -1,5 +1,7 @@
 package com.java.model.map;
 
+import java.io.Serializable;
+
 /**
  * This class models a country by giving a name, a continent to belong, a conqueror 
  * player id, and the number of armies placed on the country.
@@ -11,7 +13,7 @@ package com.java.model.map;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  * */
-public class Country {
+public class Country implements Serializable {
 	
 	/**
 	 * The country name.

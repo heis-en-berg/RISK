@@ -1,5 +1,6 @@
 package com.java.controller.dice;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -12,7 +13,7 @@ import java.util.Random;
  *  * @author Cristian Rodriguez
  *  * @version 1.0.0
  */
-public class Dice {
+public class Dice implements Serializable {
 
 	public Dice(){
 	}

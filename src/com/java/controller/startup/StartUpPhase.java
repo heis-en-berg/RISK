@@ -7,6 +7,7 @@ import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
 import com.java.model.player.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +28,7 @@ import java.util.HashMap;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  */
-public class StartUpPhase {
+public class StartUpPhase implements Serializable {
 	
 	/**
 	 * Game Data holds the whole data of the game, here the static variable holds the ids for the players.

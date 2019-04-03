@@ -1,5 +1,7 @@
 package com.java.model.player;
 
+import java.io.Serializable;
+
 /**
  * This class models the state of Reinforcement phase to be presented in phase View.
  * 
@@ -10,7 +12,7 @@ package com.java.model.player;
  * @author Cristian Rodriguez 
  * @version 1.0.0
  * */
-public class ReinforcementPhaseState {
+public class ReinforcementPhaseState implements Serializable {
 	
 	private String toCountry = null;
 	private Integer numberOfArmiesPlaced = 0;
