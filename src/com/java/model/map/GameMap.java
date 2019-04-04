@@ -452,7 +452,7 @@ public class GameMap extends Observable implements Cloneable, Serializable {
     *Calculates the number of armies per player.
     *
     */
-	private void calculateNumberOfArmiesPerPlayer() {
+	public void calculateNumberOfArmiesPerPlayer() {
 		
 		HashMap<String, Country> countries = getAllCountries();
 		HashSet<String> countriesPerPlayer;

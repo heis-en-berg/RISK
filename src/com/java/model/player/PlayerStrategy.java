@@ -167,7 +167,8 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	private int reinforcementArmyCountFromCards(ArrayList<Card> cumulatedPlayerExchangeCards) {
 		ArrayList<Card> playerExchangeCards;
 		int countReinforcementFromCardExchange = 0;
-		while (!(cumulatedPlayerExchangeCards.isEmpty())) {
+		while (cumulatedPlayerExchangeCards.size() > 2) {
+		//while (!(cumulatedPlayerExchangeCards.isEmpty())) {
 			playerExchangeCards = new ArrayList<>();
 			for (int i = 0; i < 3; i++) {
 				playerExchangeCards.add(cumulatedPlayerExchangeCards.get(0));
