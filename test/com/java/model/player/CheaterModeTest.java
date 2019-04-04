@@ -4,6 +4,8 @@ package com.java.model.player;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import com.java.model.cards.Card;
@@ -66,7 +68,9 @@ public class CheaterModeTest {
 
             playerOne.getStrategyType().setGameData(gameData);
             playerTwo.getStrategyType().setGameData(gameData);
-
+            
+            gameData.gameMap.setupPlayerNames(players);
+            gameData.setPlayers(players);
         }
 
         /**
@@ -75,21 +79,10 @@ public class CheaterModeTest {
         @Test
         public void testCalculateFortificationPaths() {
 
-            ArrayList<Country> countryList = new ArrayList<Country>();
-
             HashMap<String, Integer> armiesPerPlayer = gameData.gameMap.getNumberOfArmiesPerPlayer();
 
             Integer numberOfInitialArmies = armiesPerPlayer.get("2");
-
-            countryList.add(gameData.gameMap.getCountry("C1"));
-            countryList.add(gameData.gameMap.getCountry("C2"));
-            countryList.add(gameData.gameMap.getCountry("C3"));
-            gameData.cardsDeck = new CardsDeck(countryList);
-            for (int cardCount = 0; cardCount < 3; cardCount++) {
-                Card card = gameData.cardsDeck.getCard();
-                playerTwo.getStrategyType().addToPlayerCardList(card);
-            }
-
+            
             ArrayList<Card> playerExchangeCards = playerTwo.getStrategyType().getPlayerCardList();
 
             int numberOfLegalArmies = playerTwo.getStrategyType().calculateTotalReinforcement(playerExchangeCards);
@@ -102,7 +95,7 @@ public class CheaterModeTest {
 
             Integer actualValue = numberOfArmiesAfterReinforcement - numberOfInitialArmies;
 
-            Integer expectedValue = 2 * (numberOfLegalArmies - 5);
+            Integer expectedValue = 2 * (numberOfLegalArmies);
 
             assertEquals(actualValue, expectedValue);
 
@@ -110,9 +103,51 @@ public class CheaterModeTest {
 
     @Test
     public void executeAttack() {
+    	HashSet<String> initialOwnedCountries = gameData.gameMap.getConqueredCountriesPerPlayer(2);
+    	
+    	int initialOwnedCountriesNumber =  initialOwnedCountries.size();
+    	
+    	ArrayList<Country> countryList = new ArrayList<Country>();
+    	
+    	countryList.add(gameData.gameMap.getCountry("C1"));
+        countryList.add(gameData.gameMap.getCountry("C2"));
+        countryList.add(gameData.gameMap.getCountry("C3"));
+        countryList.add(gameData.gameMap.getCountry("C4"));
+        countryList.add(gameData.gameMap.getCountry("C5"));
+        countryList.add(gameData.gameMap.getCountry("C6"));
+        
+    	gameData.cardsDeck = new CardsDeck(countryList);
+        
+    	playerTwo.getStrategyType().executeAttack();
+    	
+    	int afterOwnedCountriesNumber =  initialOwnedCountries.size();
+    	
+    	Integer expectedValue = initialOwnedCountriesNumber + 3;
+    	Integer actualValue = afterOwnedCountriesNumber;
+    	
+    	assertEquals(actualValue, expectedValue);
     }
 
     @Test
     public void executeFortification() {
+    	
+    	HashSet<String> countriesOwnedByPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(2);
+    	
+    	Country country0 = gameData.gameMap.getCountry("C5");
+    	Country country1 = gameData.gameMap.getCountry("C6");
+    	
+    	Integer beforeFortify0 = country0.getCountryArmyCount();
+    	Integer beforeFortify1 = country1.getCountryArmyCount();
+    	
+    	playerTwo.getStrategyType().executeFortification();
+    	
+    	Integer expectedValue0 = beforeFortify0 * 2;
+    	Integer actualValue0 = country0.getCountryArmyCount(); 
+    	
+    	Integer expectedValue1 = beforeFortify1 * 2;
+    	Integer actualValue1 = country1.getCountryArmyCount(); 
+    	
+    	assertEquals(actualValue0, expectedValue0);
+    	assertEquals(actualValue1, expectedValue1);
     }
 }

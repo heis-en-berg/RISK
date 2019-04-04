@@ -190,6 +190,7 @@ public class CheaterMode extends PlayerStrategy{
                     Integer newConquererPlayerId = this.playerID;
                     
                     this.gameData.gameMap.updateCountryConquerer(eachattackingCountry, oldConquererPlayerId, newConquererPlayerId);
+                    this.gameData.gameMap.calculateNumberOfArmiesPerPlayer();
                     System.out.println("\nCheater " + getPlayerName() + " is conquering " + eachattackingCountry + "  from " + defendingPlayerName);
                 }
             }
@@ -219,8 +220,6 @@ public class CheaterMode extends PlayerStrategy{
 
         // First get confirmation from the player that fortification is desired.
 
-        boolean doFortify = true;
-
         System.out.println("\n" + "I am a Cheater! , Going to double all my arimies where I dont own any neighbour countries " + this.playerName + "...\n");
 
         //get list of countries owned by player
@@ -228,9 +227,10 @@ public class CheaterMode extends PlayerStrategy{
 
         HashSet<String> adacentCountries;
 
-        boolean isCountryBelongsToMe = false;
+        boolean isCountryBelongsToMe;
 
         for(String entry : countriesOwned) {
+        	isCountryBelongsToMe = false;
             Country belongsToPlayer = new Country();
             // then check if thoes countries nebouires are nont owned by me
              adacentCountries = gameData.gameMap.getAdjacentCountries(entry);
@@ -247,13 +247,13 @@ public class CheaterMode extends PlayerStrategy{
 
              // when it is not in the list I own just double the army amount.
              if(isCountryBelongsToMe == false){
-                  gameData.gameMap.addArmyToCountry(belongsToPlayer.getCountryName(),belongsToPlayer.getCountryArmyCount() *2);
-
-                  fortificationPhase = new FortificationPhaseState();
-
-                  fortificationPhase.setFromCountry(belongsToPlayer.getCountryName());
+            	 Integer numberOfCheatedArmies = gameData.gameMap.getCountry(entry).getCountryArmyCount();
+                 gameData.gameMap.addArmyToCountry(entry,numberOfCheatedArmies);
+                 
+                 fortificationPhase = new FortificationPhaseState();
+                 fortificationPhase.setFromCountry(belongsToPlayer.getCountryName());
                  fortificationPhase.setToCountry(" I am Cheating, :) ");
-                 fortificationPhase.setNumberOfArmiesMoved(belongsToPlayer.getCountryArmyCount());
+                 fortificationPhase.setNumberOfArmiesMoved(numberOfCheatedArmies);
 
                  fortificationPhaseState.add(fortificationPhase);
 
@@ -262,12 +262,12 @@ public class CheaterMode extends PlayerStrategy{
 
         }
 
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
+        //try {
+          //  TimeUnit.SECONDS.sleep(5);
+        //} catch (InterruptedException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+          //  e.printStackTrace();
+        //}
         System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
 
         fortificationPhaseState.clear();
