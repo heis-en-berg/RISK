@@ -253,9 +253,14 @@ public class HumanMode extends PlayerStrategy implements Serializable {
 
         if (hasConnqueredAtleastOneCountry) {
             Card card = gameData.cardsDeck.getCard();
-            this.cardList.add(card);
-            System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: " + card.getCountry().getCountryName());
-            System.out.println("Total cards : " + this.cardList.size());
+            
+            if(card == null) {
+            	System.out.println("No more cards left in the deck");
+            } else {
+            	 this.cardList.add(card);
+                 System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: " + card.getCountry().getCountryName());
+                 System.out.println("Total cards : " + this.cardList.size());
+            }
         }
 
         endAttack();
@@ -621,12 +626,7 @@ public class HumanMode extends PlayerStrategy implements Serializable {
                 + this.gameData.gameMap.getCountry(toCountry).getCountryArmyCount());
 
         fortificationPhaseState.clear();
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        
         System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
     }
 }

@@ -33,6 +33,9 @@ public class CardsDeck implements Serializable {
     }
 
     public Card getCard(){
+    	if(deck.isEmpty()) {
+    		return null;
+    	}
         card = deck.get(top);
         deck.remove(top);
         return card;

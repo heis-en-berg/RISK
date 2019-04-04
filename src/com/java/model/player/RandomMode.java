@@ -307,10 +307,15 @@ public class RandomMode extends PlayerStrategy {
 
 		if (hasConnqueredAtleastOneCountry) {
 			Card card = gameData.cardsDeck.getCard();
-			this.cardList.add(card);
-			System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: "
-					+ card.getCountry().getCountryName());
-			System.out.println("Total cards : " + this.cardList.size());
+			
+			if(card == null) {
+            	System.out.println("No more cards left in the deck");
+            } else {
+            	this.cardList.add(card);
+    			System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: "
+    					+ card.getCountry().getCountryName());
+    			System.out.println("Total cards : " + this.cardList.size());
+            }
 		}
 
 		endAttack();
