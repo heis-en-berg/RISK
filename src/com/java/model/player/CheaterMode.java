@@ -9,6 +9,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * this class is a player strategy that is created startuphase.java and 
+ * is a subclass of player strategy, all the methods are called from player(context class)
+ * the methods called are reinforce - doubled the number of armies on all countries owned
+ * fortify- doubles army for country that is surrounded by the enemies and attack will automatically own the country
+ * the neighbours
+ */
 public class CheaterMode extends PlayerStrategy{
 
     public CheaterMode(Integer playerID, String playerName) {
