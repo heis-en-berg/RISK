@@ -26,6 +26,9 @@ public class CheaterMode extends PlayerStrategy{
     @Override
     public void executeReinforcement() {
     	notifyView();
+    	ArrayList<Card> playerExchangeCards;
+        playerExchangeCards = getValidCards();
+        calculateTotalReinforcement(playerExchangeCards);
         placeArmy(0);
     }
 
