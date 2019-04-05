@@ -74,30 +74,38 @@ public class CheaterModeTest {
         }
 
         /**
-         * Tests the received number of armies from fortify.
+         * Tests the received number of armies from reinforcement.
          */
         @Test
-        public void testCalculateFortificationPaths() {
-
-            HashMap<String, Integer> armiesPerPlayer = gameData.gameMap.getNumberOfArmiesPerPlayer();
-
-            Integer numberOfInitialArmies = armiesPerPlayer.get("2");
+        public void executeReinforcement() {
             
-            ArrayList<Card> playerExchangeCards = playerTwo.getStrategyType().getPlayerCardList();
-
-            int numberOfLegalArmies = playerTwo.getStrategyType().calculateTotalReinforcement(playerExchangeCards);
-
-            playerTwo.getStrategyType().executeReinforcement();
-
-            armiesPerPlayer = gameData.gameMap.getNumberOfArmiesPerPlayer();
-
-            Integer numberOfArmiesAfterReinforcement = armiesPerPlayer.get("2");
-
-            Integer actualValue = numberOfArmiesAfterReinforcement - numberOfInitialArmies;
-
-            Integer expectedValue = 2 * (numberOfLegalArmies);
-
-            assertEquals(actualValue, expectedValue);
+            HashSet<String> countriesOwnedByPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(2);
+            ArrayList<Integer> beforeReinforcementVariables = new ArrayList<Integer>();
+            ArrayList<Integer> expectedValues = new ArrayList<Integer>();
+            ArrayList<Integer> actualValues = new ArrayList<Integer>();
+            
+            Country countryObject;
+            Integer beforeReinforcement;
+            
+            for(String country : countriesOwnedByPlayer) {
+            	countryObject = gameData.gameMap.getCountry(country);
+            	beforeReinforcement = countryObject.getCountryArmyCount();
+            	
+            	beforeReinforcementVariables.add(beforeReinforcement);
+            }
+            
+            for(Integer number : beforeReinforcementVariables) {
+            	expectedValues.add(number * 2);
+            }
+        	
+        	playerTwo.getStrategyType().executeReinforcement();
+        	
+        	for(String country : countriesOwnedByPlayer) {
+        		countryObject = gameData.gameMap.getCountry(country);
+        		actualValues.add(countryObject.getCountryArmyCount());
+        	}
+        	
+        	assertEquals(actualValues, expectedValues);
 
         }
 
@@ -130,8 +138,6 @@ public class CheaterModeTest {
 
     @Test
     public void executeFortification() {
-    	
-    	HashSet<String> countriesOwnedByPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(2);
     	
     	Country country0 = gameData.gameMap.getCountry("C5");
     	Country country1 = gameData.gameMap.getCountry("C6");
