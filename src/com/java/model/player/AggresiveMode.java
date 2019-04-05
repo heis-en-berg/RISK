@@ -1,17 +1,10 @@
 package com.java.model.player;
 
-import com.java.model.cards.Card;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+
+//import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 public class AggresiveMode extends PlayerStrategy {
 
@@ -21,19 +14,51 @@ public class AggresiveMode extends PlayerStrategy {
 
     }
 
+    // Reinforcement Phase Begins
     @Override
     public void executeReinforcement() {
+        notifyView();
+
+        Integer getReinforcementCountFromCards = getReinforcementCountFromValidCardsAI();
+        Integer totalReinforcementArmyCount = getReinforcementCountFromCards + calculateReinforcementArmy();
+        ReinforcementPhaseState reinforcementPhase = new ReinforcementPhaseState();
+        reinforcementPhase.setNumberOfArmiesReceived(totalReinforcementArmyCount);
+
+        reinforcementPhaseState.add(reinforcementPhase);
+
+        notifyView();
+        placeArmy(totalReinforcementArmyCount);
 
     }
 
-    @Override
-    public ArrayList<Card> getValidCards() {
-        return null;
-    }
-
+    /**
+     * Method to place armies.
+     * @param reinforcementArmy the number of armies to be reinforced
+     */
     @Override
     public void placeArmy(Integer reinforcementArmy) {
 
+        Integer currentPlayerID = playerID;
+        HashSet<String> conqueredCountryByThisPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(currentPlayerID);
+
+        System.out.println();
+        System.out.println("**** Reinforcement Phase Begins for player " + this.playerName + "..****\n");
+
+        String strongestCountry = "";
+        Integer strongestCountryArmyCount = Integer.MIN_VALUE;
+        Integer currentCountryArmyCount = 0;
+        for(String country: conqueredCountryByThisPlayer){
+            currentCountryArmyCount = gameData.gameMap.getCountry(country).getCountryArmyCount();
+            if(strongestCountryArmyCount < currentCountryArmyCount){
+                strongestCountry = country;
+                strongestCountryArmyCount = currentCountryArmyCount;
+            }
+        }
+        gameData.gameMap.getCountry(strongestCountry).addArmy(reinforcementArmy);
+        System.out.println("\nReinforcement is done for player "+playerName+". Here is an overview. \n");
+        for(String country: conqueredCountryByThisPlayer){
+            System.out.println("Country: "+country+", Army Count: "+gameData.gameMap.getCountry(country).getCountryArmyCount());
+        }
     }
 
     @Override
