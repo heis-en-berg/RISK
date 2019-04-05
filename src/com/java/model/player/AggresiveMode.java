@@ -88,34 +88,8 @@ public class AggresiveMode extends PlayerStrategy {
             return;
         }
         
-        Integer maxSrcArmyCountEncountered = 1;
-        // target to fortify
-        String strongestCountry = "";
-        Integer maxDestArmyCountEncountered = 1;
-        // supplier to fortify from
-        String secondStrongestCountry = "";
-        
-        // find the strongest country conquered by the player, knowing it would be contained as a key value
-        for (String sourceCountry : potentialFortificationScenarios.keySet()){
-        	boolean potentialCandidateToFortify = false;
-        	Integer currentSourceCountryArmyCount = gameData.gameMap.getCountry(sourceCountry).getCountryArmyCount();
-        	if (currentSourceCountryArmyCount > maxSrcArmyCountEncountered) {
-        		strongestCountry = sourceCountry;
-        		maxSrcArmyCountEncountered = currentSourceCountryArmyCount;
-        		potentialCandidateToFortify = true;
-        	}
-        	// this is hacky, but basically don't bother looking for suppliers if you're not at the strongest potential
-        	if(potentialCandidateToFortify) {
-        		for(String destinationCountry: potentialFortificationScenarios.get(sourceCountry)) {
-                	Integer currentDestinationCountryArmyCount = gameData.gameMap.getCountry(destinationCountry).getCountryArmyCount();
-                	// only countries with 2 or more armies on the ground qualify as suppliers
-                	if (currentDestinationCountryArmyCount > maxDestArmyCountEncountered) {
-                		secondStrongestCountry = destinationCountry;
-                		maxDestArmyCountEncountered = currentDestinationCountryArmyCount;
-                	}
-                }
-        	}          
-        }
+        String strongestCountry = getStrongestCountryConqueredByPlayer(potentialFortificationScenarios);
+        String secondStrongestCountry = getSecondStrongestCountryConqueredByPlayer(potentialFortificationScenarios,strongestCountry);
 
 
         Integer maxNoOfArmiesToMove = gameData.gameMap.getCountry(secondStrongestCountry).getCountryArmyCount() - 1;
@@ -130,5 +104,42 @@ public class AggresiveMode extends PlayerStrategy {
         }
 
     }
+    
+    public String getStrongestCountryConqueredByPlayer(HashMap<String, ArrayList<String>> potentialScenarios) {
+		
+    	String strongestCountry = null;
+    	Integer maxArmyCountEncountered = 1;
+        
+        // find the strongest country conquered by the player, knowing it would be contained as a key 
+        for (String country : potentialScenarios.keySet()){
+        	Integer currentCountryArmyCount = gameData.gameMap.getCountry(country).getCountryArmyCount();
+        	if (currentCountryArmyCount > maxArmyCountEncountered) {
+        		strongestCountry = country;
+        		maxArmyCountEncountered = currentCountryArmyCount;
+        	}        
+        }
+        
+    	return strongestCountry;
+    }
+    
+    public String getSecondStrongestCountryConqueredByPlayer(HashMap<String, ArrayList<String>> potentialScenarios, String strongestCountry) {
+		
+    	String secondStrongestCountry = null;
+    	Integer maxArmyCountEncountered = 1;
+        
+        // find second strongest country conquered by the player based on value passed in as strongest 
+    	for(String country: potentialScenarios.get(strongestCountry)) {
+        	Integer currentCountryArmyCount = gameData.gameMap.getCountry(country).getCountryArmyCount();
+        	// only countries with 2 or more armies on the ground qualify as suppliers
+        	if (currentCountryArmyCount > maxArmyCountEncountered) {
+        		secondStrongestCountry = country;
+        		maxArmyCountEncountered = currentCountryArmyCount;
+        	}
+        }
+        
+    	return secondStrongestCountry;
+    }
+    
+    
     
 }
