@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * this class is a player strategy that is created startuphase.java and 
@@ -25,16 +24,17 @@ public class CheaterMode extends PlayerStrategy{
     }
     @Override
     public void executeReinforcement() {
-    	notifyView();
-    	ArrayList<Card> playerExchangeCards;
-        playerExchangeCards = getValidCards();
-        calculateTotalReinforcement(playerExchangeCards);
-        placeArmy(0);
-    }
+        notifyView();
 
-    @Override
-    public ArrayList<Card> getValidCards() {
-        return new ArrayList<Card>();
+        Integer getReinforcementCountFromCards = getReinforcementCountFromValidCardsAI();
+        Integer totalReinforcementArmyCount = getReinforcementCountFromCards + calculateReinforcementArmy();
+        ReinforcementPhaseState reinforcementPhase = new ReinforcementPhaseState();
+        reinforcementPhase.setNumberOfArmiesReceived(totalReinforcementArmyCount);
+
+        reinforcementPhaseState.add(reinforcementPhase);
+
+        notifyView();
+        placeArmy(0);
     }
 
     @Override
@@ -158,15 +158,10 @@ public class CheaterMode extends PlayerStrategy{
         }
 
         if (hasConnqueredAtleastOneCountry) {
-            Card card = gameData.cardsDeck.getCard();
-            
-            if(card == null) {
-            	System.out.println("No more cards left in the deck");
-            } else {
-            	 this.cardList.add(card);
-                 System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: " + card.getCountry().getCountryName());
-                 System.out.println("Total cards : " + this.cardList.size());
-            }
+             Card card = gameData.cardsDeck.getCard();
+             this.cardList.add(card);
+             System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: " + card.getCountry().getCountryName());
+             System.out.println("Total cards : " + this.cardList.size());
         }
 
         endAttack();

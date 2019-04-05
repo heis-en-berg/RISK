@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class HumanMode extends PlayerStrategy implements Serializable {
     private static Scanner input = new Scanner(System.in);
@@ -22,7 +21,6 @@ public class HumanMode extends PlayerStrategy implements Serializable {
      * @return array of valid cards.
      */
 
-    @Override
     public ArrayList<Card> getValidCards() {
             ArrayList<Card> playerCardList = getPlayerCardList();
             ArrayList<Card> playerExchangeCards = new ArrayList<>();
