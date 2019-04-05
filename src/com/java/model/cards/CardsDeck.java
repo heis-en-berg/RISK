@@ -32,6 +32,10 @@ public class CardsDeck implements Serializable {
         Collections.shuffle(deck);
     }
 
+    /**
+     * get a card from the deck
+     * @return Card
+     */
     public Card getCard(){
     	if(deck.isEmpty()) {
     		return null;
@@ -41,6 +45,10 @@ public class CardsDeck implements Serializable {
         return card;
     }
 
+    /**
+     * Return the card to the deck and shuffle the cardsdeck.
+     * @param returnCard put the card back to the deck
+     */
     public void setCard(Card returnCard){
         deck.add(returnCard);
         Collections.shuffle(deck);
