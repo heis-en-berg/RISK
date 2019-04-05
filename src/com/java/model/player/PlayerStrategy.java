@@ -562,19 +562,27 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	}
 
 	/**
-	 *
+	 *Helper method to build a comprehensive map of all the possible fortification
+	 *paths (for both immediate and extended neighbors)
 	 * @return Reversed the source and destination from getPotentialFortificationScenarios.
 	 */
-	HashMap<String,ArrayList<String>> reversedPotentialFortificationScenarios() {
+	HashMap<String,ArrayList<String>> getReversedPotentialFortificationScenarios() {
 		HashMap<String, ArrayList<String>> potentialFortificationScenarios = getPotentialFortificationScenarios();
 		HashMap<String, ArrayList<String>> reversedPotentialFortificationScenarios = new HashMap<>();
-		for (String key : potentialFortificationScenarios.keySet()) {
-			for (String country : potentialFortificationScenarios.get(key)) {
-				reversedPotentialFortificationScenarios.putIfAbsent(country, new ArrayList<>());
-				reversedPotentialFortificationScenarios.get(country).add(key);
+		if (potentialFortificationScenarios == null || getPotentialFortificationScenarios().isEmpty()) {
+			return new HashMap<>();
+		} else {
+			for (String key : potentialFortificationScenarios.keySet()) {
+				for (String country : potentialFortificationScenarios.get(key)) {
+					reversedPotentialFortificationScenarios.putIfAbsent(country, new ArrayList<>());
+					reversedPotentialFortificationScenarios.get(country).add(key);
+				}
 			}
+			if (reversedPotentialFortificationScenarios.isEmpty()) {
+				return new HashMap<>();
+			}
+			return reversedPotentialFortificationScenarios;
 		}
-		return reversedPotentialFortificationScenarios;
 	}
 
 	/**
