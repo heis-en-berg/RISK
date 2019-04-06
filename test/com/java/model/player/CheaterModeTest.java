@@ -14,11 +14,31 @@ import com.java.model.gamedata.GameData;
 import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 
+/**
+ * This class test the cheater strategy behavior.
+ * 
+ * reinforce - doubles the number of armies on all its countries.
+ * attack - conquers all the neighbors of all its countries.
+ * fortify - doubles the number of armies on its countries surrounded by other countries' players.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 3.0.0
+ * @author Cristian
+ *
+ */
 public class CheaterModeTest {
+	
         private static GameData gameData;
         private static Player playerOne,playerTwo;
         private static ArrayList<Player> players;
-
+        
+        /**
+         * Sets up the scenario for the tests. Creates a map, two players, a human and a cheater.
+         */
         @BeforeClass
         static public void setUp() {
             // Load the game with a dummy map and dummy data.
@@ -108,52 +128,58 @@ public class CheaterModeTest {
         	assertEquals(actualValues, expectedValues);
 
         }
-
-    @Test
-    public void executeAttack() {
-    	HashSet<String> initialOwnedCountries = gameData.gameMap.getConqueredCountriesPerPlayer(2);
-    	
-    	int initialOwnedCountriesNumber =  initialOwnedCountries.size();
-    	
-    	ArrayList<Country> countryList = new ArrayList<Country>();
-    	
-    	countryList.add(gameData.gameMap.getCountry("C1"));
-        countryList.add(gameData.gameMap.getCountry("C2"));
-        countryList.add(gameData.gameMap.getCountry("C3"));
-        countryList.add(gameData.gameMap.getCountry("C4"));
-        countryList.add(gameData.gameMap.getCountry("C5"));
-        countryList.add(gameData.gameMap.getCountry("C6"));
         
-    	gameData.cardsDeck = new CardsDeck(countryList);
+        /**
+         * Test cheater attack logic, conquers all the neighbors of all its countries.
+         */
+        @Test
+        public void executeAttack() {
+        	HashSet<String> initialOwnedCountries = gameData.gameMap.getConqueredCountriesPerPlayer(2);
+    	
+        	int initialOwnedCountriesNumber =  initialOwnedCountries.size();
+    	
+        	ArrayList<Country> countryList = new ArrayList<Country>();
+    	
+        	countryList.add(gameData.gameMap.getCountry("C1"));
+        	countryList.add(gameData.gameMap.getCountry("C2"));
+        	countryList.add(gameData.gameMap.getCountry("C3"));
+        	countryList.add(gameData.gameMap.getCountry("C4"));
+        	countryList.add(gameData.gameMap.getCountry("C5"));
+        	countryList.add(gameData.gameMap.getCountry("C6"));
         
-    	playerTwo.getStrategyType().executeAttack();
+        	gameData.cardsDeck = new CardsDeck(countryList);
+        
+        	playerTwo.getStrategyType().executeAttack();
     	
-    	int afterOwnedCountriesNumber =  initialOwnedCountries.size();
+        	int afterOwnedCountriesNumber =  initialOwnedCountries.size();
     	
-    	Integer expectedValue = initialOwnedCountriesNumber + 3;
-    	Integer actualValue = afterOwnedCountriesNumber;
+        	Integer expectedValue = initialOwnedCountriesNumber + 3;
+        	Integer actualValue = afterOwnedCountriesNumber;
     	
-    	assertEquals(actualValue, expectedValue);
-    }
-
-    @Test
-    public void executeFortification() {
+        	assertEquals(actualValue, expectedValue);
+        }
+        
+        /**
+         * Test cheater fortification logic, doubles the number of armies on its countries surrounded by other countries' players.
+         */
+        @Test
+        public void executeFortification() {
     	
-    	Country country0 = gameData.gameMap.getCountry("C5");
-    	Country country1 = gameData.gameMap.getCountry("C6");
+        	Country country0 = gameData.gameMap.getCountry("C5");
+        	Country country1 = gameData.gameMap.getCountry("C6");
     	
-    	Integer beforeFortify0 = country0.getCountryArmyCount();
-    	Integer beforeFortify1 = country1.getCountryArmyCount();
+        	Integer beforeFortify0 = country0.getCountryArmyCount();
+        	Integer beforeFortify1 = country1.getCountryArmyCount();
     	
-    	playerTwo.getStrategyType().executeFortification();
+        	playerTwo.getStrategyType().executeFortification();
     	
-    	Integer expectedValue0 = beforeFortify0 * 2;
-    	Integer actualValue0 = country0.getCountryArmyCount(); 
+        	Integer expectedValue0 = beforeFortify0 * 2;
+        	Integer actualValue0 = country0.getCountryArmyCount(); 
     	
-    	Integer expectedValue1 = beforeFortify1 * 2;
-    	Integer actualValue1 = country1.getCountryArmyCount(); 
+        	Integer expectedValue1 = beforeFortify1 * 2;
+        	Integer actualValue1 = country1.getCountryArmyCount(); 
     	
-    	assertEquals(actualValue0, expectedValue0);
-    	assertEquals(actualValue1, expectedValue1);
-    }
+        	assertEquals(actualValue0, expectedValue0);
+        	assertEquals(actualValue1, expectedValue1);
+        }
 }
