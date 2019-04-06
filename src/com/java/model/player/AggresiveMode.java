@@ -6,15 +6,39 @@ import java.util.HashSet;
 
 //import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
+/**
+ * This class is a player strategy that is created in startuphase.java and
+ * is a subclass of player strategy, all the methods are called from player(context class)
+ * the methods called are 
+ * 
+ * reinforce - place armies in the strongest country.
+ * attack - always attack all out mode.
+ * fortify - in order to maximize aggregation of forces in one country.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 3.0.0
+ */
 public class AggresiveMode extends PlayerStrategy {
-
+	
+	/**
+	 * Creates a new aggresive player.
+	 * 
+	 * @param playerID the player id.
+	 * @param playerName the player name.
+	 */
     public AggresiveMode(Integer playerID, String playerName) {
 
         super(playerID,playerName);
 
     }
 
-    // Reinforcement Phase Begins
+    /**
+     * Executes aggressive reinforcement, placing armies in the strongest country
+     */
     @Override
     public void executeReinforcement() {
         notifyView();
@@ -61,31 +85,17 @@ public class AggresiveMode extends PlayerStrategy {
         }
     }
 
+    /**
+     * Executes aggressive attack, always attack all out mode.
+     */
     @Override
     public void executeAttack() {
 
     }
-
-    @Override
-    public String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios) {
-        return null;
-    }
-
-    @Override
-    public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios) {
-        return null;
-    }
-
-    @Override
-    public Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
-        return null;
-    }
-
-    @Override
-    public Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
-        return null;
-    }
-
+    
+    /**
+     * Executes aggressive fortification, in order to maximize aggregation of forces in one country.
+     */
     @Override
     public void executeFortification() {
     	
@@ -165,6 +175,37 @@ public class AggresiveMode extends PlayerStrategy {
     	return secondStrongestCountry;
     }
     
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
+    @Override
+    public String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios) {
+        return null;
+    }
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
+    @Override
+    public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios) {
+        return null;
+    }
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
+    @Override
+    public Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
+        return null;
+    }
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
+    @Override
+    public Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
+        return null;
+    }
     
     
 }
