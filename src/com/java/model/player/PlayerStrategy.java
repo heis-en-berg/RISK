@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * This class models the player, it holds the id, the name, and the order to
+ * This class models the player strategy, it holds the id, the name, and the order to
  * play for the round robing.
  *
  * @author Arnav Bhardwaj
@@ -21,7 +21,7 @@ import java.util.HashSet;
  * @author Ghalia Elkerdi
  * @author Sahil Singh Sodhi
  * @author Cristian Rodriguez
- * @version 2.0.0
+ * @version 3.0.0
  */
 public abstract class PlayerStrategy extends Observable implements Serializable {
 
