@@ -1,6 +1,9 @@
 package com.java.model.player;
 
+import com.java.model.cards.Card;
+import com.java.model.cards.CardsDeck;
 import com.java.model.gamedata.GameData;
+import com.java.model.map.Country;
 import com.java.model.map.GameMap;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -94,6 +97,10 @@ public class BenevolentModeTest {
         assertEquals(expected_value, actual_value);
     }
 
+    /**
+     * Verify there is no attack in benevolent mode. The number of armies
+     * before and after calling the attack method should be the same.
+     */
     @Test
     public void testAttack(){
 
@@ -149,5 +156,32 @@ public class BenevolentModeTest {
         Collections.sort(expected_dest_for_C3);
         Collections.sort(actual_paths.get("C3"));
         assertEquals(actual_paths.get("C3"),expected_dest_for_C3);
+    }
+
+    /**
+     * Calculate reinforcement army for a player with three cards in hand.
+     * The trade is automatic.
+     */
+    @Test
+    public void testCalculateReinforcementArmyFromValidTradeCards() {
+
+        ArrayList<Country> countryList = new ArrayList<Country>();
+        countryList.add(gameData.gameMap.getCountry("C1"));
+        countryList.add(gameData.gameMap.getCountry("C2"));
+        countryList.add(gameData.gameMap.getCountry("C3"));
+
+        gameData.cardsDeck = new CardsDeck(countryList);
+
+        for (int cardCount = 0; cardCount < 3; cardCount++) {
+            Card card = gameData.cardsDeck.getCard();
+            playerOne.getStrategyType().addToPlayerCardList(card);
+        }
+        /*calculateTotalReinforcement internally verifies for the validity of the card exchange.*/
+        int actual_value = playerOne.getStrategyType().tradeCardsAI(playerOne.getStrategyType().getPlayerCardList());
+
+        /*expected value is 7 as 5 armies will be given for trading 3 cards of different types and
+        2 extra armies as the territory in the card is conquered by the same player. */
+        int expected_value = 7;
+        assertEquals(expected_value,actual_value);
     }
 }

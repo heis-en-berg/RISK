@@ -230,7 +230,7 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	}
 
 	// Automatically trade valid cards for benevolent bot.
-	private int tradeCardsAI(ArrayList<Card> playerCardList){
+	public int tradeCardsAI(ArrayList<Card> playerCardList){
 		HashMap<Enum,Integer> playerDeck = new HashMap<>();
 		Integer reinforcementAICount = 0;
 		Integer infantryCount = 0;
