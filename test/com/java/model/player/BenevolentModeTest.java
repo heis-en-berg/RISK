@@ -171,11 +171,16 @@ public class BenevolentModeTest {
         countryList.add(gameData.gameMap.getCountry("C3"));
 
         gameData.cardsDeck = new CardsDeck(countryList);
-
+        ArrayList<Card> cardList = playerOne.getStrategyType().getPlayerCardList();
+        for(Card card : cardList){
+            System.out.println(card.getArmyType());
+        }
+        System.out.println();
         for (int cardCount = 0; cardCount < 3; cardCount++) {
             Card card = gameData.cardsDeck.getCard();
             playerOne.getStrategyType().addToPlayerCardList(card);
         }
+        playerOne.getStrategyType().cardExchangeArmyCount = 5;
         /*calculateTotalReinforcement internally verifies for the validity of the card exchange.*/
         int actual_value = playerOne.getStrategyType().tradeCardsAI(playerOne.getStrategyType().getPlayerCardList());
 
