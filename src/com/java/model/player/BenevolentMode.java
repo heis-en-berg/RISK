@@ -5,21 +5,36 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * this class is a player strategy that is created in startuphase.java and
+ * This class is a player strategy that is created in startuphase.java and
  * is a subclass of player strategy, all the methods are called from player(context class)
  * the methods called are reinforce - place armies in the weakest country.
  * attack - never attacks any other player.
  * fortify- moves army to the weakest country from the strongest country possible in its path.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 3.0.0
  */
 public class BenevolentMode extends PlayerStrategy {
-
+	
+	/**
+	 * Creates a new cheater player.
+	 * 
+	 * @param playerID the player id.
+	 * @param playerName the player name.
+	 */
     public BenevolentMode(Integer playerID, String playerName) {
 
         super(playerID,playerName);
 
     }
 
-    // Reinforcement Phase Begins
+    /**
+     * Executes benevolent mode reinforcement, it places armies in the weakest country.
+     */
     @Override
     public void executeReinforcement() {
         notifyView();
@@ -38,6 +53,7 @@ public class BenevolentMode extends PlayerStrategy {
 
     /**
      * Method to place armies.
+     * 
      * @param reinforcementArmy the number of armies to be reinforced
      */
     @Override
@@ -78,7 +94,7 @@ public class BenevolentMode extends PlayerStrategy {
     }
 
     /**
-     * Method to execute attack
+     * Method to execute benevolent attack, never attacks any other player.
      */
     @Override
     public void executeAttack() {
@@ -94,7 +110,7 @@ public class BenevolentMode extends PlayerStrategy {
     }
 
     /**
-     * Method to execute fortification.
+     * Method to execute benevolent fortification, moves army to the weakest country from the strongest country possible in its path.
      */
     @Override
     public void executeFortification() {
@@ -190,22 +206,33 @@ public class BenevolentMode extends PlayerStrategy {
         fortificationPhaseState.clear();
     }
 
-
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
     @Override
     public String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios) {
         return null;
     }
-
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
     @Override
     public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios) {
         return null;
     }
-
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
     @Override
     public Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
         return null;
     }
-
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
     @Override
     public Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
         return null;
