@@ -4,12 +4,34 @@ import com.java.model.cards.Card;
 
 import java.util.*;
 
-
+/**
+ * This class is a player strategy that is created in startuphase.java and
+ * is a subclass of player strategy, all the methods are called from player(context class)
+ * the methods called are 
+ * 
+ * reinforce - a random country.
+ * attack - a random number of times a random country.
+ * fortify - a random country.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 3.0.0
+ */
 public class RandomMode extends PlayerStrategy {
 
-	private static Scanner input = new Scanner(System.in);;
+	private static Scanner input = new Scanner(System.in);
+	
 	Random random;
-
+	
+	/**
+	 * Creates a new random strategy player.
+	 * 
+	 * @param playerID the player id.
+	 * @param playerName the player name.
+	 */
 	public RandomMode(Integer playerID, String playerName) {
 		super(playerID, playerName);
 		random = new Random();
@@ -90,7 +112,10 @@ public class RandomMode extends PlayerStrategy {
 		reinforcementPhaseState.clear();
 		System.out.println("\n**** Reinforcement Phase Ends for player " + this.playerName + "..****\n");
 	}
-
+	
+	/**
+	 * Executes random attack mode, a random number of times a random country.
+	 */
 	@Override
 	public void executeAttack() {
 		System.out.println();
@@ -217,8 +242,7 @@ public class RandomMode extends PlayerStrategy {
 	 * @return destinationCountry: a validated target country based on the source.
 	 */
 	@Override
-	public String getEnemyCountryToAttack(String selectedSourceCountry,
-			HashMap<String, ArrayList<String>> attackScenarios) {
+	public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios) {
 		{
 
 			ArrayList<String> enemyCountries = attackScenarios.get(selectedSourceCountry);
@@ -300,7 +324,10 @@ public class RandomMode extends PlayerStrategy {
 
 		return selectedArmyCount;
 	}
-
+	
+	/**
+	 * Executes random strategy fortification, fortifies a random country.
+	 */
 	@Override
 	public void executeFortification() {
 
