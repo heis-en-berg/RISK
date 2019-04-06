@@ -9,18 +9,36 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 
+/**
+ * This class is a player strategy that is created startuphase.java and 
+ * is a subclass of player strategy, all the methods are called from player(context class).
+ * This strategy behaves as a human, it receives inputs from the user.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 3.0.0
+ */
 public class HumanMode extends PlayerStrategy implements Serializable {
     private static Scanner input = new Scanner(System.in);
-
+    
+    /**
+	 * Creates a new human player.
+	 * 
+	 * @param playerID the player id.
+	 * @param playerName the player name.
+	 */
     public HumanMode(Integer playerID, String playerName) {
         super(playerID,playerName);
     }
+    
     /**
      * Gets valid cards to trade.
      *
      * @return array of valid cards.
      */
-
     public ArrayList<Card> getValidCards() {
             ArrayList<Card> playerCardList = getPlayerCardList();
             ArrayList<Card> playerExchangeCards = new ArrayList<>();
@@ -117,7 +135,10 @@ public class HumanMode extends PlayerStrategy implements Serializable {
         notifyView();
         placeArmy(totalReinforcementArmyCount);
     }
-
+    
+    /**
+     * Executes human mode attack.
+     */
     @Override
     public void executeAttack() {
         System.out.println();
@@ -263,6 +284,7 @@ public class HumanMode extends PlayerStrategy implements Serializable {
 
         endAttack();
     }
+    
     /**
      * PlaceArmy method allows the player to position the armies in the player's
      * owned countries.
@@ -492,7 +514,10 @@ public class HumanMode extends PlayerStrategy implements Serializable {
 
             return Integer.parseInt(selectedArmyCount);
         }
-
+    
+    /**
+     * Executes human mode fortification.
+     */
     @Override
     public void executeFortification() {
 

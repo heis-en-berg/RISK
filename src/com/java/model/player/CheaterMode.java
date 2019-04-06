@@ -24,6 +24,12 @@ import com.java.model.map.Country;
  */
 public class CheaterMode extends PlayerStrategy{
 
+	/**
+	 * Creates a new cheater player.
+	 * 
+	 * @param playerID the player id.
+	 * @param playerName the player name.
+	 */
     public CheaterMode(Integer playerID, String playerName) {
         super(playerID,playerName);
     }
