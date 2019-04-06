@@ -16,11 +16,31 @@ import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * This class test the benevolent strategy behavior.
+ * 
+ * reinforce - its weaker country.
+ * attack - never attacks.
+ * fortify - weaker countries.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 3.0.0
+ *
+ */
 public class BenevolentModeTest {
+	
     private static GameData gameData;
     private static Player playerOne,playerTwo;
     private static ArrayList<Player> players;
-
+    
+    /**
+	 * Sets up the scenario for the tests. Creates a map, two players, a human and a
+	 * Benevolent.
+	 */
     @BeforeClass
     static public void setUp() {
         // Load the game with a dummy map and dummy data.
@@ -120,7 +140,10 @@ public class BenevolentModeTest {
         Assert.assertEquals(armyCountBeforeAttack, armyCountAfterAttack);
 
     }
-
+    
+    /**
+     * Test the fortification benevolent strategy.
+     */
     @Test
     public void testCalculateFortificationPaths() {
 
