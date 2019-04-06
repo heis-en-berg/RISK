@@ -1,27 +1,36 @@
 package com.java.model.player;
 
-import com.java.model.cards.Card;
-import com.java.model.map.Country;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.java.model.cards.Card;
+import com.java.model.map.Country;
+
 /**
- * this class is a player strategy that is created startuphase.java and 
+ * This class is a player strategy that is created startuphase.java and 
  * is a subclass of player strategy, all the methods are called from player(context class)
  * the methods called are reinforce - doubled the number of armies on all countries owned
  * fortify- doubles army for country that is surrounded by the enemies and attack will automatically own the country
- * the neighbours
+ * the neighbours.
+ * 
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez
+ * @version 3.0.0
  */
 public class CheaterMode extends PlayerStrategy{
 
     public CheaterMode(Integer playerID, String playerName) {
-
         super(playerID,playerName);
-
     }
+    
+    /**
+     * Executes reinforcement, cheater player will double its armies in every country.
+     */
     @Override
     public void executeReinforcement() {
         notifyView();
@@ -36,7 +45,10 @@ public class CheaterMode extends PlayerStrategy{
         notifyView();
         placeArmy(0);
     }
-
+    
+    /**
+     * Place the armies in every country owned by cheater, basically is adding the double to every country.
+     */
     @Override
     public void placeArmy(Integer reinforcementArmy) {
     	
@@ -91,7 +103,10 @@ public class CheaterMode extends PlayerStrategy{
         reinforcementPhaseState.clear();
         System.out.println("\n**** Reinforcement Phase Ends for player " + this.playerName + "..****\n");
     }
-
+    
+    /**
+     * Executes attack, cheater player will conquer every neighboring country whitout rolling any dice.
+     */
     @Override
     public void executeAttack() {
         System.out.println();
@@ -166,7 +181,10 @@ public class CheaterMode extends PlayerStrategy{
 
         endAttack();
     }
-
+    
+    /**
+     * Executes fortification, cheater will double its armies in every country which all neighbors belong to other player.
+     */
     @Override
     public void executeFortification() {
         System.out.println();
@@ -225,22 +243,33 @@ public class CheaterMode extends PlayerStrategy{
         fortificationPhaseState.clear();
     }
 
-
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
     @Override
     public String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios) {
         return null; // not needed since each country will be automatically be attacked from
     }
-
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
     @Override
     public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios) {
         return null; // Not needed
     }
-
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
     @Override
     public Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
         return null;
     }
-
+    
+    /**
+     * Since this is a bot strategy there is no imput from the user.
+     */
     @Override
     public Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
         return null;
