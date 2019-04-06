@@ -74,17 +74,20 @@ public class RiskGameDriver extends TournamentModeHelper{
 		else if(userChoice == 3){
 			GameData gameData_load = null;
 			String filename = "";
+			boolean isValidFileName = false;
 			File folder = new File("./SavedGames");
-			System.out.println("List of files saved:\n");
-			for(File filenames:folder.listFiles()){
-				System.out.println(filenames.getName());
-			}
-			System.out.println("\nEnter name of the file: ");
-			filename = input.nextLine().trim();
+
+			while(!isValidFileName) {
+				System.out.println("List of files saved:\n");
+				for(File filenames:folder.listFiles()){
+					System.out.println(filenames.getName());
+				}
+				System.out.println("\nEnter name of the file: ");
+				filename = input.nextLine().trim();
 
 				try {
 					// Reading the object from a file
-					FileInputStream inputFile = new FileInputStream("./SavedGames/"+filename);
+					FileInputStream inputFile = new FileInputStream("./SavedGames/" + filename);
 					ObjectInputStream in = new ObjectInputStream(inputFile);
 
 					// Method for deserialization of object
@@ -95,12 +98,16 @@ public class RiskGameDriver extends TournamentModeHelper{
 
 					System.out.println("Map has been loaded successfully. Game is resumed.");
 				} catch (IOException ex) {
-					System.out.println("IOException is caught. " + ex.getMessage());
+					System.out.println("\n"+ex.getMessage() + ". Please verify the filename from the list\n");
+					continue;
 				} catch (ClassNotFoundException ex) {
-					System.out.println("ClassNotFoundException is caught"+ex.getMessage());
+					System.out.println("ClassNotFoundException is caught" + ex.getMessage());
+					continue;
 				}
+				isValidFileName = true;
 				this.gameData = gameData_load;
 				startTurn();
+			}
 		}
 		else {
 			gameData.gameMap = maploader.loadMap();
@@ -421,6 +428,7 @@ public class RiskGameDriver extends TournamentModeHelper{
 			}
 
 			if(!IS_TOURNAMENT_MODE) {
+				choiceToSave = "";
 				while ((!(choiceToSave.equals("y") || choiceToSave.equals("n")))) {
 
 					System.out.println("Would you like to save the game (y/n)?");

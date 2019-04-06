@@ -172,9 +172,6 @@ public class BenevolentModeTest {
 
         gameData.cardsDeck = new CardsDeck(countryList);
         ArrayList<Card> cardList = playerOne.getStrategyType().getPlayerCardList();
-        for(Card card : cardList){
-            System.out.println(card.getArmyType());
-        }
         System.out.println();
         for (int cardCount = 0; cardCount < 3; cardCount++) {
             Card card = gameData.cardsDeck.getCard();
