@@ -14,7 +14,7 @@ import java.util.HashSet;
 
 /**
  * This class models the player, it holds the id, the name, and the order to
- * play for the round robin.
+ * play for the round robing.
  *
  * @author Arnav Bhardwaj
  * @author Karan Dhingra
@@ -64,7 +64,7 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	}
 
 	/**
-	 * get player's win status
+	 * Get player's win status
 	 *
 	 * @return true if player is a winner else false
 	 */
@@ -212,7 +212,7 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 		return extraTerritoryMatchArmy;
 	}
 
-	/***
+	/**
 	 * Helper method to check if it is valid card exchange.
 	 *
 	 * @param playerExchangeCards cards to exchange.
@@ -229,7 +229,12 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 		return (condition_same || condition_different);
 	}
 
-	// Automatically trade valid cards for benevolent bot.
+	/**
+	 * Helper method to trade cards automatically.
+	 *
+	 * @param playerCardList list of cards to trade.
+	 * @return the number of traded armies.
+	 */
 	public int tradeCardsAI(ArrayList<Card> playerCardList){
 		HashMap<Enum,Integer> playerDeck = new HashMap<>();
 		Integer reinforcementAICount = 0;
@@ -351,7 +356,7 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	}
 
 	/**
-	 * rollDiceBattle resorts to the core rollDice method in Dice but contains
+	 * RollDiceBattle resorts to the core rollDice method in Dice but contains
 	 * additional logic to set attackPhase logic
 	 *
 	 * @param attackPhase has all the dice count info for attacker and defender
@@ -886,16 +891,55 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	 * number of armies.
 	 */
 	public abstract void executeReinforcement();
-
+	
+	/**
+	 * This method depends on each strategy, in this case how the player is going to put
+	 * the army after the calculation of the armies during reinforcement.
+	 * 
+	 * @param reinforcementArmy
+	 */
 	public abstract void placeArmy(Integer reinforcementArmy);
+	
+	/**
+	 * Method to begin attack.
+	 */
 	public abstract void executeAttack();
-
+	
+	/**
+	 * Depends on the strategy of each player, wheter the input comes from the human or bot.
+	 * 
+	 * @param attackScenarios array of possible attack countries to attack from.
+	 * @return the country choosed by the player whether is a human or bot.
+	 */
 	public abstract String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios);
-
-	public abstract String getEnemyCountryToAttack(String selectedSourceCountry,
-												   HashMap<String, ArrayList<String>> attackScenarios);
+	
+	/**
+	 * Depends on the strategy of each player, it receives the selected country to attack from and
+	 * the method accepts a valid country to attack to.
+	 * 
+	 * @param selectedSourceCountry country to attack from.
+	 * @param attackScenarios every attack scenario.
+	 * 
+	 * @return the selected country to attack to, whether a human or bot.
+	 */
+	public abstract String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios);
+	
+	/**
+	 * Gets the number of allowed number of dice base on the action ("attack" or "defend")
+	 * 
+	 * @param player who is going to roll the dice.
+	 * @param country the country where the player is attacking or defending.
+	 * @param action ("attack" or "defend")
+	 * @return the number of dices to roll.
+	 */
 	public abstract Integer getDesiredDiceCountFromPlayer(String player, String country, String action);
-
+	
+	/**
+	 * After conquering a country the player can decide how many armies are going to be moved to the conquered country.
+	 * 
+	 * @param selectedSourceCountry selected country.
+	 * @return the number of armies to be moved.
+	 */
 	public abstract Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry);
 
 	/**
