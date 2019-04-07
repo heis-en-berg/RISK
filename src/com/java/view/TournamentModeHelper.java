@@ -9,6 +9,19 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
+
+/**
+ * TournamentModeHelper class is used as a helper for RiskGameDriver.
+ * It prompts the user to get the essential details required to organize the tournament.
+ * 
+ *
+ * @author Arnav Bhardwaj
+ * @author Karan Dhingra
+ * @author Ghalia Elkerdi
+ * @author Sahil Singh Sodhi
+ * @author Cristian Rodriguez 
+ * @version 1.0.0
+ */
 public class TournamentModeHelper {
 
 	static Scanner scanner;
@@ -59,6 +72,10 @@ public class TournamentModeHelper {
 		getPlayersFromUser();
 	}
 
+	/**
+	 * This method asks
+     * for the number of the players and the names of players.
+	 */
 	
 	private void getPlayersFromUser() {
 
@@ -101,6 +118,9 @@ public class TournamentModeHelper {
 		}
 	}
 
+	/**
+	 * Load the number of maps specified by the user
+	 */
 	private void loadGameMaps() {
 		
 		for(Integer key : tournamentModeGameData.keySet()) {
@@ -117,6 +137,7 @@ public class TournamentModeHelper {
 		
 	}
 
+	
 	private void setAndGetMaxNumberOfTurnsForEachGame() {
 		String usersInput = "";
 
@@ -185,9 +206,13 @@ public class TournamentModeHelper {
 		
 	}
 	
+	/**
+	 * Prints tournaments outcome
+	 */
+	
 	protected void printTournamentModeResults() {
 		
-		System.out.println("\nResults of Tournament: ");
+		System.out.println("\nTournament Results: ");
 		
 		for (Integer key : this.tournamentModeGameData.keySet()) {
 			System.out.println("\nMap " + key);

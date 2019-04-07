@@ -24,7 +24,9 @@ public class RandomMode extends PlayerStrategy {
 
 	private static Scanner input = new Scanner(System.in);
 	
-	Random random;
+	public Random random;
+	
+	public static Integer seed = 0;
 	
 	/**
 	 * Creates a new random strategy player.
@@ -32,9 +34,10 @@ public class RandomMode extends PlayerStrategy {
 	 * @param playerID the player id.
 	 * @param playerName the player name.
 	 */
-	public RandomMode(Integer playerID, String playerName) {
+	public RandomMode(Integer playerID, String playerName, Integer seed) {
 		super(playerID, playerName);
-		random = new Random();
+		this.seed = seed;
+		random = new Random(seed);
 	}
 
 	/**
@@ -382,7 +385,12 @@ public class RandomMode extends PlayerStrategy {
 		notifyView();
 
 		Integer possibleNumOfArmyRange = armiesPerPotentialFortificationSourceCountry.get(randomSourceCountry) - 1;
-		Integer randomNumberOfArmiesToMove = random.nextInt(possibleNumOfArmyRange + 1);
+		Integer randomNumberOfArmiesToMove = 0;
+		
+		while(randomNumberOfArmiesToMove == 0) {
+			randomNumberOfArmiesToMove = random.nextInt(possibleNumOfArmyRange + 1);
+		}
+		
 		fortificationPhase.setNumberOfArmiesMoved(randomNumberOfArmiesToMove);
 		notifyView();
 

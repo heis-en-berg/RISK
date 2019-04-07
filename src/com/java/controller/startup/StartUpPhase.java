@@ -70,7 +70,7 @@ public class StartUpPhase implements Serializable {
                     strategy = new BenevolentMode(playerId,playerNames.get(i));
                     break;
                 case 3:
-                    strategy = new RandomMode(playerId,playerNames.get(i));
+                    strategy = new RandomMode(playerId,playerNames.get(i), 42);
                     break;
                 case 4:
                     strategy = new CheaterMode(playerId,playerNames.get(i));

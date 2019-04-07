@@ -3,6 +3,7 @@ import com.java.controller.map.MapTestSuite;
 import com.java.controller.startup.StartUpPhaseTestSuite;
 import com.java.model.map.GameMapTestSuite;
 import com.java.model.player.PlayerTestSuite;
+import com.java.model.player.RandomModeTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -10,7 +11,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 
-@SuiteClasses({GameplayTestSuite.class, MapTestSuite.class, StartUpPhaseTestSuite.class, GameMapTestSuite.class, PlayerTestSuite.class})
+@SuiteClasses({ GameplayTestSuite.class, MapTestSuite.class, StartUpPhaseTestSuite.class, GameMapTestSuite.class,
+		PlayerTestSuite.class, RandomModeTest.class })
 
 /**
  * This class is the suit to run the test cases of every test class.
@@ -19,8 +21,8 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Karan Dhingra
  * @author Ghalia Elkerdi
  * @author Sahil Singh Sodhi
- * @author Cristian Rodriguez 
+ * @author Cristian Rodriguez
  * @version 2.0.0
- * */
+ */
 public class Junit4TestSuite {
 }

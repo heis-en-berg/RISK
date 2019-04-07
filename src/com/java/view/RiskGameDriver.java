@@ -66,9 +66,10 @@ public class RiskGameDriver extends TournamentModeHelper{
 					ramdomAssignationOfCountries();
 					initialArmyPlacement();
 					startTurn();
-					printTournamentModeResults();
 				}
 			}
+			
+			printTournamentModeResults();
 			
 		}
 		else if(userChoice == 3){
