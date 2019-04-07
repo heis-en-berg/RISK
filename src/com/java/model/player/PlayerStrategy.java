@@ -555,11 +555,6 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 					selectedAttackerDiceCount = 1;
 				}
 				
-				
-				System.out.println("\n Must update country conquerer for " + selectedDestinationCountry + "to " + (this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID()));
-
-				System.out.println("\n Must deduct " + selectedAttackerDiceCount + " from source" + selectedSourceCountry); 
-				
 				this.gameData.gameMap.updateCountryConquerer(selectedDestinationCountry,
 						this.gameData.gameMap.getCountry(selectedDestinationCountry).getCountryConquerorID(),
 						this.playerID);
