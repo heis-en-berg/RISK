@@ -1,8 +1,12 @@
 package com.java.model.player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+
+import com.java.model.cards.Card;
 
 //import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
@@ -25,7 +29,7 @@ import java.util.HashSet;
 public class AggresiveMode extends PlayerStrategy {
 	
 	/**
-	 * Creates a new aggresive player.
+	 * Creates a new aggressive player.
 	 * 
 	 * @param playerID the player id.
 	 * @param playerName the player name.
@@ -86,12 +90,122 @@ public class AggresiveMode extends PlayerStrategy {
     }
 
     /**
-     * Executes aggressive attack, always attack all out mode.
+     * Executes aggressive attack, always attack with strongest country in all out mode.
+     * 
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void executeAttack() {
+    	
+    	System.out.println();
+        System.out.println("**** Attack Phase Begins for player " + this.playerName + "..****\n");
+        
+        boolean hasConnqueredAtleastOneCountry = false;
+        
+	    System.out.println("\n" + "Fetching potential attack scenarios for " + this.playerName + "...\n");
+	        
+	    // get all scenarios but we're only interested in attacking with the strongest country & in all-out mode
+	    HashMap<String, ArrayList<String>> potentialAttackScenarios = getPotentialAttackScenarios();
+	        
+	    if (potentialAttackScenarios == null) {
+	        System.out.println(
+	                "There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
+	        System.out.println("\n****Attack Phase Ends for player " + this.playerName + "..****\n");
+	        return;
+	     }
+	
+	    if (potentialAttackScenarios.isEmpty()) {
+	        System.out.println(
+	                "There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
+	        System.out.println("\n****Attack Phase Ends for player " + this.playerName + "..****\n");
+	        return;
+	    }
+	        
+	   	        
+	    String enemyCountryToAttack = null;
+	    String strongestCountry = getStrongestCountryConqueredByPlayer(potentialAttackScenarios);
+	    if(strongestCountry == null) {
+	    	System.out.println(
+	                   "There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
+	        System.out.println("\n****Attack Phase Ends for player " + this.playerName + "..****\n");
+	        return;
+	    }
+	          
+	    
+        // implement a mini-strategy within this aggressive strategy to target the weakest enemy country first
+	    // build map of all enemy countries and their respective army counts
+	    ArrayList<String> allAdjacentEnemyCountries = potentialAttackScenarios.get(strongestCountry); 
+	    HashMap<String,Integer> allAdjacentEnemyCountriesAndArmyCounts = new HashMap<String,Integer>();
+	    
+	    for(String enemyCountry: allAdjacentEnemyCountries) {
+        	Integer currentEnemyCountryArmyCount = gameData.gameMap.getCountry(enemyCountry).getCountryArmyCount();
+        	allAdjacentEnemyCountriesAndArmyCounts.putIfAbsent(enemyCountry, currentEnemyCountryArmyCount);
+	    }
+	    
+	    // sort in ascending order based on lowest army count -> highest
+	    Object[] sortedAdjacentEnemyCountriesAndArmyCounts = allAdjacentEnemyCountriesAndArmyCounts.entrySet().toArray();
+	    Arrays.sort(sortedAdjacentEnemyCountriesAndArmyCounts, (o1, o2) -> ((Map.Entry<String, Integer>) o1).getValue()
+		           .compareTo(((Map.Entry<String, Integer>) o2).getValue()));
+	        
 
+	    // attack each surrounding enemy country while you can
+	    for (Object e : sortedAdjacentEnemyCountriesAndArmyCounts) {
+
+	    	// setup phase state
+	    	AttackPhaseState attackPhase = new AttackPhaseState();
+	 	    attackPhase.setAttackingPlayer(this.playerName);
+	 	    attackPhaseState.add(attackPhase);
+	 	    notifyView();
+	 	    // attacking country will be the same for a given turn
+	 	    attackPhase.setAttackingCountry(strongestCountry);
+	        notifyView();
+	    	
+	    	enemyCountryToAttack = ((Map.Entry<String, Integer>) e).getKey(); 
+	    	attackPhase.setDefendingCountry(enemyCountryToAttack);
+	    	notifyView();
+	
+	    	String defendingPlayer = gameData
+	            .getPlayer(this.gameData.gameMap.getCountry(enemyCountryToAttack).getCountryConquerorID())
+	            .getStrategyType().getPlayerName();
+	    	attackPhase.setDefendingPlayer(defendingPlayer);
+	    	notifyView();
+	        
+	    	// fight in all out mode until you win or run out of armies on the ground
+		    while (!attackPhase.getBattleOutcomeFlag() && this.gameData.gameMap.getCountry(strongestCountry).getCountryArmyCount() > 1) {
+	            // proceed with max allowed dice count for both sides
+	            Integer attackerDiceCount = getActualMaxAllowedDiceCountForAction("attack", strongestCountry, 3);
+		        attackPhase.setAttackerDiceCount(attackerDiceCount);
+		        Integer defenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",enemyCountryToAttack, 2);
+		        attackPhase.setDefenderDiceCount(defenderDiceCount);
+		        rollDiceBattle(attackPhase);
+	            hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry;
+	        }
+		    
+            checkIfPlayerHasConqueredTheWorld();
+	    
+	    }
+		
+	    if (hasConnqueredAtleastOneCountry) {
+		   	Card card = gameData.cardsDeck.getCard();
+	            
+		    if(card == null) {
+		      	System.out.println("No more cards left in the deck");
+		    } else {
+		   		this.cardList.add(card);
+		   		System.out.println("PlayerStrategy received 1 card => Army Type: " + card.getArmyType() + ", Country: " + card.getCountry().getCountryName());
+		   		System.out.println("Total cards : " + this.cardList.size());
+		   	}
+		}   
+	    
+	    HashSet<String> conqueredCountryByThisPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
+        System.out.println("\nOverview of army counts: \n");
+        for(String country: conqueredCountryByThisPlayer){
+            System.out.println("Country: "+country+", Army Count: "+gameData.gameMap.getCountry(country).getCountryArmyCount());
+        }
+	        
+	    endAttack();
     }
+    
     
     /**
      * Executes aggressive fortification, in order to maximize aggregation of forces in one country.
@@ -103,7 +217,6 @@ public class AggresiveMode extends PlayerStrategy {
         System.out.println("**** Fortification Phase Begins for player " + this.playerName + "..****\n");
 
         System.out.println("\n" + "Fetching potential fortification scenarios for " + this.playerName + "...\n");
-
         HashMap<String, ArrayList<String>> potentialFortificationScenarios = getPotentialFortificationScenarios();
         
         if (potentialFortificationScenarios == null) {
@@ -123,14 +236,33 @@ public class AggresiveMode extends PlayerStrategy {
             return;
         }
         
-        String strongestCountry = getStrongestCountryConqueredByPlayer(potentialFortificationScenarios);
-        String secondStrongestCountry = getSecondStrongestCountryConqueredByPlayer(potentialFortificationScenarios,strongestCountry);
-
+        HashMap<String, ArrayList<String>> topPotentialFortificationScenarios = new HashMap<String, ArrayList<String>>();
+        
+		for (String keySourceCountry : potentialFortificationScenarios.keySet()) {        
+			for (String correspondingDestinationCountry : potentialFortificationScenarios.get(keySourceCountry)) {
+				if(potentialFortificationScenarios.containsKey(correspondingDestinationCountry)) {
+					topPotentialFortificationScenarios.putIfAbsent(keySourceCountry, new ArrayList<String>());
+					topPotentialFortificationScenarios.get(keySourceCountry).add(correspondingDestinationCountry);
+				}
+			}
+		}
+		
+        if (topPotentialFortificationScenarios.isEmpty() || topPotentialFortificationScenarios.size() == 1) {
+            System.out.println(
+                    "There are currently no 'aggressive' fortification opportunities for " + this.playerName + ".. Sorry!\n");
+            System.out.println("\n****Fortification Phase Ends for player " + this.playerName + "..****\n");
+            return;
+        }
+		
+		String strongestCountry = getStrongestCountryConqueredByPlayer(topPotentialFortificationScenarios);
+        String secondStrongestCountry = getSecondStrongestCountryConqueredByPlayer(topPotentialFortificationScenarios,strongestCountry);
 
         Integer maxNoOfArmiesToMove = gameData.gameMap.getCountry(secondStrongestCountry).getCountryArmyCount() - 1;
 
+        // move armies based on determined source - destination countries per startegy logic
         gameData.gameMap.getCountry(secondStrongestCountry).deductArmy(maxNoOfArmiesToMove);
         gameData.gameMap.getCountry(strongestCountry).addArmy(maxNoOfArmiesToMove);
+        
         HashSet<String> conqueredCountryByThisPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
         System.out.println("Moved "+maxNoOfArmiesToMove+" armies from "+secondStrongestCountry+" to "+strongestCountry);
         System.out.println("\nAn overview after Fortification.\n");
@@ -139,6 +271,14 @@ public class AggresiveMode extends PlayerStrategy {
         }
 
     }
+        
+    /**	
+     * This helper method is utilized by all phases to return,
+     * at any given point in time, the strongest country 
+     * currently conquered by the player
+     * @param potentialScenarios
+     * @return strongestCountry
+     */
     
     public String getStrongestCountryConqueredByPlayer(HashMap<String, ArrayList<String>> potentialScenarios) {
 		
@@ -156,6 +296,16 @@ public class AggresiveMode extends PlayerStrategy {
         
     	return strongestCountry;
     }
+    
+
+    /**	
+     * This helper method is utilized by fortification to return,
+     * given the strongest country to be fortified, 
+     * the second strongest country which should serve as a supplier
+     * @param  potentialScenarios
+     * @param  strongestCountry
+     * @return secondStrongestCountry
+     */
     
     public String getSecondStrongestCountryConqueredByPlayer(HashMap<String, ArrayList<String>> potentialScenarios, String strongestCountry) {
 		
@@ -176,7 +326,7 @@ public class AggresiveMode extends PlayerStrategy {
     }
     
     /**
-     * Since this is a bot strategy there is no imput from the user.
+     * Since this is a bot strategy there is no input from the user.
      */
     @Override
     public String getCountryToAttackFrom(HashMap<String, ArrayList<String>> attackScenarios) {
@@ -184,7 +334,7 @@ public class AggresiveMode extends PlayerStrategy {
     }
     
     /**
-     * Since this is a bot strategy there is no imput from the user.
+     * Since this is a bot strategy there is no input from the user.
      */
     @Override
     public String getEnemyCountryToAttack(String selectedSourceCountry, HashMap<String, ArrayList<String>> attackScenarios) {
@@ -192,7 +342,7 @@ public class AggresiveMode extends PlayerStrategy {
     }
     
     /**
-     * Since this is a bot strategy there is no imput from the user.
+     * Since this is a bot strategy there is no input from the user.
      */
     @Override
     public Integer getDesiredDiceCountFromPlayer(String player, String country, String action) {
@@ -200,7 +350,7 @@ public class AggresiveMode extends PlayerStrategy {
     }
     
     /**
-     * Since this is a bot strategy there is no imput from the user.
+     * Since this is a bot strategy there is no input from the user.
      */
     @Override
     public Integer getNumberofArmiesAttackerWantsToMove(String selectedSourceCountry) {
