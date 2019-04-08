@@ -90,21 +90,19 @@ public class MapLoader implements Serializable {
 	 * @return choice of the user and apply logic based on their input.
 	 */
 	private Integer getChoiceToContinueOrEditMap() {
-		Integer choice = null;
+		String choice = null;
 		do {
 			System.out.println();
 			System.out.println("\nDo you want to edit the map or continue with the game?");
 			System.out.println("1. Edit map");
 			System.out.println("2. Continue");
 			System.out.println();
+			
 			System.out.print("\nEnter choice: ");
-			choice = scanner.nextInt();
-			if (!(choice == 1 || choice == 2)) {
-				System.out.println("Invalid Input");
-			}
-		} while (!(choice == 1 || choice == 2));
+			choice = scanner.nextLine();
+		} while (isNaN(choice) || !(Integer.parseInt(choice) >= 1 && Integer.parseInt(choice) <= 2));
 
-		return choice;
+		return Integer.parseInt(choice);
 	}
 
 	/**
