@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 
 @SuiteClasses({ GameplayTestSuite.class, MapTestSuite.class, StartUpPhaseTestSuite.class, GameMapTestSuite.class,
-		PlayerTestSuite.class, RandomModeTest.class })
+		PlayerTestSuite.class})
 
 /**
  * This class is the suit to run the test cases of every test class.

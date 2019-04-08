@@ -76,7 +76,6 @@ public class TournamentModeHelper {
 	 * This method asks
      * for the number of the players and the names of players.
 	 */
-	
 	private void getPlayersFromUser() {
 
 		// Array list to store the name of the players provided by the user.
@@ -137,7 +136,10 @@ public class TournamentModeHelper {
 		
 	}
 
-	
+	/**
+	 * Obtains the input regarding number of turns to be played by each player
+	 * the number is regarding max value
+	 */
 	private void setAndGetMaxNumberOfTurnsForEachGame() {
 		String usersInput = "";
 
@@ -155,7 +157,10 @@ public class TournamentModeHelper {
 		TournamentModeHelper.TM_NUMBER_OF_TURNS = Integer.parseInt(usersInput);
 
 	}
-
+	/**
+	 * Obtains the input regarding the number of games to be played by the player
+	 * and sets the static value
+	 */
 	private void setAndGetNumberOfGamesToBePlayedOnEachMap() {
 		String usersInput = "";
 
@@ -173,6 +178,9 @@ public class TournamentModeHelper {
 		TournamentModeHelper.TM_NUMBER_OF_GAMES_ON_EACH_MAP = Integer.parseInt(usersInput);
 	}
 
+	/**
+	 * Obtain the total number of players to play in this mode
+	 */
 	private void setAndGetNumberOfPlayers() {
 		String usersInput = "";
 
@@ -189,6 +197,9 @@ public class TournamentModeHelper {
 		TournamentModeHelper.TM_NUMBER_OF_PLAYERS = Integer.parseInt(usersInput);
 	}
 
+	/**
+	 * Obtain the total number of maps to play with in this mode
+	 */
 	private void setAndGetNumberOfMapsToBeUsed() {
 		String usersInput = "";
 

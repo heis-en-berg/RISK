@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 
-@Suite.SuiteClasses({BenevolentModeTest.class, CheaterModeTest.class, AggressiveModeTest.class})
+@Suite.SuiteClasses({BenevolentModeTest.class, CheaterModeTest.class, AggressiveModeTest.class,RandomModeTest.class})
 
 /**
  * This class is the suit to run the test cases of every test class.
