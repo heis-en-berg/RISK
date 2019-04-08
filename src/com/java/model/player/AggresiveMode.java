@@ -229,6 +229,13 @@ public class AggresiveMode extends PlayerStrategy {
 	    endAttack();
     }
     
+    /** 
+     * Helper method to assist aggressive attack logic with shifting power according 
+     * to neighboring threats (and attack potentials)
+     * 
+     * @param countriesConquered
+     * @return weakestCountry
+     */
     
     private String getCountryWithMostNumberOfBordersShared(HashSet<String> countriesConquered) {
 		String weakestCountry = "";
