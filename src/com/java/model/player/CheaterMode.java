@@ -120,63 +120,60 @@ public class CheaterMode extends PlayerStrategy{
 
         Boolean hasConnqueredAtleastOneCountry = true;
 
-        while (gameOn) {
+		AttackPhaseState attackPhaseState = new AttackPhaseState();
+		attackPhaseState.setAttackingPlayer(this.playerName);
+		this.attackPhaseState.add(attackPhaseState);
+		notifyView();
 
-            AttackPhaseState attackPhaseState = new AttackPhaseState();
-            attackPhaseState.setAttackingPlayer(this.playerName);
-            this.attackPhaseState.add(attackPhaseState);
-            notifyView();
+		// Now fetch all attack possibilities for player
+		System.out.println("\n" + "Fetching potential attack scenarios for " + this.playerName + "...\n");
 
+		// K = my source country , V = list of other countries that i dont own ( as
+		// nebiours)
+		HashMap<String, ArrayList<String>> attackScenarios = getPotentialAttackScenarios();
 
-            // Now fetch all attack possibilities for player
-            System.out.println("\n" + "Fetching potential attack scenarios for " + this.playerName + "...\n");
+		if (attackScenarios.isEmpty()) {
+			System.out.println("There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
+		}
 
-            // K = my source country , V = list of other countries that i dont own ( as nebiours)
-            HashMap<String, ArrayList<String>> attackScenarios = getPotentialAttackScenarios();
+		// show PlayerStrategy all the options they have
+		showAllAttackScenarios(attackScenarios);
+		System.out.println("\nCheater is getting all countries");
+		// TODO Now chose the country to attack from and in a loop conqure all the
+		// nebiours
+		for (Map.Entry<String, ArrayList<String>> currCountry : attackScenarios.entrySet()) {
 
-            if (attackScenarios.isEmpty()) {
-                System.out
-                        .println("There are currently no attack opportunities for " + this.playerName + ".. Sorry!\n");
-                break;
-            }
+			// get the arraylist here for that player at "i"
+			ArrayList<String> attackingCountries = currCountry.getValue();
 
-            // show PlayerStrategy all the options they have
-            showAllAttackScenarios(attackScenarios);
-            System.out.println("\nCheater is getting all countries");
-            // TODO Now chose the country to attack from and in a loop conqure all the nebiours
-            for(Map.Entry<String,ArrayList<String>> currCountry : attackScenarios.entrySet()){
+			// now iterate over each of the attacking countries
+			for (String eachattackingCountry : attackingCountries) {
 
-                // get the arraylist here for that player at "i"
-                ArrayList<String> attackingCountries = currCountry.getValue();
+				// get the country object
+				Country countryObject = gameData.gameMap.getCountry(eachattackingCountry);
 
-                // now iterate over each of the attacking countries
-                for(String eachattackingCountry : attackingCountries){
+				String defendingPlayerName = gameData.getPlayer(countryObject.getCountryConquerorID()).getStrategyType()
+						.getPlayerName();
 
-                    // get the country object
-                    Country countryObject = gameData.gameMap.getCountry(eachattackingCountry);
+				attackPhaseState.setDefendingPlayer(defendingPlayerName);
+				this.notifyView();
 
-                    String defendingPlayerName = gameData
-                            .getPlayer(countryObject.getCountryConquerorID()).getStrategyType().getPlayerName();
+				attackPhaseState.setAttackingCountry(countryObject.getCountryName());
+				this.notifyView();
 
-                    attackPhaseState.setDefendingPlayer(defendingPlayerName);
-                    this.notifyView();
+				// change the country conqurer to the current player's lit of countries owned
+				Integer oldConquererPlayerId = countryObject.getCountryConquerorID();
+				Integer newConquererPlayerId = this.playerID;
 
-                    attackPhaseState.setAttackingCountry(countryObject.getCountryName());
-                    this.notifyView();
+				this.gameData.gameMap.updateCountryConquerer(eachattackingCountry, oldConquererPlayerId,
+						newConquererPlayerId);
+				this.gameData.gameMap.calculateNumberOfArmiesPerPlayer();
+				System.out.println("\nCheater " + getPlayerName() + " is conquering " + eachattackingCountry + "  from "
+						+ defendingPlayerName);
+			}
+		}
 
-                    // change the country conqurer to the current player's lit of countries owned
-                    Integer oldConquererPlayerId = countryObject.getCountryConquerorID();
-                    Integer newConquererPlayerId = this.playerID;
-                    
-                    this.gameData.gameMap.updateCountryConquerer(eachattackingCountry, oldConquererPlayerId, newConquererPlayerId);
-                    this.gameData.gameMap.calculateNumberOfArmiesPerPlayer();
-                    System.out.println("\nCheater " + getPlayerName() + " is conquering " + eachattackingCountry + "  from " + defendingPlayerName);
-                }
-            }
-
-            checkIfPlayerHasConqueredTheWorld();
-
-        }
+		checkIfPlayerHasConqueredTheWorld();
 
         if (hasConnqueredAtleastOneCountry) {
              Card card = gameData.cardsDeck.getCard();
