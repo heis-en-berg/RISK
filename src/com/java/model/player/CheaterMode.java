@@ -164,12 +164,12 @@ public class CheaterMode extends PlayerStrategy{
 				// change the country conqurer to the current player's lit of countries owned
 				Integer oldConquererPlayerId = countryObject.getCountryConquerorID();
 				Integer newConquererPlayerId = this.playerID;
-
-				this.gameData.gameMap.updateCountryConquerer(eachattackingCountry, oldConquererPlayerId,
-						newConquererPlayerId);
-				this.gameData.gameMap.calculateNumberOfArmiesPerPlayer();
-				System.out.println("\nCheater " + getPlayerName() + " is conquering " + eachattackingCountry + "  from "
-						+ defendingPlayerName);
+				
+				if(oldConquererPlayerId != newConquererPlayerId) {
+					this.gameData.gameMap.updateCountryConquerer(eachattackingCountry, oldConquererPlayerId,newConquererPlayerId);
+					this.gameData.gameMap.calculateNumberOfArmiesPerPlayer();
+					System.out.println("\nCheater " + getPlayerName() + " is conquering " + eachattackingCountry + "  from " + defendingPlayerName);
+				}
 			}
 		}
 

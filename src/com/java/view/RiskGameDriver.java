@@ -208,14 +208,14 @@ public class RiskGameDriver extends TournamentModeHelper{
 			String playerStrategyInput = "";
 
 			while(playerNameInput == null || playerNameInput.length() == 0) {
-				System.out.println("\nPlayerStrategy " + (i + 1));
+				System.out.println("\nPlayer " + (i + 1));
 				System.out.println("Enter your name: ");
 				playerNameInput = input.nextLine().trim();
 			}
 			//first check if it is a number then check if it is inside the range of 1 to 5
 			do {
 				do {
-					System.out.println("\nChoose your PlayerStrategy Strategy (BASED ON NUMBER): ");
+					System.out.println("\nChoose your Player Strategy (BASED ON NUMBER): ");
 					System.out.println("\n(1) Aggressive \n(2) Benevolent \n(3) Random \n(4) Cheater \n(5) Human");
 
 					playerStrategyInput = input.nextLine().trim();
