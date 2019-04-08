@@ -148,6 +148,8 @@ public class AggresiveMode extends PlayerStrategy {
 		           .compareTo(((Map.Entry<String, Integer>) o2).getValue()));
 	        
 
+	    HashSet<String> countriesConquered = new HashSet<>();
+	    
 	    // attack each surrounding enemy country while you can
 	    for (Object e : sortedAdjacentEnemyCountriesAndArmyCounts) {
 
@@ -179,11 +181,32 @@ public class AggresiveMode extends PlayerStrategy {
 		        attackPhase.setDefenderDiceCount(defenderDiceCount);
 		        rollDiceBattle(attackPhase);
 	            hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry;
+	            
+	            if(attackPhase.getBattleOutcomeFlag()) {
+	            	countriesConquered.add(strongestCountry);
+	            	countriesConquered.add(enemyCountryToAttack);
+	            	
+	            }
+	            
 	        }
 		    
-            checkIfPlayerHasConqueredTheWorld();
-	    
 	    }
+	    
+	    String weakestCountry = getCountryWithMostNumberOfBordersShared(countriesConquered);
+	    
+	    if(weakestCountry != strongestCountry) {
+	    	
+	    	Integer strongestCountryArmyCount = this.gameData.gameMap.getCountry(strongestCountry).getCountryArmyCount();
+	    	
+	    	if(strongestCountryArmyCount > 1) {
+	    		this.gameData.gameMap.deductArmyToCountry(strongestCountry, strongestCountryArmyCount - 1);
+				this.gameData.gameMap.addArmyToCountry(weakestCountry, strongestCountryArmyCount - 1);
+	    	}
+	    	
+	    }
+	    
+        checkIfPlayerHasConqueredTheWorld();
+    
 		
 	    if (hasConnqueredAtleastOneCountry) {
 		   	Card card = gameData.cardsDeck.getCard();
@@ -207,7 +230,29 @@ public class AggresiveMode extends PlayerStrategy {
     }
     
     
-    /**
+    private String getCountryWithMostNumberOfBordersShared(HashSet<String> countriesConquered) {
+		String weakestCountry = "";
+		Integer maxNeighbours = Integer.MIN_VALUE;
+		
+		for(String country : countriesConquered) {
+			Integer enemyNeighbours = 0;
+			for(String adjacentCountry : this.gameData.gameMap.getAdjacentCountries(country)) {
+				if(this.gameData.gameMap.getCountry(adjacentCountry).getCountryConquerorID() != this.playerID) {
+					enemyNeighbours++;
+				}
+			}
+			
+			if(enemyNeighbours > maxNeighbours) {
+				maxNeighbours = enemyNeighbours;
+				weakestCountry = country;
+			}
+			
+		}
+		return weakestCountry;
+		
+	}
+
+	/**
      * Executes aggressive fortification, in order to maximize aggregation of forces in one country.
      */
     @Override
