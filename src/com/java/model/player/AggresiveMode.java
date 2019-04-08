@@ -321,10 +321,9 @@ public class AggresiveMode extends PlayerStrategy {
      * This helper method is utilized by all phases to return,
      * at any given point in time, the strongest country 
      * currently conquered by the player
-     * @param potentialScenarios
-     * @return strongestCountry
+     * @param potentialScenarios potentical attack scenario
+     * @return strongestCountry the strongest country
      */
-    
     public String getStrongestCountryConqueredByPlayer(HashMap<String, ArrayList<String>> potentialScenarios) {
 		
     	String strongestCountry = null;
@@ -347,11 +346,10 @@ public class AggresiveMode extends PlayerStrategy {
      * This helper method is utilized by fortification to return,
      * given the strongest country to be fortified, 
      * the second strongest country which should serve as a supplier
-     * @param  potentialScenarios
-     * @param  strongestCountry
-     * @return secondStrongestCountry
+     * @param  potentialScenarios the potential attack scenarios
+     * @param  strongestCountry the strongest country
+     * @return secondStrongestCountry the second strongest country
      */
-    
     public String getSecondStrongestCountryConqueredByPlayer(HashMap<String, ArrayList<String>> potentialScenarios, String strongestCountry) {
 		
     	String secondStrongestCountry = null;
