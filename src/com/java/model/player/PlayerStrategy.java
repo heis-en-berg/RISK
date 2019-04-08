@@ -84,7 +84,7 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	/**
 	 * set true if player won the game
 	 *
-	 * @param isWinner
+	 * @param isWinner true if the player won the game.
 	 */
 	public void setIsWinner(Boolean isWinner) {
 		this.isWinner = isWinner;
@@ -497,11 +497,11 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	}
 
 	/**
-	 * Main fight method which encompasses the dynamic interactions of rolling &
+	 * Main fight method which encompasses the dynamic interactions of rolling and
 	 * comparing dice This handles the army count updates as well as conqueror id's
 	 * if need be.
 	 *
-	 * @param attackPhase
+	 * @param attackPhase Attack Phase object
 	 * @return true if attacker conquers the target country
 	 */
 
@@ -901,7 +901,7 @@ public abstract class PlayerStrategy extends Observable implements Serializable 
 	 * This method depends on each strategy, in this case how the player is going to put
 	 * the army after the calculation of the armies during reinforcement.
 	 * 
-	 * @param reinforcementArmy
+	 * @param reinforcementArmy number of army to place
 	 */
 	public abstract void placeArmy(Integer reinforcementArmy);
 	
