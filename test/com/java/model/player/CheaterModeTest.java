@@ -153,7 +153,7 @@ public class CheaterModeTest {
 
 		int afterOwnedCountriesNumber = initialOwnedCountries.size();
 
-		Integer expectedValue = initialOwnedCountriesNumber + 3;
+		Integer expectedValue = initialOwnedCountriesNumber + 2;
 		Integer actualValue = afterOwnedCountriesNumber;
 
 		assertEquals(actualValue, expectedValue);
