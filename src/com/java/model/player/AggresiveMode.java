@@ -235,8 +235,7 @@ public class AggresiveMode extends PlayerStrategy {
      * 
      * @param countriesConquered
      * @return weakestCountry
-     */
-    
+     */  
     private String getCountryWithMostNumberOfBordersShared(HashSet<String> countriesConquered) {
 		String weakestCountry = "";
 		Integer maxNeighbours = Integer.MIN_VALUE;
