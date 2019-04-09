@@ -29,6 +29,10 @@ public class Dice implements Serializable {
 	
 	/**
 	 * Generates a range modified dice in order to get a random number between the specifiend range
+	 * 
+	 * @param min minimum
+	 * @param max maximum
+	 * 
 	 * @return a single integer value of random number
 	 */
 	public Integer rollDice(int min, int max){

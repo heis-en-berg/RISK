@@ -51,6 +51,7 @@ public class StartUpPhase implements Serializable {
 	 * It assigns unique ids to the players by receiving a collection of player names.
 	 * the static variable is incremented by one every time a new player is created.
 	 * @param playerNames list of names passed based on the console input from user
+	 * @param playerStrategy player strategy.
 	 * @return A list that contains all the players which now have ids assigned.
 	 */
 	public ArrayList<Player> generatePlayers(ArrayList<String> playerNames, ArrayList<Integer> playerStrategy){

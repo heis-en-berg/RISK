@@ -71,6 +71,7 @@ public class Player implements Serializable {
     
     /**
      * Checks if a player conquered the whole map, therefore is the winner.
+     * @return true if the player conquered the world
      */
     public boolean checkIfPlayerHasConqueredTheWorld(){
         return strategyType.checkIfPlayerHasConqueredTheWorld();

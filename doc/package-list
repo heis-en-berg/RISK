@@ -1,4 +1,6 @@
+
 com.java.controller.dice
+com.java.controller.gameplay
 com.java.controller.map
 com.java.controller.startup
 com.java.model

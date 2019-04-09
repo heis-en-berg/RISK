@@ -215,6 +215,7 @@ public class MapValidator implements Serializable {
 	 * 
 	 * @param mapFilePath .map file(to be validated) path in String format
 	 * @return true if content in .map file is valid, false otherwise
+	 * @throws IOException exception
 	 */
 	public Boolean validateMapTextFile(String mapFilePath) throws IOException {
 
