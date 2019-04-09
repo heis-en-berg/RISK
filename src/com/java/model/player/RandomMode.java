@@ -33,6 +33,7 @@ public class RandomMode extends PlayerStrategy {
 	 * 
 	 * @param playerID the player id.
 	 * @param playerName the player name.
+	 * @param seed seed to random mode.
 	 */
 	public RandomMode(Integer playerID, String playerName, Integer seed) {
 		super(playerID, playerName);

@@ -62,7 +62,7 @@ public class Country implements Serializable {
 	/**
 	 * Update the country's name.
 	 * 
-	 * @param the country name
+	 * @param countryName the country name
 	 * */
 	public void updateCountryName(String countryName) {
 		this.countryName = countryName;

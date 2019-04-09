@@ -61,7 +61,7 @@ public class PlayersWorldDominationView implements GameView {
 
     /**
      * Shows the owneship of each country , continents and how much army each player owns.
-     * @param observable
+     * @param observable observable object
      */
 	@Override
 	public void update(Observable observable) {

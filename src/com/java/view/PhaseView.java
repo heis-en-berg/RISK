@@ -60,7 +60,7 @@ public class PhaseView implements GameView {
      * Do the update for Attack to write in file the different actions that took place
      * reinforcement what each player recived for army and country moved to and country from.
      * fortification used to show from country and to country moved armies, armies left and armies moved.
-     * @param observable
+     * @param observable observable object
      */
     @Override
     public void update(Observable observable) {

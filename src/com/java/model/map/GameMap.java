@@ -141,6 +141,7 @@ public class GameMap extends Observable implements Cloneable, Serializable {
 	/**
 	 * Gets the country object by giving the country name.
 	 * 
+	 * @param countryName country name
 	 * @return the country object.
 	 * */
 	public Country getCountry(String countryName) {
@@ -225,6 +226,8 @@ public class GameMap extends Observable implements Cloneable, Serializable {
 	 * Gets adjacents countries.
 	 * 
 	 * @param countryName country name
+	 * @return the adjacent countries
+	 * 
 	 * */
 	public HashSet<String> getAdjacentCountries(String countryName) {
 		if(!this.adjacentCountries.containsKey(countryName)) {
