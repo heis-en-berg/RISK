@@ -267,6 +267,9 @@ public class AggresiveMode extends PlayerStrategy {
     	
     	System.out.println();
         System.out.println("**** Fortification Phase Begins for player " + this.playerName + "..****\n");
+        FortificationPhaseState fortificationPhase = new FortificationPhaseState();
+        fortificationPhaseState.add(fortificationPhase);
+        notifyView();
 
         System.out.println("\n" + "Fetching potential fortification scenarios for " + this.playerName + "...\n");
         HashMap<String, ArrayList<String>> potentialFortificationScenarios = getPotentialFortificationScenarios();
@@ -314,6 +317,14 @@ public class AggresiveMode extends PlayerStrategy {
         // move armies based on determined source - destination countries per startegy logic
         gameData.gameMap.getCountry(secondStrongestCountry).deductArmy(maxNoOfArmiesToMove);
         gameData.gameMap.getCountry(strongestCountry).addArmy(maxNoOfArmiesToMove);
+        
+        fortificationPhase.setFromCountry(secondStrongestCountry);
+        fortificationPhase.setToCountry(strongestCountry);
+        fortificationPhase.setNumberOfArmiesMoved(maxNoOfArmiesToMove);
+
+        fortificationPhaseState.add(fortificationPhase);
+
+        notifyView();
         
         HashSet<String> conqueredCountryByThisPlayer = gameData.gameMap.getConqueredCountriesPerPlayer(playerID);
         System.out.println("Moved "+maxNoOfArmiesToMove+" armies from "+secondStrongestCountry+" to "+strongestCountry);
