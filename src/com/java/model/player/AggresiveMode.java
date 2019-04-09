@@ -177,7 +177,9 @@ public class AggresiveMode extends PlayerStrategy {
 	            // proceed with max allowed dice count for both sides
 	            Integer attackerDiceCount = getActualMaxAllowedDiceCountForAction("attack", strongestCountry, 3);
 		        attackPhase.setAttackerDiceCount(attackerDiceCount);
-		        Integer defenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",enemyCountryToAttack, 2);
+		        //Integer defenderDiceCount = getActualMaxAllowedDiceCountForAction("defend",enemyCountryToAttack, 2);
+		        // always set defender dice count to the min to maximize aggression 
+		        Integer defenderDiceCount = 1;
 		        attackPhase.setDefenderDiceCount(defenderDiceCount);
 		        rollDiceBattle(attackPhase);
 	            hasConnqueredAtleastOneCountry = fight(attackPhase) || hasConnqueredAtleastOneCountry;
